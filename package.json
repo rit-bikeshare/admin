@@ -10,10 +10,40 @@
     "react-scripts": "1.1.1",
     "styled-components": "^3.1.6"
   },
+  "devDependencies": {
+    "babel-eslint": "^7.1.1",
+    "eslint": "^3.17.1",
+    "eslint-config-hubspot": "^7.3.1",
+    "eslint-plugin-react": "^6.10.1",
+    "eslint-config-prettier": "^2.9.0",
+    "husky": "^0.14.3",
+    "lint-staged": "^4.3.0",
+    "prepush": "^3.1.11",
+    "prettier": "^1.7.4"
+  },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "lint:all": "eslint . --fix",
+    "lint:changed:js": "npm run changed:js --silent | xargs eslint",
+    "precommit": "lint-staged",
+    "prepush": "npm run lint:changed:js",
+    "prettier": "prettier --single-quote --trailing-comma es5",
+    "prettier:verify": "sh bin/prettier-verify.sh",
+    "prettier:write": "npm run prettier -- --write \"static/**/*.js\"",
+    "fix-githooks": "prepush -c package.json remove && node node_modules/husky/bin/install"
+  },
+  "lint-staged": {
+    "*.js": [
+      "eslint",
+      "prettier -l"
+    ]
+  },
+  "prepush": {
+    "tasks": [
+      "npm run lint-all"
+    ]
   }
 }

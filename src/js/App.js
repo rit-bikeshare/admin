@@ -1,5 +1,5 @@
-import React, { Component } from "react";
-import { UIBadge } from "@hubspot/canvas";
+import React, { Component } from 'react';
+import { UIBadge } from '@hubspot/canvas';
 
 class App extends Component {
   render() {
