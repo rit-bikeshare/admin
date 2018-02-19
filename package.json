@@ -1,6 +1,6 @@
 {
   "name": "admin",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": true,
   "dependencies": {
     "@hubspot/canvas": "^0.0.4",
@@ -14,8 +14,8 @@
     "babel-eslint": "^7.1.1",
     "eslint": "^3.17.1",
     "eslint-config-hubspot": "^7.3.1",
-    "eslint-plugin-react": "^6.10.1",
     "eslint-config-prettier": "^2.9.0",
+    "eslint-plugin-react": "^6.10.1",
     "husky": "^0.14.3",
     "lint-staged": "^4.3.0",
     "prepush": "^3.1.11",
