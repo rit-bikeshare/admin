@@ -14,12 +14,12 @@ jobs:
       cache: yarn
       install: yarn install
       script: yarn build
-      before_deploy: ls -l
       deploy:
         provider: releases
         file_glob: true
+        skip_cleanup: true
         api_key:
           secure: at9L2fczFCMscONfSwVc0i9qOE/+aoq4xPFsA5pnap1tnx5ilHEIX264J+kBzGKrAqn+XMmHyyJ4YaTUX113cSQFFKyYS1NYgUAoUb4vqKlyvKj3GvfBsXyLu12cIr5OSS1/Kf1G/pOkJ2UI2to7hFoEJ/wBqGqbO1rMTDVyRBKjPU2NPVwkYSvppY8c/iVEQJUawK5ddRzoc1WT54JavJiZpfgRhwjd8cCBgu/iLxyV/WAkRQZ8R9yvifICsdV8ZagioYTGi50aQZoskrdFuL488ptKYasg+Mag2YNQFMYMzrxd+Jpj41iMzkEP3EztzdpMbtnPs2ABQIX46d1vNU8p20nugy2BcSi6u3D9/Rhum0ZeX2zDNRszMJ7ylfjYNGqCA4ChUXLeoCK8mnV4GDOzkpgxVFFRWUWvE9EV0Fo7Aro4TCL1IrSYhGDQPw1xIqM5hyEhnqCtZFQhQQZnpEUzj5zK1fRBEP29piaQOzcJo3Lg6eTDu6wNOus0hWyxT3QkqEBzdcTdatFYgx4eEOB1HzVz3cIzrSE2WDFHUIkDh82ZGc7VSkXUgjxqzHkkRYvzU3mKWNRLfL2dDTgmCXLUHfxvuyqTOK6O5oak0jSDQAY75KcWh+5RIphwsS9+ELD5UQ/9txy+4gNxQO4lZCgkQ7J77GnFho6vPxylMfw=
         file: build/*
         on:
-          repo: rit-bikeshare/admin
+          tag: true
