@@ -1,5 +1,5 @@
 {
-  "name": "admin",
+  "name": "rit-bikeshare-admin",
   "version": "0.1.6",
   "private": true,
   "dependencies": {
@@ -20,7 +20,7 @@
     "babel-eslint": "^7.1.1",
     "eslint": "^3.17.1",
     "eslint-config-prettier": "^2.9.0",
-    "eslint-plugin-react": "^6.10.1",
+    "eslint-plugin-react": "^7.7.0",
     "husky": "^0.14.3",
     "lint-staged": "^4.3.0",
     "prepush": "^3.1.11",
@@ -38,17 +38,13 @@
     "prettier": "prettier --single-quote --trailing-comma es5",
     "prettier:verify": "sh bin/prettier-verify.sh",
     "prettier:write": "npm run prettier -- --write \"static/**/*.js\"",
-    "fix-githooks": "prepush -c package.json remove && node node_modules/husky/bin/install"
+    "fix-githooks":
+      "prepush -c package.json remove && node node_modules/husky/bin/install"
   },
   "lint-staged": {
-    "*.js": [
-      "eslint",
-      "prettier -l"
-    ]
+    "*.js": ["eslint", "prettier -l"]
   },
   "prepush": {
-    "tasks": [
-      "npm run lint-all"
-    ]
+    "tasks": ["npm run lint-all"]
   }
 }

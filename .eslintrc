@@ -1,19 +1,30 @@
 {
-    "parser": "babel-eslint",
-    "extends": [
-      "hubspot",
-      "prettier",
-      "prettier/react"
-    ],
-    "plugins": [
-      "react"
-    ],
-    "rules": {
-      "react/jsx-handler-names": "off",
-      "no-param-reassign": "off",
-      "no-unused-vars": [2, {
-        varsIgnorePattern: "^__"
-      }],
-      "react/no-unescaped-entities": "off"
+  "parser": "babel-eslint",
+  "parserOptions": {
+    "ecmaFeatures": {
+      "jsx": true
     }
+  },
+  "env": {
+    "browser": true,
+    "jasmine": true
+  },
+  "globals": {
+    "Symbol": true
+  },
+  "extends": [
+    "eslint:recommended",
+    "plugin:react/recommended",
+    "prettier",
+    "prettier/react"
+  ],
+  "plugins": ["react"],
+  "rules": {
+    "react/display-name": "off"
+  },
+  "settings": {
+    "react": {
+      "version": "16.2.0"
+    }
+  }
 }
