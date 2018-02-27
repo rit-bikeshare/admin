@@ -1,8 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
-
-import App from './js/App';
 import registerServiceWorker from './registerServiceWorker';
 
 ReactDOM.render(
@@ -15,6 +13,7 @@ ReactDOM.render(
       <Route path="/users" component={() => 'Users'} />
       <Route path="/maintenance" component={() => 'Maintenance'} />
       <Route path="/settings" component={() => 'Settings'} />
+
       <Route component={() => 'No matching route'} />
     </Switch>
   </BrowserRouter>,
