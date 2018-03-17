@@ -1,9 +1,13 @@
 import React, { Component } from 'react';
-import { UIBadge } from '@hubspot/canvas';
+import { Button } from 'semantic-ui-react';
 
 class App extends Component {
   render() {
-    return <UIBadge>It's a badge</UIBadge>;
+    return (
+      <div>
+        <Button>It's a badge</Button>
+      </div>
+    );
   }
 }
 

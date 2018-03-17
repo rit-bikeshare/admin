@@ -2,11 +2,12 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import registerServiceWorker from './registerServiceWorker';
+import App from './js/App';
 
 ReactDOM.render(
   <BrowserRouter>
     <Switch>
-      <Route exact={true} path="/" component={() => 'Home'} />
+      <Route exact={true} path="/" component={App} />
       <Route path="/login" component={() => 'Login'} />
       <Route path="/bikes" component={() => 'Bikes'} />
       <Route path="/bike-racks" component={() => 'Bike Racks'} />

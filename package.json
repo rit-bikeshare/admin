@@ -3,7 +3,6 @@
   "version": "0.1.6",
   "private": true,
   "dependencies": {
-    "@hubspot/canvas": "^0.0.4",
     "immutable": "^3.8.2",
     "moment": "^2.20.1",
     "react": "^16.2.0",
@@ -14,6 +13,7 @@
     "redux": "^3.7.2",
     "redux-actions": "^2.2.1",
     "redux-thunk": "^2.2.0",
+    "semantic-ui-react": "^0.78.3",
     "styled-components": "^3.1.6"
   },
   "devDependencies": {
@@ -38,13 +38,17 @@
     "prettier": "prettier --single-quote --trailing-comma es5",
     "prettier:verify": "sh bin/prettier-verify.sh",
     "prettier:write": "npm run prettier -- --write \"static/**/*.js\"",
-    "fix-githooks":
-      "prepush -c package.json remove && node node_modules/husky/bin/install"
+    "fix-githooks": "prepush -c package.json remove && node node_modules/husky/bin/install"
   },
   "lint-staged": {
-    "*.js": ["eslint", "prettier -l"]
+    "*.js": [
+      "eslint",
+      "prettier -l"
+    ]
   },
   "prepush": {
-    "tasks": ["npm run lint-all"]
+    "tasks": [
+      "npm run lint-all"
+    ]
   }
 }

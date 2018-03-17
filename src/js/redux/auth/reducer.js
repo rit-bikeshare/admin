@@ -1,6 +1,6 @@
 import { handleActions } from 'redux-actions';
-import UserData from './UserData';
+import UserData from '../../data/records/UserData';
+
 const initialState = new UserData();
-const aa = ';';
 
 export default handleActions({}, initialState);
