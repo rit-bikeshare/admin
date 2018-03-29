@@ -1,23 +1,5 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import registerServiceWorker from './registerServiceWorker';
-import App from './js/App';
+import app from './js/app';
 
-ReactDOM.render(
-  <BrowserRouter>
-    <Switch>
-      <Route exact={true} path="/" component={App} />
-      <Route path="/login" component={() => 'Login'} />
-      <Route path="/bikes" component={() => 'Bikes'} />
-      <Route path="/bike-racks" component={() => 'Bike Racks'} />
-      <Route path="/users" component={() => 'Users'} />
-      <Route path="/maintenance" component={() => 'Maintenance'} />
-      <Route path="/settings" component={() => 'Settings'} />
-
-      <Route component={() => 'No matching route'} />
-    </Switch>
-  </BrowserRouter>,
-  document.getElementById('root')
-);
+app();
 registerServiceWorker();
