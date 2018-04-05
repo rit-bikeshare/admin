@@ -34,7 +34,7 @@
   "scripts": {
     "build-css": "node-sass-chokidar --include-path ./src --include-path ./node_modules src/styles -o src/styles/css",
     "watch-css": "npm run build-css && node-sass-chokidar --include-path ./src --include-path ./node_modules src/styles -o public/styles/ --watch --recursive",
-    "start-js": "react-scripts start",
+    "start-js": "PORT=80 react-scripts start",
     "start": "npm-run-all -p watch-css start-js",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",

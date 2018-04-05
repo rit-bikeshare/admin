@@ -7,11 +7,11 @@ import { fetchBikes, fetchRentals } from '../../redux/bikes/actions';
 
 import { Table, Button, Loader, Header } from 'semantic-ui-react';
 
-class BikesView extends Component {
+class Editor extends Component {
   componentDidMount() {
     const { dispatch } = this.props;
-    dispatch(fetchBikes());
-    dispatch(fetchRentals());
+    //dispatch(fetchBikes());
+    //dispatch(fetchRentals());
   }
 
   renderBike(bike) {
@@ -73,21 +73,16 @@ class BikesView extends Component {
   }
 }
 
-BikesView.propTypes = {
-  dispatch: PropTypes.func.isRequired,
-  bikes: PropTypes.instanceOf(Immutable.List),
-  bikesError: PropTypes.object,
-  rentals: PropTypes.instanceOf(Immutable.List),
-  rentalsError: PropTypes.object
+Editor.propTypes = {
+  bike: PropTypes.instanceOf(Immutable.Map),
+  error: PropTypes.object
 };
 
 const mapStateToProps = state => {
   return {
-    bikes: state.bikes.getIn(['bikes', 'bikes']),
-    bikesError: state.bikes.getIn(['bikes', 'error']),
-    rentals: state.bikes.get(['rentals', 'rentals']),
-    rentalsError: state.bikes.getIn(['rentals', 'error'])
+    bike: state.bikes.getIn(['editor', 'bike']),
+    error: state.bikes.getIn(['editor', 'error'])
   };
 };
 
-export default connect(mapStateToProps)(withNav(BikesView, 'BIKES'));
+export default connect(mapStateToProps)(Editor);
