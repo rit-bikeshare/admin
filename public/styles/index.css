@@ -22,3 +22,6 @@
 
 .app-container {
   padding-top: 30px; }
+
+.admin-table .admin-table-row .actions {
+  display: inline-block; }

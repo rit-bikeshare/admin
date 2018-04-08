@@ -1,33 +1,65 @@
 import { Map, fromJS } from 'immutable';
 import { handleActions } from 'redux-actions';
+import { Bike } from './model';
 
-import { fetchBikesAction, fetchRentalsAction } from './actions';
+import {
+  fetchBikesAction,
+  fetchRentalsAction,
+  editorAction,
+  editBikeAction
+} from './actions';
 
 export default handleActions(
   {
     [fetchBikesAction](state, action) {
-      const { status, bikes = null, error = null } = action.payload;
+      const { status, error = null, bikes = null } = action.payload;
       return state.set('bikes', fromJS({ status, bikes, error }));
     },
     [fetchRentalsAction](state, action) {
-      const { status, rentals = null, error = null } = action.payload;
+      const { status, error = null, rentals = null } = action.payload;
       return state.set('rentals', fromJS({ status, rentals, error }));
+    },
+    [editorAction](state, action) {
+      const {
+        status = 'UNINITIALIZED',
+        error = null,
+        active = false,
+        bike = new Bike()
+      } = action.payload;
+
+      return state.set(
+        'editor',
+        fromJS({
+          status,
+          error,
+          active,
+          bike
+        })
+      );
+    },
+    [editBikeAction](state, action) {
+      const { status, error = null } = action.payload;
+      return state.update('editor', editor =>
+        editor.set('status', status).set('error', error)
+      );
     }
   },
   Map({
     bikes: Map({
-      request: 'UNINITIALIZED',
-      bikes: null,
-      error: null
+      status: 'UNINITIALIZED',
+      error: null,
+      bikes: null
     }),
     rentals: Map({
-      request: 'UNINITIALIZED',
-      rentals: null,
-      error: null
+      status: 'UNINITIALIZED',
+      error: null,
+      rentals: null
     }),
     editor: Map({
-      bike: null, // null will create new bike
-      error: null
+      status: 'UNINITIALIZED',
+      error: null,
+      active: false,
+      bike: new Bike()
     })
   })
 );
