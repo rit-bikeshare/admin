@@ -29,11 +29,11 @@ export default handleActions(
 
       return state.set(
         'editor',
-        fromJS({
+        Map({
           status,
           error,
           active,
-          bike
+          bike: new Bike(bike)
         })
       );
     },

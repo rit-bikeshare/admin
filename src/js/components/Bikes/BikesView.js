@@ -2,7 +2,14 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Immutable from 'immutable';
-import { Container, Table, Button, Loader, Header } from 'semantic-ui-react';
+import {
+  Container,
+  Table,
+  Button,
+  Loader,
+  Header,
+  Modal
+} from 'semantic-ui-react';
 import withNav from '../../withNav';
 import {
   fetchBikes,
@@ -11,16 +18,67 @@ import {
 } from '../../redux/bikes/actions';
 
 import Editor from './Editor';
+import { DeleteBikeModal } from './DeleteBikeModal';
 
 class BikesView extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      deleteBikeModal: null // id of bike deleting
+    };
+  }
+
   componentDidMount() {
     const { fetchBikes, fetchRentals } = this.props;
     fetchBikes();
     fetchRentals();
   }
 
+  onDeleteBike(id) {
+    return ';';
+  }
+
+  renderDeleteBikeModal() {
+    const { deleteBikeModal: id } = this.state;
+    if (!id) {
+      return null;
+    }
+
+    return (
+      <DeleteBikeModal
+        id={id}
+        onCancel={() => this.setState({ deleteBikeModal: null })}
+        onDelete={() => this.onDeleteBike(id)}
+      />
+    );
+  }
+
   renderBike(bike) {
+    const { openEditor } = this.props;
     const { id, currentRental, lat, lon } = bike.toJS();
+
+    const editButton = (
+      <Button size="tiny" compact onClick={() => openEditor(bike.toJS())}>
+        Edit
+      </Button>
+    );
+
+    const deleteButton = (
+      <Button
+        size="tiny"
+        compac
+        onClick={() => this.setState({ deleteBikeModal: id })}
+      >
+        Delete
+      </Button>
+    );
+
+    const printButton = (
+      <Button size="tiny" compact>
+        Print QR Code
+      </Button>
+    );
+
     return (
       <Table.Row className="admin-table-row">
         <Table.Cell>
@@ -31,15 +89,9 @@ class BikesView extends Component {
         <Table.Cell>rider?</Table.Cell>
         <Table.Cell>
           <div className="actions">
-            <Button size="tiny" compact>
-              Edit
-            </Button>
-            <Button size="tiny" compact>
-              Delete
-            </Button>
-            <Button size="tiny" compact>
-              Print QR Code
-            </Button>
+            {editButton}
+            {deleteButton}
+            {printButton}
           </div>
         </Table.Cell>
       </Table.Row>
@@ -68,7 +120,7 @@ class BikesView extends Component {
             <Table.HeaderCell>ACTIONS</Table.HeaderCell>
           </Table.Row>
         </Table.Header>
-        <Table.Body>{bikes.map(this.renderBike)}</Table.Body>
+        <Table.Body>{bikes.map(b => this.renderBike(b))}</Table.Body>
       </Table>
     );
   }
@@ -81,6 +133,7 @@ class BikesView extends Component {
 
     return (
       <div>
+        {this.renderDeleteBikeModal()}
         <Container style={{ paddingBottom: '10px' }}>
           <Button floated="right" onClick={() => openEditor()}>
             Add Bike
@@ -99,7 +152,7 @@ BikesView.propTypes = {
   rentals: PropTypes.instanceOf(Immutable.List),
   rentalsError: PropTypes.object,
   editorActive: PropTypes.bool,
-
+  /* dispatch */
   fetchBikes: PropTypes.func.isRequired,
   fetchRentals: PropTypes.func.isRequired,
   openEditor: PropTypes.func

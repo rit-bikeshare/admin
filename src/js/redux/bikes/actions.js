@@ -35,7 +35,6 @@ export const editBikeAction = createAction('EDIT_BIKE');
 export const editBike = bike => dispatch => {
   dispatch(editBikeAction({ status: 'PENDING' }));
   const fn = bike.id ? () => null : post;
-  debugger;
   fn('bikes/', bike.toJS())
     .then(response => {
       dispatch(editBikeAction({ status: 'SUCCEEDED', response }));

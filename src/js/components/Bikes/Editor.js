@@ -4,18 +4,37 @@ import { connect } from 'react-redux';
 import { Button, Form, Loader, Header, Message } from 'semantic-ui-react';
 import { editorAction, editBike } from '../../redux/bikes/actions';
 import { Bike } from '../../redux/bikes/model';
+import { DeleteBikeModal } from './DeleteBikeModal';
 
 class Editor extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      ...props.bike
+      deleteModal: false,
+      ...props.bike.toJS()
     };
   }
 
   componentWillUnmount() {
     const { close } = this.props;
     close();
+  }
+
+  onDeleteBike(id) {}
+
+  renderDeleteModal() {
+    const { deleteModal, id } = this.state;
+    if (!deleteModal) {
+      return null;
+    }
+
+    return (
+      <DeleteBikeModal
+        id={id}
+        onCancel={() => this.setState({ deleteModal: null })}
+        onDelete={() => this.onDeleteBike(id)}
+      />
+    );
   }
 
   renderMessage() {
@@ -33,27 +52,45 @@ class Editor extends Component {
     return null;
   }
 
-  renderButtons() {
+  renderButtons(showDelete = false) {
     const { status, save, close } = this.props;
     if (status === 'PENDING') {
       return <Loader active inline="centered" />;
     }
 
+    const deleteButton = showDelete ? (
+      <Button
+        floated="right"
+        negative
+        onClick={() =>
+          this.setState({
+            deleteModal: true
+          })
+        }
+      >
+        Delete bike
+      </Button>
+    ) : null;
+
     return (
       <div>
         {this.renderMessage()}
-        <Button onClick={() => close()}>Cancel</Button>
+        <Button onClick={() => close()}>Back</Button>
         <Button type="submit" onClick={() => save(new Bike(this.state))}>
           Submit
         </Button>
+        {deleteButton}
       </div>
     );
   }
 
   render() {
     const { id, lock, visible } = this.state;
+    const showDelete = Boolean(id);
+
     return (
       <div>
+        {this.renderDeleteModal()}
         <Header as="h3">{id ? 'Edit Bike' : 'Create Bike'}</Header>
         <Form>
           {id ? (
@@ -80,7 +117,7 @@ class Editor extends Component {
               this.setState({ visible });
             }}
           />
-          {this.renderButtons()}
+          {this.renderButtons(showDelete)}
         </Form>
       </div>
     );
@@ -91,7 +128,7 @@ Editor.propTypes = {
   status: PropTypes.string,
   error: PropTypes.object,
   bike: PropTypes.string,
-
+  /* dispatch */
   open: PropTypes.func.isRequired,
   save: PropTypes.func.isRequired,
   close: PropTypes.func.isRequired
