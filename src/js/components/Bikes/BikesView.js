@@ -2,21 +2,10 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Immutable from 'immutable';
-import {
-  Container,
-  Table,
-  Button,
-  Loader,
-  Header,
-  Modal
-} from 'semantic-ui-react';
+import { Container, Table, Button, Loader, Header } from 'semantic-ui-react';
 import withNav from '../../withNav';
-import {
-  fetchBikes,
-  fetchRentals,
-  editorAction
-} from '../../redux/bikes/actions';
-
+//import { editorAction } from '../../redux/bikes/actions';
+import { actions as bikeActions } from '../../redux/bikes';
 import Editor from './Editor';
 import { DeleteBikeModal } from './DeleteBikeModal';
 
@@ -29,9 +18,10 @@ class BikesView extends Component {
   }
 
   componentDidMount() {
-    const { fetchBikes, fetchRentals } = this.props;
-    fetchBikes();
-    fetchRentals();
+    const { listBikes, retrieveBike } = this.props;
+    listBikes();
+    retrieveBike({ id: 10 });
+    //fetchRentals();
   }
 
   onDeleteBike(id) {
@@ -44,11 +34,13 @@ class BikesView extends Component {
       return null;
     }
 
+    const { deleteBike } = this.props;
+
     return (
       <DeleteBikeModal
         id={id}
         onCancel={() => this.setState({ deleteBikeModal: null })}
-        onDelete={() => this.onDeleteBike(id)}
+        onDelete={() => deleteBike({ id })}
       />
     );
   }
@@ -66,7 +58,7 @@ class BikesView extends Component {
     const deleteButton = (
       <Button
         size="tiny"
-        compac
+        compact
         onClick={() => this.setState({ deleteBikeModal: id })}
       >
         Delete
@@ -99,12 +91,7 @@ class BikesView extends Component {
   }
 
   renderBikes() {
-    const { bikes, bikesError } = this.props;
-
-    if (bikesError) {
-      return String(bikesError);
-    }
-
+    const { bikes } = this.props;
     if (!bikes) {
       return <Loader active inline="centered" />;
     }
@@ -120,13 +107,13 @@ class BikesView extends Component {
             <Table.HeaderCell>ACTIONS</Table.HeaderCell>
           </Table.Row>
         </Table.Header>
-        <Table.Body>{bikes.map(b => this.renderBike(b))}</Table.Body>
+        <Table.Body>{bikes.map(b => this.renderBike(b)).toList()}</Table.Body>
       </Table>
     );
   }
 
   render() {
-    const { editorActive, openEditor } = this.props;
+    const { editorActive, openEditor, bikesError } = this.props;
     if (openEditor && editorActive) {
       return <Editor />;
     }
@@ -140,6 +127,7 @@ class BikesView extends Component {
           </Button>
           <Header as="h2">Bikes</Header>
         </Container>
+        {bikesError ? String(bikesError) : null}
         {this.renderBikes()}
       </div>
     );
@@ -147,32 +135,36 @@ class BikesView extends Component {
 }
 
 BikesView.propTypes = {
-  bikes: PropTypes.instanceOf(Immutable.List),
+  bikes: PropTypes.instanceOf(Immutable.Map),
   bikesError: PropTypes.object,
   rentals: PropTypes.instanceOf(Immutable.List),
   rentalsError: PropTypes.object,
   editorActive: PropTypes.bool,
   /* dispatch */
-  fetchBikes: PropTypes.func.isRequired,
-  fetchRentals: PropTypes.func.isRequired,
+  listBikes: PropTypes.func.isRequired,
+  retrieveBike: PropTypes.func.isRequired,
+  deleteBike: PropTypes.func.isRequired,
   openEditor: PropTypes.func
 };
 
 const mapStateToProps = state => {
   return {
-    bikes: state.bikes.getIn(['bikes', 'bikes']),
-    bikesError: state.bikes.getIn(['bikes', 'error']),
+    bikes: state.bikes.get('data'),
+    bikesError: state.bikes.get('error'),
     rentals: state.bikes.get(['rentals', 'rentals']),
     rentalsError: state.bikes.getIn(['rentals', 'error']),
     editorActive: state.bikes.getIn(['editor', 'active'], false)
   };
 };
 
-const mapDispatchToProps = dispatch => ({
-  fetchBikes: () => dispatch(fetchBikes()),
-  fetchRentals: () => dispatch(fetchRentals()),
-  openEditor: bike => dispatch(editorAction({ active: true, bike }))
-});
+const mapDispatchToProps = dispatch => {
+  return {
+    listBikes: () => dispatch(bikeActions.list()),
+    retrieveBike: ({ id }) => dispatch(bikeActions.retrieve({ id })),
+    deleteBike: ({ id, obj }) => dispatch(bikeActions.destroy({ id, obj }))
+    //openEditor: bike => dispatch(editorAction({ active: true, bike }))
+  };
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(
   withNav(BikesView, 'BIKES')

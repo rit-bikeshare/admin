@@ -21,7 +21,6 @@ export function get(url) {
     }
   }).then(async response => {
     if (response.ok) return response.json().then(fromJS);
-
     const error = await response.json();
     return Promise.reject({ code: response.status, message: error.detail });
   });
@@ -40,12 +39,47 @@ export function post(url, body) {
     body: JSON.stringify(body)
   }).then(async response => {
     if (response.ok) return response.json().then(fromJS);
-
     const error = await response.json();
-
     return Promise.reject({
       code: response.status,
       message: error.detail
     });
+  });
+}
+
+export function put(url, body) {
+  // always add a trailing slash
+  url = url.replace(/\/?$/, '/');
+  return fetch(`${baseApiUrl}/${url}`, {
+    method: 'PUT',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      ...tokenHeader
+    },
+    body: JSON.stringify(body)
+  }).then(async response => {
+    if (response.ok) return response.json().then(fromJS);
+    const error = await response.json();
+    return Promise.reject({
+      code: response.status,
+      message: error.detail
+    });
+  });
+}
+
+export function del(url) {
+  // always add a trailing slash
+  url = url.replace(/\/?$/, '/');
+  return fetch(`${baseApiUrl}/${url}`, {
+    method: 'DELETE',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      ...tokenHeader
+    }
+  }).then(async response => {
+    if (response.ok) return Promise.resolve(true);
+    return Promise.reject(response);
   });
 }

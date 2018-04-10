@@ -1,22 +1,13 @@
 import { Map, fromJS } from 'immutable';
 import { handleActions } from 'redux-actions';
-import { Bike } from './model';
+import { Bike } from '../../models';
 
-import {
-  fetchBikesAction,
-  fetchRentalsAction,
-  editorAction,
-  editBikeAction
-} from './actions';
+import { fetchRentalsAction, editorAction, editBikeAction } from './actions';
 
 export default handleActions(
   {
-    [fetchBikesAction](state, action) {
-      const { status, error = null, bikes = null } = action.payload;
-      return state.set('bikes', fromJS({ status, bikes, error }));
-    },
     [fetchRentalsAction](state, action) {
-      const { status, error = null, rentals = null } = action.payload;
+      const { status, error = null, data: rentals = null } = action.payload;
       return state.set('rentals', fromJS({ status, rentals, error }));
     },
     [editorAction](state, action) {

@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Button, Form, Loader, Header, Message } from 'semantic-ui-react';
-import { editorAction, editBike } from '../../redux/bikes/actions';
-import { Bike } from '../../redux/bikes/model';
+//import { editorAction, editBike } from '../../redux/bikes/actions';
+import { Bike } from '../../models';
 import { DeleteBikeModal } from './DeleteBikeModal';
 
 class Editor extends Component {
@@ -143,9 +143,9 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = dispatch => ({
-  open: bike => dispatch(editorAction({ active: true, bike })),
-  save: bike => dispatch(editBike(bike)),
-  close: () => dispatch(editorAction({}))
+  //open: bike => dispatch(editorAction({ active: true, bike })),
+  //save: bike => dispatch(editBike(bike)),
+  //close: () => dispatch(editorAction({}))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Editor);

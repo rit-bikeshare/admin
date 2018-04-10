@@ -1,7 +1,7 @@
 import { combineReducers } from 'redux';
 import { routerReducer } from 'react-router-redux';
 import auth from './auth/reducer';
-import bikes from './bikes/reducer';
+import { reducer as bikes } from './bikes';
 
 export default combineReducers({
   auth,
