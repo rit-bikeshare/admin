@@ -48,7 +48,7 @@ export default class NavView extends Component {
           <Menu stackable>
             {navMenuItems}
             <Menu.Item position={'right'}>
-              <Button>Sign out</Button>
+              <Button secondary={true}>Sign out</Button>
             </Menu.Item>
           </Menu>
         </Container>

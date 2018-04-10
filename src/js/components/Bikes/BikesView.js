@@ -97,7 +97,7 @@ class BikesView extends Component {
     }
 
     return (
-      <Table celled className="admin-table">
+      <Table className="admin-table">
         <Table.Header>
           <Table.Row>
             <Table.HeaderCell>ID</Table.HeaderCell>
@@ -122,7 +122,7 @@ class BikesView extends Component {
       <div>
         {this.renderDeleteBikeModal()}
         <Container style={{ paddingBottom: '10px' }}>
-          <Button floated="right" onClick={() => openEditor()}>
+          <Button floated="right" onClick={() => openEditor()} primary={true}>
             Add Bike
           </Button>
           <Header as="h2">Bikes</Header>

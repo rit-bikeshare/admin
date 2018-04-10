@@ -1,5 +1,5 @@
 import registerServiceWorker from './registerServiceWorker';
-import app from './js/app';
+import app from './js/App';
 
 app();
 registerServiceWorker();
