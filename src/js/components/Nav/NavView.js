@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Container, Menu, Button } from 'semantic-ui-react';
-import Logo from '../../../img/logo.png';
+import Icon from '../../../img/icon.png';
 import nav from './nav';
 
 export default class NavView extends Component {
@@ -18,12 +18,13 @@ export default class NavView extends Component {
   renderMenuItem({ key, label, route, active }) {
     return (
       <Menu.Item
+        className="home-nav-item"
         key={key}
         name={key}
         active={active}
         onClick={() => this.routeTo(route)}
       >
-        {key === 'HOME' ? <img src={Logo} /> : label}
+        {key === 'HOME' ? <img src={Icon} /> : label}
       </Menu.Item>
     );
   }
