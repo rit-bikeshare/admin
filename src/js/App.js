@@ -12,6 +12,7 @@ import { Provider } from 'react-redux';
 import reducer from './redux';
 import Home from './components/Home';
 import Bikes from './components/Bikes';
+import BikeRacks from './components/BikeRacks';
 
 function createStore(reducer) {
   const composeEnhancers =
@@ -32,7 +33,7 @@ export default () => {
         <Switch>
           <Route exact={true} path="/" component={Home} />
           <Route path="/bikes" component={Bikes} />
-          <Route path="/bike-racks" component={() => 'Bike Racks'} />
+          <Route path="/bike-racks" component={BikeRacks} />
           <Route path="/users" component={() => 'Users'} />
           <Route path="/maintenance" component={() => 'Maintenance'} />
           <Route path="/settings" component={() => 'Settings'} />

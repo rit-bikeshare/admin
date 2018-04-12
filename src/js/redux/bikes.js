@@ -1,7 +1,5 @@
-import { Map } from 'immutable';
-import { createAction, handleActions } from 'redux-actions';
-import { Bike } from '../../models';
-import { all } from '../common/all';
+import { Bike } from '../models';
+import { all } from './common/all';
 
 /**
  * Provides actions:
@@ -13,7 +11,7 @@ import { all } from '../common/all';
  */
 export const { actions, reducer } = all({
   name: 'bikes',
-  path: 'bikes/',
+  path: 'admin/bikes/',
   record: Bike,
   indexFn: bike => bike.get('id')
 });
