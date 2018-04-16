@@ -38,7 +38,7 @@
     "build-css": "node-sass-chokidar ./src/sass/project.sass --include-path ./node-modules --output-style compressed -o public/",
     "watch-css": "npm run build-css && node-sass-chokidar ./src/sass/project.sass --include-path ./node-modules --output-style compressed --source-map-embed -o public/ --watch --recursive",
     "start-js": "PORT=80 react-scripts start",
-    "start": "sh bin/verify-githooks.js && npm-run-all -p watch-css start-js",
+    "start": "sh bin/verify-githooks.sh && npm-run-all -p watch-css start-js",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
     "lint:all": "eslint . --fix",

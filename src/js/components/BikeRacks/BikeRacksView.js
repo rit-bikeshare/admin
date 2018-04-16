@@ -75,7 +75,7 @@ class BikeRacksView extends Component {
     );
 
     return (
-      <Table.Row className="admin-table-row">
+      <Table.Row key={id} className="admin-table-row">
         <Table.Cell>
           <span style={{ paddingRight: '20px' }}>{name}</span>
         </Table.Cell>
@@ -124,7 +124,7 @@ class BikeRacksView extends Component {
         {this.renderDeleteBikeRackModal()}
         {this.renderMap()}
         <Container style={{ paddingBottom: '10px' }}>
-          <Button floated="right" onClick={() => openEditor()}>
+          <Button primary floated="right" onClick={() => openEditor()}>
             Add Bike Rack
           </Button>
           <Header as="h2">Bike Racks</Header>

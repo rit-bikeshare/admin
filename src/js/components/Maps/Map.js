@@ -36,7 +36,7 @@ const MarkerMap = ({ markers }) => {
 };
 
 MarkerMap.propTypes = {
-  markers: PropTypes.array,
+  markers: PropTypes.object,
 };
 
 export default MarkerMap;
