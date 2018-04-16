@@ -3,46 +3,36 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Immutable from 'immutable';
 import { Container, Table, Button, Loader, Header } from 'semantic-ui-react';
+import { actions as bikeActions, name as objectName } from '../../redux/bikes';
+import { actions as bikeEditorActions } from '../../redux/bikeEditor';
+//import { editorAction } from '../../redux/bikes/actions'
 import withNav from '../../withNav';
-//import { editorAction } from '../../redux/bikes/actions';
-import { actions as bikeActions } from '../../redux/bikes';
+import DeleteModal from '../DeleteModal';
 import Editor from './Editor';
-import { DeleteBikeModal } from './DeleteBikeModal';
+import { Bike } from '../../models';
 
 class BikesView extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      deleteBikeModal: null // id of bike deleting
-    };
+    this.state = { deleteBikeModal: null };
   }
 
   componentDidMount() {
-    const { listBikes, retrieveBike } = this.props;
+    const { listBikes } = this.props;
     listBikes();
-    retrieveBike({ id: 10 });
-    //fetchRentals();
-  }
-
-  onDeleteBike(id) {
-    return ';';
   }
 
   renderDeleteBikeModal() {
     const { deleteBikeModal: id } = this.state;
-    if (!id) {
-      return null;
-    }
-
-    const { deleteBike } = this.props;
-
-    return (
-      <DeleteBikeModal
+    return id ? (
+      <DeleteModal
         id={id}
+        objectName={objectName}
+        deleteFn={this.props.deleteBike}
+        onDelete={() => this.setState({ deleteBikeModal: null })}
         onCancel={() => this.setState({ deleteBikeModal: null })}
-        onDelete={() => deleteBike({ id })}
       />
-    );
+    ) : null;
   }
 
   renderBike(bike) {
@@ -50,7 +40,7 @@ class BikesView extends Component {
     const { id, currentRental, lat, lon } = bike.toJS();
 
     const editButton = (
-      <Button size="tiny" compact onClick={() => openEditor(bike.toJS())}>
+      <Button size="tiny" compact onClick={() => openEditor({ object: bike })}>
         Edit
       </Button>
     );
@@ -122,7 +112,11 @@ class BikesView extends Component {
       <div>
         {this.renderDeleteBikeModal()}
         <Container style={{ paddingBottom: '10px' }}>
-          <Button floated="right" onClick={() => openEditor()} primary={true}>
+          <Button
+            floated="right"
+            onClick={() => openEditor({ object: new Bike() })}
+            primary={true}
+          >
             Add Bike
           </Button>
           <Header as="h2">Bikes</Header>
@@ -153,7 +147,7 @@ const mapStateToProps = state => {
     bikesError: state.bikes.get('error'),
     rentals: state.bikes.get(['rentals', 'rentals']),
     rentalsError: state.bikes.getIn(['rentals', 'error']),
-    editorActive: state.bikes.getIn(['editor', 'active'], false)
+    editorActive: state.bikeEditor.get('active', false)
   };
 };
 
@@ -161,8 +155,9 @@ const mapDispatchToProps = dispatch => {
   return {
     listBikes: () => dispatch(bikeActions.list()),
     retrieveBike: ({ id }) => dispatch(bikeActions.retrieve({ id })),
-    deleteBike: ({ id, obj }) => dispatch(bikeActions.destroy({ id, obj }))
-    //openEditor: bike => dispatch(editorAction({ active: true, bike }))
+    deleteBike: ({ id, obj }) => dispatch(bikeActions.destroy({ id, obj })),
+    openEditor: ({ id = null, object = null }) =>
+      dispatch(bikeEditorActions.openBikeEditor({ id, object }))
   };
 };
 

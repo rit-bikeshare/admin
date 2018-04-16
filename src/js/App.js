@@ -38,7 +38,15 @@ export default () => {
           <Route path="/maintenance" component={() => 'Maintenance'} />
           <Route path="/settings" component={() => 'Settings'} />
 
-          <Route path="/login" component={() => 'Login'} />
+          <Route
+            path="/login"
+            component={() => {
+              window.location.replace(
+                'https://bikesharedev.rit.edu/api/login/'
+              );
+              return 'Login';
+            }}
+          />
           <Route component={() => 'No matching route'} />
         </Switch>
       </BrowserRouter>

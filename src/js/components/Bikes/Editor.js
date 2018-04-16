@@ -2,9 +2,10 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Button, Form, Loader, Header, Message } from 'semantic-ui-react';
+import { actions as bikeActions, name as objectName } from '../../redux/bikes';
 //import { editorAction, editBike } from '../../redux/bikes/actions';
 import { Bike } from '../../models';
-import { DeleteBikeModal } from './DeleteBikeModal';
+import DeleteModal from '../DeleteModal';
 
 class Editor extends Component {
   constructor(props) {
@@ -20,21 +21,19 @@ class Editor extends Component {
     close();
   }
 
-  onDeleteBike(id) {}
-
   renderDeleteModal() {
     const { deleteModal, id } = this.state;
-    if (!deleteModal) {
-      return null;
-    }
+    const { deleteBike, close } = this.props;
 
-    return (
-      <DeleteBikeModal
+    return deleteModal ? (
+      <DeleteModal
         id={id}
-        onCancel={() => this.setState({ deleteModal: null })}
-        onDelete={() => this.onDeleteBike(id)}
+        objectName={objectName}
+        deleteFn={deleteBike}
+        onDelete={close}
+        onCancel={() => this.setState({ deleteModal: false })}
       />
-    );
+    ) : null;
   }
 
   renderMessage() {
@@ -62,11 +61,7 @@ class Editor extends Component {
       <Button
         floated="right"
         negative
-        onClick={() =>
-          this.setState({
-            deleteModal: true
-          })
-        }
+        onClick={() => this.setState({ deleteModal: true })}
       >
         Delete bike
       </Button>
@@ -129,21 +124,17 @@ Editor.propTypes = {
   error: PropTypes.object,
   bike: PropTypes.string,
   /* dispatch */
-  open: PropTypes.func.isRequired,
+  deleteBike: PropTypes.func.isRequired,
   save: PropTypes.func.isRequired,
   close: PropTypes.func.isRequired
 };
 
-const mapStateToProps = state => {
-  return {
-    status: state.bikes.getIn(['editor', 'status']),
-    error: state.bikes.getIn(['editor', 'error']),
-    bike: state.bikes.getIn(['editor', 'bike'])
-  };
-};
+const mapStateToProps = state => ({
+  bike: state.bikeEditor.get('bike')
+});
 
 const mapDispatchToProps = dispatch => ({
-  //open: bike => dispatch(editorAction({ active: true, bike })),
+  deleteBike: ({ id, obj }) => dispatch(bikeActions.destroy({ id, obj }))
   //save: bike => dispatch(editBike(bike)),
   //close: () => dispatch(editorAction({}))
 });

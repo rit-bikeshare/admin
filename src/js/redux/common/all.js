@@ -8,6 +8,14 @@ import { update } from './update';
 
 const providers = Map({ create, destroy, list, retrieve, update });
 
+/**
+ * Provides actions:
+ * list()
+ * create(obj)
+ * retrieve(id) or retrieve(obj)
+ * update(obj)
+ * destroy(id) or destroy(obj)
+ */
 export const all = objectDefinition => {
   const result = providers.map(provider => provider(objectDefinition));
   const actions = result.map(({ action }) => action).toJS();
@@ -21,6 +29,7 @@ export const all = objectDefinition => {
     reducer: handleActions(
       reducers,
       Map({ status: 'UNINITIALIZED', data: Map(), error: null })
-    )
+    ),
+    indexFn: objectDefinition.indexFn
   };
 };

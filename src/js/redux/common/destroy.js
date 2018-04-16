@@ -10,7 +10,7 @@ export const destroy = ({ name, path, indexFn }) => {
   const action = ({ id: maybeId, object }) => dispatch => {
     const id = maybeId || indexFn(object);
     dispatch(destroyAction());
-    del(`${path}${id}`)
+    return del(`${path}${id}`)
       .then(() => {
         dispatch(destroySuccessAction({ id }));
       })

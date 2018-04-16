@@ -1,17 +1,9 @@
 import { Bike } from '../models';
 import { all } from './common/all';
 
-/**
- * Provides actions:
- * list()
- * create(obj)
- * retrieve(id) or retrieve(obj)
- * update(obj)
- * destroy(id) or destroy(obj)
- */
-export const { actions, reducer } = all({
-  name: 'bikes',
-  path: 'admin/bikes/',
-  record: Bike,
-  indexFn: bike => bike.get('id')
-});
+export const name = 'bikes';
+export const path = 'admin/bikes/';
+export const record = Bike;
+export const indexFn = bike => bike.get('id');
+
+export const { actions, reducer } = all({ name, path, record, indexFn });

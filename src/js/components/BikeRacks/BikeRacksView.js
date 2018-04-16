@@ -2,20 +2,21 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Immutable from 'immutable';
+import { Marker } from 'react-google-maps';
 import { Container, Table, Button, Loader, Header } from 'semantic-ui-react';
+import {
+  actions as bikeRackActions,
+  name as objectName
+} from '../../redux/bikeRacks';
 import withNav from '../../withNav';
-import { actions as bikeRackActions } from '../../redux/bikeRacks';
 //import Editor from './Editor';
 import MarkerMap from '../Maps/Map';
-import { Marker } from 'react-google-maps';
-import { DeleteBikeRackModal } from './DeleteBikeRackModal';
+import DeleteModal from '../DeleteModal';
 
 class BikeRacksView extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      deleteBikeModal: null // id of bike deleting
-    };
+    this.state = { deleteBikeRackModal: null };
   }
 
   componentDidMount() {
@@ -23,28 +24,17 @@ class BikeRacksView extends Component {
     listBikeRacks();
   }
 
-  onDeleteBikeRack(id) {
-    return ';';
-  }
-
   renderDeleteBikeRackModal() {
     const { deleteBikeRackModal: id } = this.state;
-    if (!id) {
-      return null;
-    }
-
-    const { deleteBikeRack } = this.props;
-
-    return (
-      <DeleteBikeRackModal
+    return id ? (
+      <DeleteModal
         id={id}
+        objectName={objectName}
+        deleteFn={this.props.deleteBikeRack}
+        onDelete={() => this.setState({ deleteBikeRackModal: null })}
         onCancel={() => this.setState({ deleteBikeRackModal: null })}
-        onDelete={() => {
-          deleteBikeRack({ id });
-          this.setState({ deleteBikeRackModal: null });
-        }}
       />
-    );
+    ) : null;
   }
 
   renderMap() {
@@ -58,12 +48,12 @@ class BikeRacksView extends Component {
     return <MarkerMap markers={markers} />;
   }
 
-  renderBike(bike) {
+  renderBikeRack(bikeRack) {
     const { openEditor } = this.props;
-    const { id, currentRental, lat, lon } = bike.toJS();
+    const { id, name, bikeCount } = bikeRack.toJS();
 
     const editButton = (
-      <Button size="tiny" compact onClick={() => openEditor(bike.toJS())}>
+      <Button size="tiny" compact onClick={() => openEditor(bikeRack.toJS())}>
         Edit
       </Button>
     );
@@ -72,7 +62,7 @@ class BikeRacksView extends Component {
       <Button
         size="tiny"
         compact
-        onClick={() => this.setState({ deleteBikeModal: id })}
+        onClick={() => this.setState({ deleteBikeRackModal: id })}
       >
         Delete
       </Button>
@@ -80,18 +70,16 @@ class BikeRacksView extends Component {
 
     const printButton = (
       <Button size="tiny" compact>
-        Print QR Code
+        Print check in QR Code
       </Button>
     );
 
     return (
       <Table.Row className="admin-table-row">
         <Table.Cell>
-          <span style={{ paddingRight: '20px' }}>{id}</span>
+          <span style={{ paddingRight: '20px' }}>{name}</span>
         </Table.Cell>
-        <Table.Cell>{`${lat}, ${lon}`}</Table.Cell>
-        <Table.Cell>{currentRental ? 'out' : '?'}</Table.Cell>
-        <Table.Cell>rider?</Table.Cell>
+        <Table.Cell>{bikeCount}</Table.Cell>
         <Table.Cell>
           <div className="actions">
             {editButton}
@@ -103,7 +91,7 @@ class BikeRacksView extends Component {
     );
   }
 
-  renderBikes() {
+  renderBikeRacks() {
     const { bikeRacks } = this.props;
     if (!bikeRacks) {
       return <Loader active inline="centered" />;
@@ -113,15 +101,13 @@ class BikeRacksView extends Component {
       <Table celled className="admin-table">
         <Table.Header>
           <Table.Row>
-            <Table.HeaderCell>ID</Table.HeaderCell>
-            <Table.HeaderCell>LOCATION</Table.HeaderCell>
-            <Table.HeaderCell>CHECKED IN</Table.HeaderCell>
-            <Table.HeaderCell>LAST RIDER</Table.HeaderCell>
+            <Table.HeaderCell>BIKE RACK</Table.HeaderCell>
+            <Table.HeaderCell>AVAILABLE BIKES</Table.HeaderCell>
             <Table.HeaderCell>ACTIONS</Table.HeaderCell>
           </Table.Row>
         </Table.Header>
         <Table.Body>
-          {bikeRacks.map(b => this.renderBike(b)).toList()}
+          {bikeRacks.map(rack => this.renderBikeRack(rack)).toList()}
         </Table.Body>
       </Table>
     );
@@ -139,12 +125,12 @@ class BikeRacksView extends Component {
         {this.renderMap()}
         <Container style={{ paddingBottom: '10px' }}>
           <Button floated="right" onClick={() => openEditor()}>
-            Add Bike
+            Add Bike Rack
           </Button>
           <Header as="h2">Bike Racks</Header>
         </Container>
         {bikeRacksError ? String(bikeRacksError) : null}
-        {this.renderBikes()}
+        {this.renderBikeRacks()}
       </div>
     );
   }
