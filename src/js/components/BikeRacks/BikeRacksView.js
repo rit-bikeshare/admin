@@ -98,7 +98,7 @@ class BikeRacksView extends Component {
     }
 
     return (
-      <Table celled className="admin-table">
+      <Table className="admin-table">
         <Table.Header>
           <Table.Row>
             <Table.HeaderCell>BIKE RACK</Table.HeaderCell>

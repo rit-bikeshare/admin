@@ -37,7 +37,7 @@
     "build": "yarn build-css && react-scripts build",
     "build-css": "node-sass-chokidar ./src/sass/project.sass --include-path ./node-modules --output-style compressed -o public/",
     "watch-css": "yarn build-css && node-sass-chokidar ./src/sass/project.sass --include-path ./node-modules --output-style compressed --source-map-embed -o public/ --watch --recursive",
-    "start-js": "PORT=80 react-scripts start",
+    "start-js": "PORT=8080 react-scripts start",
     "start": "sh bin/verify-githooks.sh && npm-run-all -p watch-css start-js",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
@@ -51,6 +51,8 @@
     "prettier:verify": "sh bin/prettier-verify.sh",
     "prettier:write": "yarn prettier -- --write \"src/**/*.js\"",
     "fix-githooks": "sh bin/fix-githooks.sh",
+    "portforward:add": "sh bin/add-portforward.sh",
+    "portforward:rm": "sh bin/remove-portforward.sh",
     "postinstall": "yarn fix-githooks"
   },
   "lint-staged": {
