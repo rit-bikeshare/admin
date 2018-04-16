@@ -12,7 +12,7 @@ class Editor extends Component {
     super(props);
     this.state = {
       deleteModal: false,
-      ...props.bike.toJS()
+      ...props.bike.toJS(),
     };
   }
 
@@ -126,15 +126,15 @@ Editor.propTypes = {
   /* dispatch */
   deleteBike: PropTypes.func.isRequired,
   save: PropTypes.func.isRequired,
-  close: PropTypes.func.isRequired
+  close: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state => ({
-  bike: state.bikeEditor.get('bike')
+  bike: state.bikeEditor.get('bike'),
 });
 
 const mapDispatchToProps = dispatch => ({
-  deleteBike: ({ id, obj }) => dispatch(bikeActions.destroy({ id, obj }))
+  deleteBike: ({ id, obj }) => dispatch(bikeActions.destroy({ id, obj })),
   //save: bike => dispatch(editBike(bike)),
   //close: () => dispatch(editorAction({}))
 });

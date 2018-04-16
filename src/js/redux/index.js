@@ -10,5 +10,5 @@ export default combineReducers({
   bikes,
   bikeEditor,
   bikeRacks,
-  routing: routerReducer
+  routing: routerReducer,
 });

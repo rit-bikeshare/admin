@@ -38,7 +38,7 @@ export default class NavView extends Component {
           key,
           label: navItem.get('label'),
           route: navItem.get('route'),
-          active: activeItem === key
+          active: activeItem === key,
         })
       )
       .toList();
@@ -60,9 +60,9 @@ export default class NavView extends Component {
 
 NavView.propTypes = {
   history: PropTypes.object,
-  activeItem: PropTypes.string
+  activeItem: PropTypes.string,
 };
 
 NavView.defaultProps = {
-  activeItem: 'HOME'
+  activeItem: 'HOME',
 };

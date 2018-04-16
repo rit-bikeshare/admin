@@ -17,7 +17,7 @@ export const list = ({ name, path, record, indexFn }) => {
               .toMap()
               .map(obj => new record(obj))
               .mapKeys((_, obj) => indexFn(obj))
-              .sort((a, b) => a.get('id') - b.get('id'))
+              .sort((a, b) => a.get('id') - b.get('id')),
           })
         );
       })
@@ -33,7 +33,7 @@ export const list = ({ name, path, record, indexFn }) => {
         .set('status', 'SUCCESS')
         .update('data', prevData => prevData.merge(data)),
     [listFailureAction]: (state, { payload: { error } }) =>
-      state.set('status', 'FAILURE').set('error', error)
+      state.set('status', 'FAILURE').set('error', error),
   };
 
   return { action, reducers };

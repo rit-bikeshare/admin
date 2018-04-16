@@ -138,7 +138,7 @@ BikesView.propTypes = {
   listBikes: PropTypes.func.isRequired,
   retrieveBike: PropTypes.func.isRequired,
   deleteBike: PropTypes.func.isRequired,
-  openEditor: PropTypes.func
+  openEditor: PropTypes.func,
 };
 
 const mapStateToProps = state => {
@@ -147,7 +147,7 @@ const mapStateToProps = state => {
     bikesError: state.bikes.get('error'),
     rentals: state.bikes.get(['rentals', 'rentals']),
     rentalsError: state.bikes.getIn(['rentals', 'error']),
-    editorActive: state.bikeEditor.get('active', false)
+    editorActive: state.bikeEditor.get('active', false),
   };
 };
 
@@ -157,7 +157,7 @@ const mapDispatchToProps = dispatch => {
     retrieveBike: ({ id }) => dispatch(bikeActions.retrieve({ id })),
     deleteBike: ({ id, obj }) => dispatch(bikeActions.destroy({ id, obj })),
     openEditor: ({ id = null, object = null }) =>
-      dispatch(bikeEditorActions.openBikeEditor({ id, object }))
+      dispatch(bikeEditorActions.openBikeEditor({ id, object })),
   };
 };
 

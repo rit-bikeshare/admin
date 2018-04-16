@@ -22,5 +22,5 @@ export const DeleteBikeRackModal = ({ id, onCancel, onDelete }) => {
 DeleteBikeRackModal.propTypes = {
   id: PropTypes.string,
   onCancel: PropTypes.func.isRequired,
-  onDelete: PropTypes.func.isRequired
+  onDelete: PropTypes.func.isRequired,
 };

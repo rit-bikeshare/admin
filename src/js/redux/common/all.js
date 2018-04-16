@@ -30,6 +30,6 @@ export const all = objectDefinition => {
       reducers,
       Map({ status: 'UNINITIALIZED', data: Map(), error: null })
     ),
-    indexFn: objectDefinition.indexFn
+    indexFn: objectDefinition.indexFn,
   };
 };

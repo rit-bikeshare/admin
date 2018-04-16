@@ -1,14 +1,10 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { compose, withProps } from 'recompose';
-import {
-  withScriptjs,
-  withGoogleMap,
-  GoogleMap,
-  Marker
-} from 'react-google-maps';
+import { withScriptjs, withGoogleMap, GoogleMap } from 'react-google-maps';
 
+//eslint-disable-next-line
 const init = map => {
-  debugger;
   //map.fitBounds({ east: -77.67, north: 43.09, south: 43.08, west: -77.69 });
 };
 
@@ -18,7 +14,7 @@ const MyMapComponent = compose(
       'https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places',
     loadingElement: <div style={{ height: `100%` }} />,
     containerElement: <div style={{ height: `500px` }} />,
-    mapElement: <div style={{ height: `100%` }} />
+    mapElement: <div style={{ height: `100%` }} />,
   }),
   withScriptjs,
   withGoogleMap
@@ -35,8 +31,12 @@ const MyMapComponent = compose(
   );
 });
 
-export default class MarkerMap extends React.PureComponent {
-  render() {
-    return <MyMapComponent markers={this.props.markers} />;
-  }
-}
+const MarkerMap = ({ markers }) => {
+  return <MyMapComponent markers={markers} />;
+};
+
+MarkerMap.propTypes = {
+  markers: PropTypes.object,
+};
+
+export default MarkerMap;

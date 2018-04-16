@@ -3,26 +3,26 @@ import { OrderedMap, Map } from 'immutable';
 export default OrderedMap({
   HOME: Map({
     label: '-',
-    route: '/'
+    route: '/',
   }),
   BIKES: Map({
     label: 'Bikes',
-    route: '/bikes'
+    route: '/bikes',
   }),
   BIKE_RACKS: Map({
     label: 'Bike Racks',
-    route: '/bike-racks'
+    route: '/bike-racks',
   }),
   USERS: Map({
     label: 'Users',
-    route: '/users'
+    route: '/users',
   }),
   MAINTENANCE: Map({
     label: 'Maintenance',
-    route: '/maintenance'
+    route: '/maintenance',
   }),
   SETTINGS: Map({
     label: 'Settings',
-    route: '/settings'
-  })
+    route: '/settings',
+  }),
 });

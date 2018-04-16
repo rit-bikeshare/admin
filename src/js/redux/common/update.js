@@ -29,7 +29,7 @@ export const update = ({ name, path, record, indexFn }) => {
           data.remove(oldId).set(indexFn(object), object)
         ),
     [updateFailureAction]: (state, { payload: { error } }) =>
-      state.set('status', 'FAILURE').set('error', error)
+      state.set('status', 'FAILURE').set('error', error),
   };
 
   return { action, reducers };
