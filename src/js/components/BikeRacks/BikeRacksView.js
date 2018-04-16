@@ -6,7 +6,7 @@ import { Marker } from 'react-google-maps';
 import { Container, Table, Button, Loader, Header } from 'semantic-ui-react';
 import {
   actions as bikeRackActions,
-  name as objectName
+  name as objectName,
 } from '../../redux/bikeRacks';
 import withNav from '../../withNav';
 //import Editor from './Editor';
@@ -41,7 +41,7 @@ class BikeRacksView extends Component {
     const { bikeRacks } = this.props;
     const markers = bikeRacks
       ? bikeRacks.map(rack => (
-          <Marker position={{ lat: rack.lat, lng: rack.lon }} />
+          <Marker key={rack.id} position={{ lat: rack.lat, lng: rack.lon }} />
         ))
       : Immutable.List();
 
@@ -143,14 +143,14 @@ BikeRacksView.propTypes = {
   /* dispatch */
   listBikeRacks: PropTypes.func.isRequired,
   deleteBikeRack: PropTypes.func.isRequired,
-  openEditor: PropTypes.func
+  openEditor: PropTypes.func,
 };
 
 const mapStateToProps = state => {
   return {
     bikeRacks: state.bikeRacks.get('data'),
     bikeRacksError: state.bikeRacks.get('error'),
-    editorActive: state.bikes.getIn(['editor', 'active'], false)
+    editorActive: state.bikes.getIn(['editor', 'active'], false),
   };
 };
 
@@ -158,7 +158,7 @@ const mapDispatchToProps = dispatch => {
   return {
     listBikeRacks: () => dispatch(bikeRackActions.list()),
     deleteBikeRack: ({ id, object }) =>
-      dispatch(bikeRackActions.destroy({ id, object }))
+      dispatch(bikeRackActions.destroy({ id, object })),
     //openEditor: bike => dispatch(editorAction({ active: true, bike }))
   };
 };

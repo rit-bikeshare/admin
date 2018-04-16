@@ -5,13 +5,13 @@ import { Button, Modal } from 'semantic-ui-react';
 const meta = {
   bikes: {
     header: id => `Delete bike ${id}`,
-    description: 'Are you sure you want to delete this bike?'
+    description: 'Are you sure you want to delete this bike?',
   },
   bikeracks: {
     header: id => `Delete bike rack ${id}`,
     description:
-      'Deleting this bike rack will prevent any further check-ins at the rack.'
-  }
+      'Deleting this bike rack will prevent any further check-ins at the rack.',
+  },
 };
 
 const DeleteModalView = ({ objectName, id, status, onCancel, onDelete }) => {
@@ -51,14 +51,14 @@ DeleteModalView.propTypes = {
   id: PropTypes.string,
   status: PropTypes.string,
   onCancel: PropTypes.func.isRequired,
-  onDelete: PropTypes.func.isRequired
+  onDelete: PropTypes.func.isRequired,
 };
 
 class DeleteModal extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      status: null
+      status: null,
     };
   }
 
@@ -97,7 +97,7 @@ DeleteModal.propTypes = {
   objectName: PropTypes.string.isRequired,
   deleteFn: PropTypes.func.isRequired,
   onDelete: PropTypes.func.isRequired,
-  onCancel: PropTypes.func.isRequired
+  onCancel: PropTypes.func.isRequired,
 };
 
 export default DeleteModal;

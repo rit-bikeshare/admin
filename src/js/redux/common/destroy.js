@@ -24,7 +24,7 @@ export const destroy = ({ name, path, indexFn }) => {
     [destroySuccessAction]: (state, { payload: { id } }) =>
       state.set('status', 'SUCCESS').update('data', data => data.remove(id)),
     [destroyFailureAction]: (state, { payload: { error } }) =>
-      state.set('status', 'FAILURE').set('error', error)
+      state.set('status', 'FAILURE').set('error', error),
   };
 
   return { action, reducers };

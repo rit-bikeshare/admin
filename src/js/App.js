@@ -1,4 +1,3 @@
-import '../styles/css/index.css';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
@@ -6,7 +5,7 @@ import thunk from 'redux-thunk';
 import {
   applyMiddleware,
   createStore as createReduxStore,
-  compose
+  compose,
 } from 'redux';
 import { Provider } from 'react-redux';
 import reducer from './redux';

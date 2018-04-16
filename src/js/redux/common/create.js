@@ -25,7 +25,7 @@ export const create = ({ name, path, record, indexFn }) => {
         .set('status', 'SUCCESS')
         .update('data', data => data.set(indexFn(object), object)),
     [createFailureAction]: (state, { payload: { error } }) =>
-      state.set('status', 'FAILURE').set('error', error)
+      state.set('status', 'FAILURE').set('error', error),
   };
 
   return { action, reducers };

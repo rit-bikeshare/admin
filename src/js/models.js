@@ -8,14 +8,14 @@ export const BikeRack = Record(
     description: null,
     checkInArea: null,
     lat: null,
-    lon: null
+    lon: null,
   },
   'BikeRack'
 );
 
 export const BikeLock = Record(
   {
-    mac: null
+    mac: null,
   },
   'BikeLock'
 );
@@ -28,7 +28,7 @@ export const Bike = Record(
     currentRental: null,
     previousRental: null,
     lat: null,
-    lon: null
+    lon: null,
   },
   'Bike'
 );
@@ -39,7 +39,7 @@ export const Rental = Record(
     rentedAt: null,
     returnedAt: null,
     renter: null,
-    bike: null
+    bike: null,
   },
   'Rental'
 );
@@ -50,7 +50,7 @@ export const MaintenanceReport = Record(
     rentedAt: null,
     returnedAt: null,
     renter: null,
-    bike: null
+    bike: null,
   },
   'MaintenanceReport'
 );
@@ -61,7 +61,7 @@ export const DamageType = Record(
     rentedAt: null,
     returnedAt: null,
     renter: null,
-    bike: null
+    bike: null,
   },
   'DamageType'
 );
@@ -72,7 +72,7 @@ export const DamageReport = Record(
     rentedAt: null,
     returnedAt: null,
     renter: null,
-    bike: null
+    bike: null,
   },
   'DamageReport'
 );
@@ -86,7 +86,7 @@ export const BikeshareUser = Record(
     lastName: null,
     isActive: null,
     isStaff: null,
-    groups: null
+    groups: null,
   },
   'BikeshareUser'
 );

@@ -8,11 +8,12 @@
   },
   "env": {
     "browser": true,
-    "jasmine": true,
-    "es6": true
+    "jasmine": true
   },
   "globals": {
-    "Symbol": true
+    "Symbol": true,
+    "Promise": true,
+    "require": true
   },
   "extends": [
     "eslint:recommended",
@@ -22,7 +23,12 @@
   ],
   "plugins": ["react"],
   "rules": {
-    "react/display-name": "off"
+    "react/display-name": "off",
+    "react/jsx-handler-names": "off",
+    "no-param-reassign": "off",
+    "no-unused-vars": [2, {
+      "varsIgnorePattern": "^__"
+    }]
   },
   "settings": {
     "react": {

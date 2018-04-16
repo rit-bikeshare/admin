@@ -6,7 +6,7 @@ const token =
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6IiIsImV4cCI6MTU1NDEzMTk4MiwidXNlcm5hbWUiOiJ0ZXN0IiwidXNlcl9pZCI6MX0.SSu3op-0P9OxVe5WKScWbFRHm5yeSRl8gxGu4KVWfNs';
 
 const tokenHeader = {
-  Authorization: 'JWT ' + token
+  Authorization: 'JWT ' + token,
 };
 
 export function get(url) {
@@ -17,8 +17,8 @@ export function get(url) {
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
-      ...tokenHeader
-    }
+      ...tokenHeader,
+    },
   }).then(async response => {
     if (response.ok) return response.json().then(fromJS);
     const error = await response.json();
@@ -34,15 +34,15 @@ export function post(url, body) {
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
-      ...tokenHeader
+      ...tokenHeader,
     },
-    body: JSON.stringify(body)
+    body: JSON.stringify(body),
   }).then(async response => {
     if (response.ok) return response.json().then(fromJS);
     const error = await response.json();
     return Promise.reject({
       code: response.status,
-      message: error.detail
+      message: error.detail,
     });
   });
 }
@@ -55,15 +55,15 @@ export function put(url, body) {
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
-      ...tokenHeader
+      ...tokenHeader,
     },
-    body: JSON.stringify(body)
+    body: JSON.stringify(body),
   }).then(async response => {
     if (response.ok) return response.json().then(fromJS);
     const error = await response.json();
     return Promise.reject({
       code: response.status,
-      message: error.detail
+      message: error.detail,
     });
   });
 }
@@ -76,8 +76,8 @@ export function del(url) {
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
-      ...tokenHeader
-    }
+      ...tokenHeader,
+    },
   }).then(async response => {
     if (response.ok) return Promise.resolve(true);
     return Promise.reject(response);
