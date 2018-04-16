@@ -98,11 +98,11 @@ class BikeRacksView extends Component {
     }
 
     return (
-      <Table className="admin-table">
+      <Table className="admin-table hoverable" selectable>
         <Table.Header>
           <Table.Row>
             <Table.HeaderCell>BIKE RACK</Table.HeaderCell>
-            <Table.HeaderCell>AVAILABLE BIKES</Table.HeaderCell>
+            <Table.HeaderCell>NUMBER OF BIKES</Table.HeaderCell>
             <Table.HeaderCell>ACTIONS</Table.HeaderCell>
           </Table.Row>
         </Table.Header>

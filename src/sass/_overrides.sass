@@ -1,12 +1,29 @@
 .ui.table
   border-radius: 0
+  border-color: #dfe3eb
 
-  thead th
-    background-color: rgba(0,77,128,.0392157)
+  thead
     border-color: #dfe3eb
-    font-size: .75rem
-    color: #33475b
-    font-weight: 500
+    border-radius: 0
+
+    th
+      background-color: rgba(0,77,128,.0392157)
+      border-color: #dfe3eb
+      border-radius: 0!important
+      font-size: 12px
+      color: #33475b
+      font-weight: 500
+
+  tbody
+    tr, td
+      border-color: #dfe3eb
+      transition: all .15s ease-out
+
+  &.selectable
+    tbody 
+      tr:hover
+        background-color: rgba(0,77,128,.0392157)!important
+
 
 .ui.button
   padding: .75rem 1.5rem

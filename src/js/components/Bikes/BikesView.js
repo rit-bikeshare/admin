@@ -87,7 +87,7 @@ class BikesView extends Component {
     }
 
     return (
-      <Table className="admin-table">
+      <Table className="admin-table hoverable" selectable>
         <Table.Header>
           <Table.Row>
             <Table.HeaderCell>ID</Table.HeaderCell>
