@@ -30,7 +30,11 @@ const LandingPage = ({ history }) => {
               src="https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png"
             />
           </a>
-          <img src={appStoreBadge} className="app-store" />
+          <img
+            alt="Download on the App Store"
+            src={appStoreBadge}
+            className="app-store"
+          />
         </div>
       </div>
       <div className="legal-bs">

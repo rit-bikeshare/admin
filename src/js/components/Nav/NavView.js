@@ -24,7 +24,7 @@ export default class NavView extends Component {
         active={active}
         onClick={() => this.routeTo(route)}
       >
-        {key === 'HOME' ? <img src={Icon} /> : label}
+        {key === 'HOME' ? <img alt="Home" src={Icon} /> : label}
       </Menu.Item>
     );
   }
