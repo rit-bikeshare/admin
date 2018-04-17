@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import Immutable from 'immutable';
 import { Container, Table, Button, Loader, Header } from 'semantic-ui-react';
 
-import { name as objectName } from '../constants/bikeReduxConfig';
+import { name as objectName } from '../';
 import bikeActions from '../actions/bikeActions';
 import openBikeEditor from '../actions/openBikeEditor';
 //import { editorAction } from '../../redux/bikes/actions'

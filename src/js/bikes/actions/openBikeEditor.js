@@ -1,6 +1,6 @@
 import { createAction } from 'redux-actions';
 import bikeActions from './bikeActions';
-import { indexFn } from '../constants/bikeReduxConfig';
+import { indexFn } from '../';
 import {
   BIKE_EDITOR_OPEN,
   BIKE_EDITOR_CLOSE,
