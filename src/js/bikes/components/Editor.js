@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Button, Form, Loader, Header, Message } from 'semantic-ui-react';
-import bikeActions from '../actions/bikeActions';
-import { name as objectName } from '../';
+import { destroy as destroyBikeAction } from '../actions/bikesActions';
+import { name as objectName } from '../bikesRedux';
 //import { editorAction, editBike } from '../../redux/bikes/actions';
 import Bike from '../records/Bike';
 import DeleteModal from 'app/components/DeleteModal';
@@ -135,7 +135,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  deleteBike: ({ id, obj }) => dispatch(bikeActions.destroy({ id, obj })),
+  deleteBike: ({ id, obj }) => dispatch(destroyBikeAction({ id, obj })),
   //save: bike => dispatch(editBike(bike)),
   //close: () => dispatch(editorAction({}))
 });

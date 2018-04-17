@@ -1,6 +1,6 @@
 import { createAction } from 'redux-actions';
-import bikeActions from './bikeActions';
-import { indexFn } from '../';
+import { retrieve as retrieveBikeAction } from './bikesActions';
+import { indexFn } from '../bikesRedux';
 import {
   BIKE_EDITOR_OPEN,
   BIKE_EDITOR_CLOSE,
@@ -21,7 +21,7 @@ export default function openBikeEditor({ id: maybeId, object }) {
     }
 
     if (!getState().bikes.hasIn(['data', id])) {
-      bikeActions.retrieve({ id });
+      retrieveBikeAction({ id });
     }
   };
 }
