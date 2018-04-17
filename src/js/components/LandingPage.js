@@ -18,7 +18,7 @@ const LandingPage = ({ history }) => {
         </Button>
       </div>
       <div className="landing-container">
-        <img src={logo} className="logo" />
+        <img alt="BikeShare" src={logo} className="logo" />
         <h3>Download the app, get riding</h3>
         <div className="app-store-badges">
           <a
