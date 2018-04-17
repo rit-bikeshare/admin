@@ -6,7 +6,6 @@ import { Container, Table, Button, Loader, Header } from 'semantic-ui-react';
 import { actions as bikeActions, name as objectName } from '../../redux/bikes';
 import { actions as bikeEditorActions } from '../../redux/bikeEditor';
 //import { editorAction } from '../../redux/bikes/actions'
-import withNav from '../../withNav';
 import DeleteModal from '../DeleteModal';
 import Editor from './Editor';
 import { Bike } from '../../models';
@@ -161,6 +160,4 @@ const mapDispatchToProps = dispatch => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(
-  withNav(BikesView, 'BIKES')
-);
+export default connect(mapStateToProps, mapDispatchToProps)(BikesView);

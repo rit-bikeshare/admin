@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import withNav from '../../withNav';
 
 class HomeView extends Component {
   render() {
@@ -7,4 +6,4 @@ class HomeView extends Component {
   }
 }
 
-export default withNav(HomeView, 'HOME');
+export default HomeView;

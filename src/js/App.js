@@ -9,9 +9,9 @@ import {
 } from 'redux';
 import { Provider } from 'react-redux';
 import reducer from './redux';
-import Home from './components/Home';
-import Bikes from './components/Bikes';
-import BikeRacks from './components/BikeRacks';
+
+import LandingPage from './components/LandingPage';
+import AppContainer from './components/AppContainer';
 
 function createStore(reducer) {
   const composeEnhancers =
@@ -30,13 +30,8 @@ export default () => {
     <Provider store={store}>
       <BrowserRouter>
         <Switch>
-          <Route exact={true} path="/" component={Home} />
-          <Route path="/bikes" component={Bikes} />
-          <Route path="/bike-racks" component={BikeRacks} />
-          <Route path="/users" component={() => 'Users'} />
-          <Route path="/maintenance" component={() => 'Maintenance'} />
-          <Route path="/settings" component={() => 'Settings'} />
-
+          <Route exact={true} path="/" component={LandingPage} />
+          <Route path="/admin" component={AppContainer} />
           <Route
             path="/login"
             component={() => {
