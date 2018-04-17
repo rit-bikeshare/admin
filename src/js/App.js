@@ -8,10 +8,10 @@ import {
   compose,
 } from 'redux';
 import { Provider } from 'react-redux';
-import reducer from './redux';
+import reducer from './app/reducers/rootReducer';
 
-import LandingPage from './components/LandingPage';
-import AppContainer from './components/AppContainer';
+import LandingPage from './landing-page/components/LandingPage';
+import AppContainer from './app/components/AppContainer';
 
 function createStore(reducer) {
   const composeEnhancers =

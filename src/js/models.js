@@ -1,36 +1,10 @@
 import { Record } from 'immutable';
 
-export const BikeRack = Record(
-  {
-    id: null,
-    bikeCount: null,
-    name: null,
-    description: null,
-    checkInArea: null,
-    lat: null,
-    lon: null,
-  },
-  'BikeRack'
-);
-
 export const BikeLock = Record(
   {
     mac: null,
   },
   'BikeLock'
-);
-
-export const Bike = Record(
-  {
-    id: null,
-    lock: null,
-    visible: true,
-    currentRental: null,
-    previousRental: null,
-    lat: null,
-    lon: null,
-  },
-  'Bike'
 );
 
 export const Rental = Record(
