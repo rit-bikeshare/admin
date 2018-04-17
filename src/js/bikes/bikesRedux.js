@@ -1,4 +1,4 @@
-import { all } from '../common/all';
+import { all } from '../commonRedux/all';
 import Bike from './records/Bike';
 
 export const name = 'bikes';
