@@ -11,7 +11,7 @@ jobs:
       script: yarn test
 
     - stage: build
-      if: branch = master OR tag IS present
+      if: tag IS present
       language: node_js
       node_js: node
       cache: yarn
