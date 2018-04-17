@@ -4,8 +4,11 @@ import PropTypes from 'prop-types';
 import Immutable from 'immutable';
 import { Marker } from 'react-google-maps';
 import { Container, Table, Button, Loader, Header } from 'semantic-ui-react';
-import bikeRackActions from '../actions/bikeRacksActions';
-import { name as objectName } from '../constants/bikeRacksReduxConfig';
+import {
+  list as listBikeRackAction,
+  destroy as destroyBikeRackAction,
+} from '../actions/bikeRacksActions';
+import { name as objectName } from '../bikeRacksRedux';
 //import Editor from './Editor';
 import MarkerMap from 'app/components/Map';
 import DeleteModal from 'app/components/DeleteModal';
@@ -153,9 +156,9 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    listBikeRacks: () => dispatch(bikeRackActions.list()),
+    listBikeRacks: () => dispatch(listBikeRackAction()),
     deleteBikeRack: ({ id, object }) =>
-      dispatch(bikeRackActions.destroy({ id, object })),
+      dispatch(destroyBikeRackAction({ id, object })),
     //openEditor: bike => dispatch(editorAction({ active: true, bike }))
   };
 };
