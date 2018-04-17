@@ -8,7 +8,6 @@ import {
   actions as bikeRackActions,
   name as objectName,
 } from '../../redux/bikeRacks';
-import withNav from '../../withNav';
 //import Editor from './Editor';
 import MarkerMap from '../Maps/Map';
 import DeleteModal from '../DeleteModal';
@@ -163,6 +162,4 @@ const mapDispatchToProps = dispatch => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(
-  withNav(BikeRacksView, 'BIKE_RACKS')
-);
+export default connect(mapStateToProps, mapDispatchToProps)(BikeRacksView);

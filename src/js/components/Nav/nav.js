@@ -2,27 +2,33 @@ import { OrderedMap, Map } from 'immutable';
 
 export default OrderedMap({
   HOME: Map({
+    key: 'HOME',
     label: '-',
-    route: '/',
+    route: '/admin',
   }),
   BIKES: Map({
+    key: 'BIKES',
     label: 'Bikes',
-    route: '/bikes',
+    route: '/admin/bikes',
   }),
   BIKE_RACKS: Map({
+    key: 'BIKE_RACKS',
     label: 'Bike Racks',
-    route: '/bike-racks',
+    route: '/admin/bike-racks',
   }),
   USERS: Map({
+    key: 'USERS',
     label: 'Users',
-    route: '/users',
+    route: '/admin/users',
   }),
   MAINTENANCE: Map({
+    key: 'MAINTENANCE',
     label: 'Maintenance',
-    route: '/maintenance',
+    route: '/admin/maintenance',
   }),
   SETTINGS: Map({
+    key: 'SETTINGS',
     label: 'Settings',
-    route: '/settings',
+    route: '/admin/settings',
   }),
 });
