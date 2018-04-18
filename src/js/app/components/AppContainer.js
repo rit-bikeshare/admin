@@ -2,6 +2,7 @@ import React from 'react';
 import { PropTypes } from 'prop-types';
 import { Route, Switch } from 'react-router-dom';
 import { Container } from 'semantic-ui-react';
+import { connect } from 'react-redux';
 
 import Nav from 'nav/components/NavView';
 import navConfig from 'nav/constants/navConfig';
@@ -9,8 +10,16 @@ import navConfig from 'nav/constants/navConfig';
 import Home from 'home/components/HomeView';
 import Bikes from 'bikes/components/BikesView';
 import BikeRacks from 'bike-racks/components/BikeRacksView';
+import UserData, { isEmpty } from 'auth/records/UserData';
 
 class AppContainer extends React.Component {
+  componentWillReceiveProps(nextProps) {
+    const { userData, history } = nextProps;
+    if (isEmpty(userData)) {
+      history.replace('/');
+    }
+  }
+
   getActiveItem() {
     const { history } = this.props;
     const currentPath = history.location.pathname;
@@ -48,6 +57,11 @@ class AppContainer extends React.Component {
 
 AppContainer.propTypes = {
   history: PropTypes.object,
+  userData: PropTypes.instanceOf(UserData),
 };
 
-export default AppContainer;
+const mapStateToProps = state => ({
+  userData: state.userData,
+});
+
+export default connect(mapStateToProps, null)(AppContainer);

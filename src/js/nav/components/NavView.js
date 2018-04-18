@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Container, Menu, Button } from 'semantic-ui-react';
 import Icon from '../../../img/icon.png';
 import nav from '../constants/navConfig';
+import { clearUserData } from 'auth/actions/fetchUserData';
 
-export default class NavView extends Component {
+class NavView extends Component {
   constructor(props) {
     super(props);
     this.routeTo = this.routeTo.bind(this);
@@ -30,7 +32,7 @@ export default class NavView extends Component {
   }
 
   render() {
-    const activeItem = this.props.activeItem;
+    const { signOut, activeItem } = this.props;
 
     const navMenuItems = nav
       .map((navItem, key) =>
@@ -49,7 +51,9 @@ export default class NavView extends Component {
           <Menu stackable>
             {navMenuItems}
             <Menu.Item position={'right'}>
-              <Button secondary={true}>Sign out</Button>
+              <Button secondary={true} onClick={signOut}>
+                Sign out
+              </Button>
             </Menu.Item>
           </Menu>
         </Container>
@@ -61,8 +65,13 @@ export default class NavView extends Component {
 NavView.propTypes = {
   history: PropTypes.object,
   activeItem: PropTypes.string,
+  signOut: PropTypes.func,
 };
 
 NavView.defaultProps = {
   activeItem: 'HOME',
 };
+
+export default connect(null, {
+  signOut: clearUserData,
+})(NavView);

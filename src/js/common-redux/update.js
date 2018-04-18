@@ -1,5 +1,4 @@
 import { createAction } from 'redux-actions';
-import { put } from 'api/request';
 
 export const update = ({ name, path, record, indexFn }) => {
   const prefix = name.toUpperCase();
@@ -8,17 +7,20 @@ export const update = ({ name, path, record, indexFn }) => {
   const updateFailureAction = createAction(`${prefix}_UPDATE_FAILURE`);
 
   /* oldId only required if changing ID */
-  const action = ({ id: oldId, object }) => dispatch => {
-    const id = oldId || indexFn(object);
-    dispatch(updateAction());
-    put(`${path}${id}`, object)
-      .then(object => {
-        dispatch(updateSuccessAction({ object: new record(object), oldId }));
-      })
-      .catch(error => {
-        dispatch(updateFailureAction({ error }));
-      });
-  };
+  function action({ id: oldId, object }) {
+    return (dispatch, getState, api) => {
+      const id = oldId || indexFn(object);
+      dispatch(updateAction());
+      api
+        .put(`${path}${id}`, object)
+        .then(object => {
+          dispatch(updateSuccessAction({ object: new record(object), oldId }));
+        })
+        .catch(error => {
+          dispatch(updateFailureAction({ error }));
+        });
+    };
+  }
 
   const reducers = {
     [updateAction]: state => state.set('status', 'PENDING'),
