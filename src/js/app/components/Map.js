@@ -3,11 +3,6 @@ import PropTypes from 'prop-types';
 import { compose, withProps } from 'recompose';
 import { withScriptjs, withGoogleMap, GoogleMap } from 'react-google-maps';
 
-//eslint-disable-next-line
-const init = map => {
-  //map.fitBounds({ east: -77.67, north: 43.09, south: 43.08, west: -77.69 });
-};
-
 const MyMapComponent = compose(
   withProps({
     googleMapURL:
@@ -18,10 +13,10 @@ const MyMapComponent = compose(
   }),
   withScriptjs,
   withGoogleMap
-)(({ markers }) => {
+)(({ markers, mapRef }) => {
   return (
     <GoogleMap
-      ref={init}
+      ref={mapRef}
       defaultZoom={17}
       zoom={17}
       center={{ lat: 43.08447438334887, lng: -77.67920080572367 }}
@@ -34,12 +29,13 @@ const MyMapComponent = compose(
   );
 });
 
-const MarkerMap = ({ markers }) => {
-  return <MyMapComponent markers={markers} />;
+const MarkerMap = ({ markers, mapRef }) => {
+  return <MyMapComponent mapRef={mapRef} markers={markers} />;
 };
 
 MarkerMap.propTypes = {
   markers: PropTypes.object,
+  mapRef: PropTypes.func,
 };
 
 export default MarkerMap;

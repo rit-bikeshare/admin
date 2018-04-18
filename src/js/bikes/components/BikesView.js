@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Immutable from 'immutable';
+import { Marker } from 'react-google-maps';
 import { Container, Table, Button, Loader, Header } from 'semantic-ui-react';
 
 import { name as objectName } from '../bikesRedux';
@@ -12,6 +13,8 @@ import {
 } from '../actions/bikesActions';
 import openBikeEditor from '../actions/openBikeEditor';
 //import { editorAction } from '../../redux/bikes/actions'
+import MarkerMap from 'app/components/Map';
+
 import DeleteModal from 'app/components/DeleteModal';
 import Editor from './Editor';
 import Bike from '../records/Bike';
@@ -20,11 +23,16 @@ class BikesView extends Component {
   constructor(props) {
     super(props);
     this.state = { deleteBikeModal: null };
+    this.registerMapRef = this.registerMapRef.bind(this);
   }
 
   componentDidMount() {
     const { listBikes } = this.props;
     listBikes();
+  }
+
+  registerMapRef(ref) {
+    this.map = ref;
   }
 
   renderDeleteBikeModal() {
@@ -66,12 +74,23 @@ class BikesView extends Component {
       </Button>
     );
 
+    const handleLocationClick = () => {
+      this.map.panTo({
+        lat,
+        lng: lon,
+      });
+    };
+
     return (
       <Table.Row className="admin-table-row">
         <Table.Cell>
           <span style={{ paddingRight: '20px' }}>{id}</span>
         </Table.Cell>
-        <Table.Cell>{`${lat}, ${lon}`}</Table.Cell>
+        <Table.Cell>
+          <a className="link-button" onClick={handleLocationClick}>
+            show on map
+          </a>
+        </Table.Cell>
         <Table.Cell>{currentRental ? 'out' : '?'}</Table.Cell>
         <Table.Cell>rider?</Table.Cell>
         <Table.Cell>
@@ -107,6 +126,23 @@ class BikesView extends Component {
     );
   }
 
+  renderBikeMarker(bike) {
+    return (
+      <Marker
+        key={bike.id}
+        position={{ lat: bike.lat, lng: bike.lon }}
+        label={`${bike.id}`}
+      />
+    );
+  }
+
+  renderMap() {
+    const { bikes } = this.props;
+    const markers = bikes.map(bike => this.renderBikeMarker(bike));
+
+    return <MarkerMap mapRef={this.registerMapRef} markers={markers} />;
+  }
+
   render() {
     const { editorActive, openEditor, bikesError } = this.props;
     if (openEditor && editorActive) {
@@ -116,6 +152,7 @@ class BikesView extends Component {
     return (
       <div>
         {this.renderDeleteBikeModal()}
+        {this.renderMap()}
         <Container style={{ paddingBottom: '10px' }}>
           <Button
             floated="right"

@@ -18,11 +18,16 @@ class BikeRacksView extends Component {
   constructor(props) {
     super(props);
     this.state = { deleteBikeRackModal: null };
+    this.registerMapRef = this.registerMapRef.bind(this);
   }
 
   componentDidMount() {
     const { listBikeRacks } = this.props;
     listBikeRacks();
+  }
+
+  registerMapRef(ref) {
+    this.map = ref;
   }
 
   renderDeleteBikeRackModal() {
@@ -81,12 +86,12 @@ class BikeRacksView extends Component {
         .push(this.renderBikeRackCheckOutArea(rack));
     }, List());
 
-    return <MarkerMap markers={markers} />;
+    return <MarkerMap mapRef={this.registerMapRef} markers={markers} />;
   }
 
   renderBikeRack(bikeRack) {
     const { openEditor } = this.props;
-    const { id, name, bikeCount } = bikeRack.toJS();
+    const { id, name, bikeCount, lat, lon } = bikeRack.toJS();
 
     const editButton = (
       <Button size="tiny" compact onClick={() => openEditor(bikeRack.toJS())}>
@@ -110,10 +115,22 @@ class BikeRacksView extends Component {
       </Button>
     );
 
+    const handleLocationClick = () => {
+      this.map.panTo({
+        lat,
+        lng: lon,
+      });
+    };
+
     return (
       <Table.Row key={id} className="admin-table-row">
         <Table.Cell>
           <span style={{ paddingRight: '20px' }}>{name}</span>
+        </Table.Cell>
+        <Table.Cell>
+          <a className="link-button" onClick={handleLocationClick}>
+            show on map
+          </a>
         </Table.Cell>
         <Table.Cell>{bikeCount}</Table.Cell>
         <Table.Cell>
@@ -138,6 +155,7 @@ class BikeRacksView extends Component {
         <Table.Header>
           <Table.Row>
             <Table.HeaderCell>BIKE RACK</Table.HeaderCell>
+            <Table.HeaderCell>LOCATION</Table.HeaderCell>
             <Table.HeaderCell>NUMBER OF BIKES</Table.HeaderCell>
             <Table.HeaderCell>ACTIONS</Table.HeaderCell>
           </Table.Row>
