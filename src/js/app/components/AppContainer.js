@@ -10,13 +10,54 @@ import navConfig from 'nav/constants/navConfig';
 import Home from 'home/components/HomeView';
 import Bikes from 'bikes/components/BikesView';
 import BikeRacks from 'bike-racks/components/BikeRacksView';
-import UserData, { isEmpty } from 'auth/records/UserData';
+import LoadingPage from './LoadingPage';
+import UserData, { isEmpty, isFetched } from 'auth/records/UserData';
+import fetchUserDataAction from 'auth/actions/fetchUserData';
 
 class AppContainer extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      loading: true,
+    };
+  }
+
+  componentWillMount() {
+    const { userData, history, fetchUserData } = this.props;
+    if (isEmpty(userData)) {
+      history.replace('/');
+      return;
+    }
+
+    fetchUserData();
+  }
+
+  componentDidMount() {
+    const { userData, history } = this.props;
+    if (isFetched(userData)) {
+      this.setState({
+        loading: false,
+      });
+      if (!userData.isStaff) {
+        history.replace('/');
+      }
+    }
+  }
+
   componentWillReceiveProps(nextProps) {
+    const { userData: prevUserData } = this.props;
     const { userData, history } = nextProps;
     if (isEmpty(userData)) {
       history.replace('/');
+    }
+
+    if (!isFetched(prevUserData) && isFetched(userData)) {
+      this.setState({
+        loading: false,
+      });
+      if (!userData.isStaff) {
+        history.replace('/');
+      }
     }
   }
 
@@ -30,11 +71,16 @@ class AppContainer extends React.Component {
   }
 
   render() {
+    const { loading } = this.state;
     const activeItem = this.getActiveItem();
     let activeKey = 'HOME';
 
     if (activeItem) {
       activeKey = activeItem.get('key');
+    }
+
+    if (loading) {
+      return <LoadingPage />;
     }
 
     return (
@@ -58,10 +104,13 @@ class AppContainer extends React.Component {
 AppContainer.propTypes = {
   history: PropTypes.object,
   userData: PropTypes.instanceOf(UserData),
+  fetchUserData: PropTypes.func,
 };
 
 const mapStateToProps = state => ({
   userData: state.userData,
 });
 
-export default connect(mapStateToProps, null)(AppContainer);
+export default connect(mapStateToProps, {
+  fetchUserData: fetchUserDataAction,
+})(AppContainer);

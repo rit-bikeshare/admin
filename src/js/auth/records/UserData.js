@@ -5,6 +5,7 @@ export default new Record({
   authToken: null,
   firstName: null,
   lastName: null,
+  isStaff: false,
 });
 
 /**
