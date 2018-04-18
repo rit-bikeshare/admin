@@ -7,7 +7,7 @@ import bikeEditorReducer from 'bikes/reducers/bikeEditorReducer';
 import bikeRacksReducer from 'bike-racks/reducers/bikeRacksReducer';
 
 export default combineReducers({
-  auth: authReducer,
+  userData: authReducer,
   bikes: bikeReducer,
   bikeEditor: bikeEditorReducer,
   bikeRacks: bikeRacksReducer,

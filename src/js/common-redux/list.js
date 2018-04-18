@@ -1,5 +1,4 @@
 import { createAction } from 'redux-actions';
-import { get } from 'api/request';
 
 export const list = ({ name, path, record, indexFn }) => {
   const prefix = name.toUpperCase();
@@ -7,24 +6,27 @@ export const list = ({ name, path, record, indexFn }) => {
   const listSuccessAction = createAction(`${prefix}_LIST_SUCCESS`);
   const listFailureAction = createAction(`${prefix}_LIST_FAILURE`);
 
-  const action = () => dispatch => {
-    dispatch(listAction());
-    get(path)
-      .then(objects => {
-        dispatch(
-          listSuccessAction({
-            data: objects
-              .toMap()
-              .map(obj => new record(obj))
-              .mapKeys((_, obj) => indexFn(obj))
-              .sort((a, b) => a.get('id') - b.get('id')),
-          })
-        );
-      })
-      .catch(error => {
-        dispatch(listFailureAction({ error }));
-      });
-  };
+  function action() {
+    return (dispatch, getState, api) => {
+      dispatch(listAction());
+      api
+        .get(path)
+        .then(objects => {
+          dispatch(
+            listSuccessAction({
+              data: objects
+                .toMap()
+                .map(obj => new record(obj))
+                .mapKeys((_, obj) => indexFn(obj))
+                .sort((a, b) => a.get('id') - b.get('id')),
+            })
+          );
+        })
+        .catch(error => {
+          dispatch(listFailureAction({ error }));
+        });
+    };
+  }
 
   const reducers = {
     [listAction]: state => state.set('status', 'PENDING'),

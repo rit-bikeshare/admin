@@ -1,5 +1,4 @@
 import { createAction } from 'redux-actions';
-import { get } from 'api/request';
 
 export const retrieve = ({ name, path, record, indexFn }) => {
   const prefix = name.toUpperCase();
@@ -7,17 +6,20 @@ export const retrieve = ({ name, path, record, indexFn }) => {
   const retrieveSuccessAction = createAction(`${prefix}_RETRIEVE_SUCCESS`);
   const retrieveFailureAction = createAction(`${prefix}_RETRIEVE_FAILURE`);
 
-  const action = ({ id: maybeId, object }) => dispatch => {
-    const id = maybeId || indexFn(object);
-    dispatch(retrieveAction());
-    get(`${path}${id}`)
-      .then(object => {
-        dispatch(retrieveSuccessAction({ object: new record(object) }));
-      })
-      .catch(error => {
-        dispatch(retrieveFailureAction({ error }));
-      });
-  };
+  function action({ id: maybeId, object }) {
+    return (dispatch, getState, api) => {
+      const id = maybeId || indexFn(object);
+      dispatch(retrieveAction());
+      api
+        .get(`${path}${id}`)
+        .then(object => {
+          dispatch(retrieveSuccessAction({ object: new record(object) }));
+        })
+        .catch(error => {
+          dispatch(retrieveFailureAction({ error }));
+        });
+    };
+  }
 
   const reducers = {
     [retrieveAction]: state => state.set('status', 'PENDING'),
