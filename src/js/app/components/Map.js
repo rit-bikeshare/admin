@@ -25,6 +25,9 @@ const MyMapComponent = compose(
       defaultZoom={17}
       zoom={17}
       center={{ lat: 43.08447438334887, lng: -77.67920080572367 }}
+      options={{
+        streetViewControl: false,
+      }}
     >
       {markers.toList()}
     </GoogleMap>
