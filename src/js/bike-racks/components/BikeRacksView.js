@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import Immutable from 'immutable';
-import { Marker } from 'react-google-maps';
+import { List, Map } from 'immutable';
+import { OverlayView, Polygon } from 'react-google-maps';
 import { Container, Table, Button, Loader, Header } from 'semantic-ui-react';
 import {
   list as listBikeRackAction,
@@ -12,6 +12,7 @@ import { name as objectName } from '../bikeRacksRedux';
 //import Editor from './Editor';
 import MarkerMap from 'app/components/Map';
 import DeleteModal from 'app/components/DeleteModal';
+import BikeRackMarker from 'svg/BikeRackMarker';
 
 class BikeRacksView extends Component {
   constructor(props) {
@@ -37,13 +38,48 @@ class BikeRacksView extends Component {
     ) : null;
   }
 
+  renderBikeRackMarker(rack) {
+    return (
+      <OverlayView
+        key={rack.id}
+        position={{ lat: rack.lat, lng: rack.lon }}
+        mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}
+      >
+        <BikeRackMarker availableBikes={rack.bikeCount} />
+      </OverlayView>
+    );
+  }
+
+  renderBikeRackCheckOutArea(bikeRack) {
+    const coords = bikeRack.checkInArea
+      .get('coordinates')
+      .first()
+      .toJS();
+    const formattedCoords = coords.map(coord => {
+      return {
+        lat: coord[1],
+        lng: coord[0],
+      };
+    });
+
+    return (
+      <Polygon
+        paths={formattedCoords}
+        options={{
+          fillColor: 'rgba(243,110,31,0.25)',
+          strokeColor: 'rgba(243,110,31,0.5)',
+        }}
+      />
+    );
+  }
+
   renderMap() {
     const { bikeRacks } = this.props;
-    const markers = bikeRacks
-      ? bikeRacks.map(rack => (
-          <Marker key={rack.id} position={{ lat: rack.lat, lng: rack.lon }} />
-        ))
-      : Immutable.List();
+    const markers = bikeRacks.reduce((acc, rack) => {
+      return acc
+        .push(this.renderBikeRackMarker(rack))
+        .push(this.renderBikeRackCheckOutArea(rack));
+    }, List());
 
     return <MarkerMap markers={markers} />;
   }
@@ -137,7 +173,7 @@ class BikeRacksView extends Component {
 }
 
 BikeRacksView.propTypes = {
-  bikeRacks: PropTypes.instanceOf(Immutable.Map),
+  bikeRacks: PropTypes.instanceOf(Map),
   bikeRacksError: PropTypes.object,
   editorActive: PropTypes.bool,
   /* dispatch */
