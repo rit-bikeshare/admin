@@ -50,17 +50,3 @@ export const DamageReport = Record(
   },
   'DamageReport'
 );
-
-export const BikeshareUser = Record(
-  {
-    id: null,
-    lastLogin: null,
-    username: null,
-    firstName: null,
-    lastName: null,
-    isActive: null,
-    isStaff: null,
-    groups: null,
-  },
-  'BikeshareUser'
-);
