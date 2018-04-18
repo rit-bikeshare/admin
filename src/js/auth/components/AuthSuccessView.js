@@ -34,7 +34,15 @@ class AuthSuccessView extends React.Component {
     fetchUserData();
   }
 
-  componentWillUpdate(nextProps) {
+  componentDidMount() {
+    const { userData } = this.props;
+
+    if (isFetched(userData)) {
+      this.routeToAdminHome();
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
     const { userData: prevUserData } = this.props;
     const { userData } = nextProps;
 
