@@ -3,7 +3,6 @@
   "version": "0.1.6",
   "private": true,
   "dependencies": {
-    "@hs/transmute": "^2.0.5",
     "immutable": "^3.8.2",
     "moment": "^2.20.1",
     "prop-types": "^15.6.1",

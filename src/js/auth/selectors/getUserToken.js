@@ -1,3 +1,1 @@
-import { getIn } from '@hs/transmute';
-
-export default getIn(['userData', 'authToken']);
+export default state => state.userData.get('authToken');
