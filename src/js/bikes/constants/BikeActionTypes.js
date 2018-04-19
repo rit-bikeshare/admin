@@ -1,2 +1,0 @@
-export const BIKE_EDITOR_OPEN = 'BIKE_EDITOR_OPEN';
-export const BIKE_EDITOR_CLOSE = 'BIKE_EDITOR_CLOSE';

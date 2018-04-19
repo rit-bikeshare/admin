@@ -8,7 +8,7 @@ import {
   list as listBikeRackAction,
   destroy as destroyBikeRackAction,
 } from '../actions/bikeRacksActions';
-import { name as objectName } from '../bikeRacksRedux';
+import { name as objectName } from '../BikeRacksRedux';
 //import Editor from './Editor';
 import MarkerMap from 'app/components/Map';
 import DeleteModal from 'app/components/DeleteModal';

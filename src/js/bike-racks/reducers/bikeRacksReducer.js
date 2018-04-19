@@ -1,1 +1,1 @@
-export { reducer as default } from '../bikeRacksRedux';
+export { reducer as default } from '../BikeRacksRedux';

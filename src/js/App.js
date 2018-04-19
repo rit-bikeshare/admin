@@ -17,7 +17,6 @@ import reducer from './app/reducers/rootReducer';
 import LandingPage from './landing-page/components/LandingPage';
 import AppContainer from './app/components/AppContainer';
 import RequestManager from './api/RequestManager';
-import getUserToken from './auth/selectors/getUserToken';
 import getLoginQuery from './auth/utils/getLoginQuery';
 import UserData from './auth/records/UserData';
 import getBaseRequestUrl from './api/utils/getBaseRequestUrl';
@@ -29,7 +28,7 @@ function createStore(reducer) {
   const composeEnhancers =
     window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
-  const getToken = () => getUserToken(store.getState());
+  const getToken = () => store.getState().userData.get('authToken');
 
   const createStoreWithMiddleware = composeEnhancers(
     applyMiddleware(thunk.withExtraArgument(new RequestManager(getToken)))

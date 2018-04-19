@@ -5,13 +5,13 @@ import Immutable from 'immutable';
 import { Marker } from 'react-google-maps';
 import { Container, Table, Button, Loader, Header } from 'semantic-ui-react';
 
-import { name as objectName } from '../bikesRedux';
+import { name as objectName } from '../BikesRedux';
 import {
   retrieve as retrieveBikeAction,
   list as listBikeAction,
   destroy as destroyBikeAction,
 } from '../actions/bikesActions';
-import openBikeEditor from '../actions/openBikeEditor';
+import { openBikeEditor } from '../actions/bikeEditorActions';
 //import { editorAction } from '../../redux/bikes/actions'
 import MarkerMap from 'app/components/Map';
 

@@ -1,1 +1,1 @@
-export { reducer as default } from '../bikesRedux';
+export { reducer as default } from '../BikesRedux';

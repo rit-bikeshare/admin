@@ -1,17 +1,11 @@
 import { createAction } from 'redux-actions';
 import { retrieve as retrieveBikeAction } from './bikesActions';
-import { indexFn } from '../bikesRedux';
-import {
-  BIKE_EDITOR_OPEN,
-  BIKE_EDITOR_CLOSE,
-} from '../constants/BikeActionTypes';
+import { indexFn } from '../BikesRedux';
 
-/* Not used directly */
-const openBikeEditorAction = createAction(BIKE_EDITOR_OPEN);
-//eslint-disable-next-line
-const closeBikeEditorAction = createAction(BIKE_EDITOR_CLOSE);
+export const openBikeEditorAction = createAction('BIKE_EDITOR_OPEN');
+export const closeBikeEditorAction = createAction('BIKE_EDITOR_CLOSE');
 
-export default function openBikeEditor({ id: maybeId, object }) {
+export const openBikeEditor = ({ id: maybeId, object }) => {
   return (dispatch, getState) => {
     const id = maybeId || indexFn(object);
 
@@ -24,4 +18,4 @@ export default function openBikeEditor({ id: maybeId, object }) {
       retrieveBikeAction({ id });
     }
   };
-}
+};

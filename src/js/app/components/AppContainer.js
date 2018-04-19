@@ -12,7 +12,7 @@ import Bikes from 'bikes/components/BikesView';
 import BikeRacks from 'bike-racks/components/BikeRacksView';
 import LoadingPage from './LoadingPage';
 import UserData, { isEmpty, isFetched } from 'auth/records/UserData';
-import fetchUserDataAction from 'auth/actions/fetchUserData';
+import { fetchUserData as fetchUserDataAction } from 'auth/actions/authActions';
 
 class AppContainer extends React.Component {
   constructor(props) {

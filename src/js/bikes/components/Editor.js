@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Button, Form, Loader, Header, Message } from 'semantic-ui-react';
 import { destroy as destroyBikeAction } from '../actions/bikesActions';
-import { name as objectName } from '../bikesRedux';
+import { name as objectName } from '../BikesRedux';
 //import { editorAction, editBike } from '../../redux/bikes/actions';
 import Bike from '../records/Bike';
 import DeleteModal from 'app/components/DeleteModal';

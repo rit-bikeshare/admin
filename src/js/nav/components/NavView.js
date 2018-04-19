@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { Container, Menu, Button } from 'semantic-ui-react';
 import Icon from '../../../img/icon.png';
 import nav from '../constants/navConfig';
-import { clearUserData } from 'auth/actions/fetchUserData';
+import { clearUserData } from 'auth/actions/authActions';
 
 class NavView extends Component {
   constructor(props) {

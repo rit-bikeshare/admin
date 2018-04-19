@@ -3,9 +3,10 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Loader } from 'semantic-ui-react';
 import queryString from 'query-string';
-
-import setUserTokenAction from '../actions/setUserTokenAction';
-import fetchUserDataAction from '../actions/fetchUserData';
+import {
+  fetchUserData as fetchUserDataAction,
+  setUserToken as setUserTokenAction,
+} from '../actions/authActions';
 import UserData, { isFetched } from '../records/UserData';
 
 import logo from '../../../img/logo.png';
