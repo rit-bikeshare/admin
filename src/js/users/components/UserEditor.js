@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Button, Form, Loader, Header, Message } from 'semantic-ui-react';
 import { update as editUser } from '../actions/userActions';
-import editorAction from '../actions/openUserEditor';
 import User from '../records/User';
 
 class Editor extends Component {
@@ -89,7 +88,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   save: bike => dispatch(editUser(bike)),
-  close: () => dispatch(editorAction({})),
+  //close: () => dispatch(editorAction({})),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Editor);

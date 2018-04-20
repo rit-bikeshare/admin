@@ -1,2 +1,0 @@
-export const USER_EDITOR_OPEN = 'USER_EDITOR_OPEN';
-export const USER_EDITOR_CLOSE = 'USER_EDITOR_CLOSE';
