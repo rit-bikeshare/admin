@@ -11,6 +11,7 @@ import Home from 'home/components/HomeView';
 import Bikes from 'bikes/components/BikesView';
 import BikeRacks from 'bike-racks/components/BikeRacksView';
 import LoadingPage from './LoadingPage';
+import UserView from 'users/components/UsersView';
 import UserData, { isEmpty, isFetched } from 'auth/records/UserData';
 import { fetchUserData as fetchUserDataAction } from 'auth/actions/authActions';
 
@@ -91,7 +92,7 @@ class AppContainer extends React.Component {
             <Route exact={true} path="/admin" component={Home} />
             <Route path="/admin/bikes" component={Bikes} />
             <Route path="/admin/bike-racks" component={BikeRacks} />
-            <Route path="/admin/users" component={() => 'Users'} />
+            <Route path="/admin/users" component={UserView} />
             <Route path="/admin/maintenance" component={() => 'Maintenance'} />
             <Route path="/admin/settings" component={() => 'Settings'} />
           </Switch>
