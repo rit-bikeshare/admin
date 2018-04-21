@@ -5,7 +5,7 @@ import { Container } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 
 import Nav from 'nav/components/NavView';
-import navConfig from 'nav/constants/navConfig';
+import NavConfig from 'nav/constants/NavConfig';
 
 import Home from 'home/components/HomeView';
 import Bikes from 'bikes/components/BikesView';
@@ -66,7 +66,7 @@ class AppContainer extends React.Component {
     const { history } = this.props;
     const currentPath = history.location.pathname;
 
-    return navConfig.find(navItem => {
+    return NavConfig.find(navItem => {
       return navItem.get('route') === currentPath;
     });
   }

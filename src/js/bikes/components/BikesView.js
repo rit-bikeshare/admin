@@ -16,7 +16,7 @@ import { openBikeEditor } from '../actions/bikeEditorActions';
 import MarkerMap from 'app/components/Map';
 
 import DeleteModal from 'app/components/DeleteModal';
-import Editor from './Editor';
+import BikeEditor from './BikeEditor';
 import Bike from '../records/Bike';
 
 class BikesView extends Component {
@@ -146,7 +146,7 @@ class BikesView extends Component {
   render() {
     const { editorActive, openEditor, bikesError } = this.props;
     if (openEditor && editorActive) {
-      return <Editor />;
+      return <BikeEditor />;
     }
 
     return (

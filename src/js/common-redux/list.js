@@ -12,15 +12,13 @@ export const list = ({ name, path, record, indexFn }) => {
       api
         .get(path)
         .then(objects => {
-          dispatch(
-            listSuccessAction({
-              data: objects
-                .toMap()
-                .map(obj => new record(obj))
-                .mapKeys((_, obj) => indexFn(obj))
-                .sort((a, b) => a.get('id') - b.get('id')),
-            })
-          );
+          const data = objects
+            .toMap()
+            .map(obj => new record(obj))
+            .mapKeys((_, obj) => indexFn(obj))
+            .sort((a, b) => a.get('id') - b.get('id'));
+          dispatch(listSuccessAction({ data }));
+          return data;
         })
         .catch(error => {
           dispatch(listFailureAction({ error }));

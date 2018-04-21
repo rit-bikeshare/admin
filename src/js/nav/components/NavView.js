@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Container, Menu, Button } from 'semantic-ui-react';
 import Icon from '../../../img/icon.png';
-import nav from '../constants/navConfig';
+import NavConfig from '../constants/NavConfig';
 import { clearUserData } from 'auth/actions/authActions';
 
 class NavView extends Component {
@@ -34,16 +34,14 @@ class NavView extends Component {
   render() {
     const { signOut, activeItem } = this.props;
 
-    const navMenuItems = nav
-      .map((navItem, key) =>
-        this.renderMenuItem({
-          key,
-          label: navItem.get('label'),
-          route: navItem.get('route'),
-          active: activeItem === key,
-        })
-      )
-      .toList();
+    const navMenuItems = NavConfig.map((navItem, key) =>
+      this.renderMenuItem({
+        key,
+        label: navItem.get('label'),
+        route: navItem.get('route'),
+        active: activeItem === key,
+      })
+    ).toList();
 
     return (
       <div id="page_header">

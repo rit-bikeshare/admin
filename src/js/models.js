@@ -1,12 +1,5 @@
 import { Record } from 'immutable';
 
-export const BikeLock = Record(
-  {
-    mac: null,
-  },
-  'BikeLock'
-);
-
 export const Rental = Record(
   {
     id: null,

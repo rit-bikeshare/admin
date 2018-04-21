@@ -1,1 +1,1 @@
-export { reducer as default } from '../usersRedux';
+export { reducer as default } from '../UsersRedux';

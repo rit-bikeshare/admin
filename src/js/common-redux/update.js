@@ -11,13 +11,16 @@ export const update = ({ name, path, record, indexFn }) => {
     return (dispatch, getState, api) => {
       const id = oldId || indexFn(object);
       dispatch(updateAction());
-      api
+      return api
         .put(`${path}${id}`, object)
-        .then(object => {
-          dispatch(updateSuccessAction({ object: new record(object), oldId }));
+        .then(rawObject => {
+          const object = new record(rawObject);
+          dispatch(updateSuccessAction({ object, oldId }));
+          return object;
         })
         .catch(error => {
           dispatch(updateFailureAction({ error }));
+          throw error;
         });
     };
   }

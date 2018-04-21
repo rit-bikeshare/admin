@@ -2,33 +2,61 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Map } from 'immutable';
-import { Container, Table, Button, Loader, Header } from 'semantic-ui-react';
+import {
+  Container,
+  Table,
+  Button,
+  Loader,
+  Header,
+  Select,
+  Input,
+} from 'semantic-ui-react';
 import BoolIcon from 'lib/components/BoolIcon';
-import { list as listUsersAction } from '../actions/userActions';
-import openUserEditorAction from '../actions/openUserEditor';
-import Editor from './UserEditor';
-import User from '../records/User';
+//import { record as BikeshareUser } from '../UsersRedux';
+import { listAdmins as listAdminsAction } from '../actions/adminActions';
+import {
+  searchUsers as searchUsersAction,
+  clearUsersAction,
+} from '../actions/userActions';
+
+//import openUserEditorAction from '../actions/openUserEditor';
+
+const UserSearchOptions = [
+  { key: 'username', text: 'Username', value: 'username' },
+  { key: 'firstName', text: 'First Name', value: 'firstName' },
+  { key: 'lastName', text: 'Last Name', value: 'lastName' },
+];
 
 class UsersView extends Component {
   constructor(props) {
     super(props);
-    this.state = { deleteuserModal: null };
+    this.state = {
+      deleteuserModal: null,
+      userSearchMode: 'username',
+      userSearchString: '',
+    };
   }
 
   componentDidMount() {
-    const { listUsers } = this.props;
-    listUsers();
+    const { listAdmins } = this.props;
+    listAdmins();
+  }
+
+  search() {
+    const { searchUsers } = this.props;
+    const { userSearchMode, userSearchString } = this.state;
+    searchUsers(userSearchMode, userSearchString);
   }
 
   renderUser(user) {
-    const { openUserEditor } = this.props;
+    //const { openUserEditor } = this.props;
     const { username, firstName, lastName, isStaff } = user;
 
     const editButton = (
       <Button
         size="tiny"
         compact
-        onClick={() => openUserEditor({ object: user })}
+        //onClick={() => openUserEditor({ object: user })}
       >
         Edit
       </Button>
@@ -49,8 +77,7 @@ class UsersView extends Component {
     );
   }
 
-  renderUsers() {
-    const { users } = this.props;
+  renderUsers(users) {
     if (!users) {
       return <Loader active inline="centered" />;
     }
@@ -71,51 +98,115 @@ class UsersView extends Component {
     );
   }
 
+  renderUserSearch() {
+    const { userSearchString } = this.state;
+    return (
+      <Input type="text" placeholder="Search..." action>
+        <input
+          value={userSearchString}
+          onChange={({ target: { value: userSearchString } }) =>
+            this.setState({ userSearchString })
+          }
+        />
+        <Select
+          compact
+          options={UserSearchOptions}
+          defaultValue="username"
+          onChange={(e, { value: userSearchMode }) =>
+            this.setState({ userSearchMode })
+          }
+        />
+        <Button type="submit" onClick={() => this.search()}>
+          Search
+        </Button>
+      </Input>
+    );
+  }
+
+  renderSearchedUsers() {
+    const { users, clearUsers } = this.props;
+
+    const usersTable =
+      users.count() > 0 ? (
+        <div>
+          {this.renderUsers(users)}
+          <Button onClick={() => clearUsers()}> Clear </Button>
+        </div>
+      ) : (
+        <span>No search results.</span>
+      );
+
+    return (
+      <div>
+        <Container
+          style={{ paddingTop: '40px', paddingBottom: '15px', display: 'flex' }}
+        >
+          <Header as="h2" style={{ flexGrow: '1' }}>
+            Users
+          </Header>
+          {this.renderUserSearch()}
+        </Container>
+        {usersTable}
+      </div>
+    );
+  }
+
+  renderAdmins() {
+    const { admins } = this.props;
+    return (
+      <div>
+        <Container style={{ paddingBottom: '10px' }}>
+          <Header as="h2">Admins</Header>
+        </Container>
+        {this.renderUsers(admins)}
+      </div>
+    );
+  }
+
   render() {
-    const { editorActive, openUserEditor, usersError } = this.props;
-    if (openUserEditor && editorActive) {
-      return <Editor />;
+    const { editorActive, /*openUserEditor,*/ usersError } = this.props;
+    if (/*openUserEditor && */ editorActive) {
+      //return <Editor />;
     }
 
     return (
       <div>
-        <Container style={{ paddingBottom: '10px' }}>
-          <Button
-            floated="right"
-            onClick={() => openUserEditor({ object: new User() })}
-            primary={true}
-          >
-            Add user
-          </Button>
-          <Header as="h2">Users</Header>
-        </Container>
         {usersError ? String(usersError) : null}
-        {this.renderUsers()}
+        {this.renderAdmins()}
+        {this.renderSearchedUsers()}
       </div>
     );
   }
 }
 
 UsersView.propTypes = {
+  admins: PropTypes.instanceOf(Map),
+  adminsError: PropTypes.object,
   users: PropTypes.instanceOf(Map),
   usersError: PropTypes.object,
   editorActive: PropTypes.bool,
   /* dispatch */
-  listUsers: PropTypes.func.isRequired,
-  openUserEditor: PropTypes.func,
+  listAdmins: PropTypes.func.isRequired,
+  searchUsers: PropTypes.func.isRequired,
+  clearUsers: PropTypes.func.isRequired,
+  //openUserEditor: PropTypes.func,
 };
 
 const mapStateToProps = state => {
   return {
+    admins: state.admins.get('data'),
+    adminsError: state.admins.get('error'),
     users: state.users.get('data'),
     usersError: state.users.get('error'),
-    editorActive: state.userEditor.get('active', false),
+    //editorActive: state.userEditor.get('active', false),
   };
 };
 
 const mapDispatchToProps = {
-  listUsers: listUsersAction,
-  openuserEditor: openUserEditorAction,
+  listAdmins: listAdminsAction,
+  searchUsers: searchUsersAction,
+  clearUsers: clearUsersAction,
+  //openuserEditor: openUserEditorAction,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(UsersView);

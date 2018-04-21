@@ -2,50 +2,63 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Button, Form, Loader, Header, Message } from 'semantic-ui-react';
+import { name as objectName, record as Bike } from '../BikesRedux';
 import { destroy as destroyBikeAction } from '../actions/bikesActions';
-import { name as objectName } from '../BikesRedux';
-//import { editorAction, editBike } from '../../redux/bikes/actions';
-import Bike from '../records/Bike';
+import {
+  closeBikeEditor as closeBikeEditorAction,
+  saveBikeEditor as saveBikeEditorAction,
+} from '../actions/bikeEditorActions';
 import DeleteModal from 'app/components/DeleteModal';
 
 class Editor extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      deleteModal: false,
+      _deleteModal: false,
+      _status: '',
+      _error: null,
       ...props.bike.toJS(),
     };
   }
 
   componentWillUnmount() {
-    const { close } = this.props;
-    close();
+    const { closeBikeEditor } = this.props;
+    closeBikeEditor();
+  }
+
+  save() {
+    const { saveBikeEditor } = this.props;
+    saveBikeEditor(new Bike(this.state))
+      .then(() => this.setState({ _status: 'SUCCEEDED', _error: null }))
+      .catch(e => this.setState({ _status: 'FAILED', _error: e }));
+
+    this.setState({ _status: 'PENDING' });
   }
 
   renderDeleteModal() {
-    const { deleteModal, id } = this.state;
-    const { deleteBike, close } = this.props;
+    const { _deleteModal, id } = this.state;
+    const { deleteBike, closeBikeEditor } = this.props;
 
-    return deleteModal ? (
+    return _deleteModal ? (
       <DeleteModal
         id={id}
         objectName={objectName}
         deleteFn={deleteBike}
-        onDelete={close}
+        onDelete={closeBikeEditor}
         onCancel={() => this.setState({ deleteModal: false })}
       />
     ) : null;
   }
 
   renderMessage() {
-    const { status, error = '' } = this.props;
-    if (status === 'FAILED') {
+    const { _status, _error = '' } = this.state;
+    if (_status === 'FAILED') {
       return (
-        <Message visible error header="Something went wrong" content={error} />
+        <Message visible error header="Something went wrong" content={_error} />
       );
     }
 
-    if (status === 'SUCCEEDED') {
+    if (_status === 'SUCCEEDED') {
       return <Message visible success header="Success" />;
     }
 
@@ -53,8 +66,9 @@ class Editor extends Component {
   }
 
   renderButtons(showDelete = false) {
-    const { status, save, close } = this.props;
-    if (status === 'PENDING') {
+    const { closeBikeEditor } = this.props;
+    const { _status } = this.state;
+    if (_status === 'PENDING') {
       return <Loader active inline="centered" />;
     }
 
@@ -71,8 +85,8 @@ class Editor extends Component {
     return (
       <div>
         {this.renderMessage()}
-        <Button onClick={() => close()}>Back</Button>
-        <Button type="submit" onClick={() => save(new Bike(this.state))}>
+        <Button onClick={() => closeBikeEditor()}>Back</Button>
+        <Button type="submit" onClick={() => this.save()}>
           Submit
         </Button>
         {deleteButton}
@@ -121,13 +135,11 @@ class Editor extends Component {
 }
 
 Editor.propTypes = {
-  status: PropTypes.string,
-  error: PropTypes.object,
   bike: PropTypes.string,
   /* dispatch */
   deleteBike: PropTypes.func.isRequired,
-  save: PropTypes.func.isRequired,
-  close: PropTypes.func.isRequired,
+  saveBikeEditor: PropTypes.func.isRequired,
+  closeBikeEditor: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state => ({
@@ -136,8 +148,8 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   deleteBike: ({ id, obj }) => dispatch(destroyBikeAction({ id, obj })),
-  //save: bike => dispatch(editBike(bike)),
-  //close: () => dispatch(editorAction({}))
+  saveBikeEditor: bike => dispatch(saveBikeEditorAction({ object: bike })),
+  closeBikeEditor: () => dispatch(closeBikeEditorAction()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Editor);

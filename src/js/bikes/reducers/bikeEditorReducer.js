@@ -1,7 +1,12 @@
 import { Map } from 'immutable';
 import { handleActions } from 'redux-actions';
 import Bike from '../records/Bike';
-import { openBikeEditorAction } from '../actions/bikeEditorActions';
+import {
+  openBikeEditorAction,
+  closeBikeEditor,
+} from '../actions/bikeEditorActions';
+
+const closedState = Map({ active: false, bike: new Bike() });
 
 export default handleActions(
   {
@@ -9,6 +14,9 @@ export default handleActions(
       const { bike } = action.payload;
       return Map({ active: true, bike: new Bike(bike) });
     },
+    [closeBikeEditor]() {
+      return closedState;
+    },
   },
-  Map({ active: false, bike: new Bike() })
+  closedState
 );

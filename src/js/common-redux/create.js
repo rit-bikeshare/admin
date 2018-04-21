@@ -11,8 +11,10 @@ export const create = ({ name, path, record, indexFn }) => {
       dispatch(createObjAction());
       api
         .post(path, object)
-        .then(object => {
-          dispatch(createSuccessAction({ object: new record(object) }));
+        .then(rawObject => {
+          const object = new record(rawObject);
+          dispatch(createSuccessAction({ object }));
+          return object;
         })
         .catch(error => {
           dispatch(createFailureAction({ error }));

@@ -10,10 +10,12 @@ export const retrieve = ({ name, path, record, indexFn }) => {
     return (dispatch, getState, api) => {
       const id = maybeId || indexFn(object);
       dispatch(retrieveAction());
-      api
+      return api
         .get(`${path}${id}`)
-        .then(object => {
-          dispatch(retrieveSuccessAction({ object: new record(object) }));
+        .then(rawObject => {
+          const object = new record(rawObject);
+          dispatch(retrieveSuccessAction({ object }));
+          return object;
         })
         .catch(error => {
           dispatch(retrieveFailureAction({ error }));

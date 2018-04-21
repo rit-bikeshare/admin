@@ -16,12 +16,20 @@ const providers = Map({ create, destroy, list, retrieve, update });
  * update(obj)
  * destroy(id) or destroy(obj)
  */
-export const all = objectDefinition => {
+export const all = (
+  objectDefinition,
+  { additionalActions = {}, additionalReducers = {} } = {}
+) => {
   const result = providers.map(provider => provider(objectDefinition));
-  const actions = result.map(({ action }) => action).toJS();
+
+  const actions = {
+    ...result.map(({ action }) => action).toJS(),
+    ...additionalActions,
+  };
+
   const reducers = result.reduce(
-    (allReducers, { reducers }) => ({ ...allReducers, ...reducers }),
-    {}
+    (allReducers, { reducers }) => ({ ...reducers, ...allReducers }),
+    additionalReducers
   );
 
   return {
@@ -30,6 +38,5 @@ export const all = objectDefinition => {
       reducers,
       Map({ status: 'UNINITIALIZED', data: Map(), error: null })
     ),
-    indexFn: objectDefinition.indexFn,
   };
 };
