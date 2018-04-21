@@ -2,10 +2,6 @@
 # yarn lockfile v1
 
 
-"@hs/transmute@^2.0.5":
-  version "2.0.5"
-  resolved "https://registry.yarnpkg.com/@hs/transmute/-/transmute-2.0.5.tgz#13ca6ff5c2c54c31c88718110855d079519f5c41"
-
 abab@^1.0.3:
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/abab/-/abab-1.0.4.tgz#5faad9c2c07f60dd76770f71cf025b62a63cfd4e"

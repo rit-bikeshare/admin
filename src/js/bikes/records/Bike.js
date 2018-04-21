@@ -9,6 +9,8 @@ export default Record(
     previousRental: null,
     lat: null,
     lon: null,
+    previousRenterUsername: null,
+    currentRenterUsername: null,
   },
   'Bike'
 );

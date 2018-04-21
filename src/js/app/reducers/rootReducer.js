@@ -6,7 +6,7 @@ import bikeReducer from 'bikes/reducers/bikesReducer';
 import bikeEditorReducer from 'bikes/reducers/bikeEditorReducer';
 import bikeRacksReducer from 'bike-racks/reducers/bikeRacksReducer';
 import adminsReducer from 'users/reducers/adminsReducer';
-import { reducer as usersReducer } from 'users/UsersRedux';
+import usersReducer from 'users/reducers/usersReducer';
 //import userEditorReducer from 'users/reducers/userEditorReducer';
 
 export default combineReducers({

@@ -22,8 +22,8 @@ import Bike from '../records/Bike';
 class BikesView extends Component {
   constructor(props) {
     super(props);
-    this.state = { deleteBikeModal: null };
-    this.registerMapRef = this.registerMapRef.bind(this);
+    this.state = { deleteBikeModal: null, pollForUpdates: false };
+    this.pollTimeout = setInterval(() => props.listBikes(), 5000);
   }
 
   componentDidMount() {
@@ -50,7 +50,13 @@ class BikesView extends Component {
 
   renderBike(bike) {
     const { openEditor } = this.props;
-    const { id, currentRental, lat, lon } = bike.toJS();
+    const {
+      id,
+      currentRenterUsername,
+      lat,
+      lon,
+      previousRenterUsername,
+    } = bike;
 
     const editButton = (
       <Button size="tiny" compact onClick={() => openEditor({ object: bike })}>
@@ -75,10 +81,8 @@ class BikesView extends Component {
     );
 
     const handleLocationClick = () => {
-      this.map.panTo({
-        lat,
-        lng: lon,
-      });
+      this.map.panTo({ lat, lng: lon });
+      window.scrollTo(0, 0);
     };
 
     return (
@@ -87,12 +91,12 @@ class BikesView extends Component {
           <span style={{ paddingRight: '20px' }}>{id}</span>
         </Table.Cell>
         <Table.Cell>
-          <a className="link-button" onClick={handleLocationClick}>
+          <a className="link-button" onClick={() => handleLocationClick()}>
             show on map
           </a>
         </Table.Cell>
-        <Table.Cell>{currentRental ? 'out' : '?'}</Table.Cell>
-        <Table.Cell>rider?</Table.Cell>
+        <Table.Cell>{currentRenterUsername || '-'}</Table.Cell>
+        <Table.Cell>{previousRenterUsername || '-'}</Table.Cell>
         <Table.Cell>
           <div className="actions">
             {editButton}
@@ -116,7 +120,7 @@ class BikesView extends Component {
           <Table.Row>
             <Table.HeaderCell>ID</Table.HeaderCell>
             <Table.HeaderCell>LOCATION</Table.HeaderCell>
-            <Table.HeaderCell>CHECKED IN</Table.HeaderCell>
+            <Table.HeaderCell>CURRENT RIDER</Table.HeaderCell>
             <Table.HeaderCell>LAST RIDER</Table.HeaderCell>
             <Table.HeaderCell>ACTIONS</Table.HeaderCell>
           </Table.Row>
@@ -140,7 +144,9 @@ class BikesView extends Component {
     const { bikes } = this.props;
     const markers = bikes.map(bike => this.renderBikeMarker(bike));
 
-    return <MarkerMap mapRef={this.registerMapRef} markers={markers} />;
+    return (
+      <MarkerMap mapRef={ref => this.registerMapRef(ref)} markers={markers} />
+    );
   }
 
   render() {
