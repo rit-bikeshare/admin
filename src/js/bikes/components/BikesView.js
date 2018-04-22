@@ -3,7 +3,14 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Immutable from 'immutable';
 import { Marker } from 'react-google-maps';
-import { Container, Table, Button, Loader, Header } from 'semantic-ui-react';
+import {
+  Container,
+  Table,
+  Button,
+  Loader,
+  Header,
+  Modal,
+} from 'semantic-ui-react';
 
 import { name as objectName } from '../BikesRedux';
 import {
@@ -18,12 +25,14 @@ import MarkerMap from 'app/components/Map';
 import DeleteModal from 'app/components/DeleteModal';
 import BikeEditor from './BikeEditor';
 import Bike from '../records/Bike';
+import generateQRCode from '../../lib/generateQRCode';
 
 class BikesView extends Component {
   constructor(props) {
     super(props);
-    this.state = { deleteBikeModal: null, pollForUpdates: false };
+    this.state = { deleteBikeModal: null, pollForUpdates: false, qrCode: null };
     this.pollTimeout = setInterval(() => props.listBikes(), 5000);
+    this.handleQRModalClose = this.handleQRModalClose.bind(this);
   }
 
   componentDidMount() {
@@ -33,6 +42,43 @@ class BikesView extends Component {
 
   registerMapRef(ref) {
     this.map = ref;
+  }
+
+  handleQRModalClose() {
+    this.setState({
+      qrCode: null,
+    });
+  }
+
+  async showQRCodeModal(bike) {
+    const qrCode = await generateQRCode(bike);
+    this.setState({
+      qrCode,
+    });
+  }
+
+  renderQRCodeModal() {
+    const { qrCode } = this.state;
+
+    if (!qrCode) return null;
+
+    return (
+      <Modal onClose={this.handleQRModalClose} open={true} closeIcon={true}>
+        <Modal.Header>QR Code</Modal.Header>
+        <Modal.Content>
+          <p>Download this image and resize to 615x350</p>
+          <img
+            src={qrCode}
+            style={{
+              width: 615,
+              height: 350,
+              margin: 'auto',
+              display: 'block',
+            }}
+          />
+        </Modal.Content>
+      </Modal>
+    );
   }
 
   renderDeleteBikeModal() {
@@ -75,7 +121,7 @@ class BikesView extends Component {
     );
 
     const printButton = (
-      <Button size="tiny" compact>
+      <Button size="tiny" compact onClick={() => this.showQRCodeModal(bike)}>
         Print QR Code
       </Button>
     );
@@ -157,6 +203,7 @@ class BikesView extends Component {
 
     return (
       <div>
+        {this.renderQRCodeModal()}
         {this.renderDeleteBikeModal()}
         {this.renderMap()}
         <Container style={{ paddingBottom: '10px' }}>
