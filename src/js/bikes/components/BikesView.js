@@ -74,6 +74,7 @@ class BikesView extends Component {
             Download this image and change the dpi to be 300 before printing.
           </p>
           <img
+            alt="qr code"
             src={qrCode}
             style={{
               width: 615,

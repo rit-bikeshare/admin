@@ -31,7 +31,7 @@ class AckTable extends React.Component {
   renderReport(report) {
     const { id, comments, damageType, critical } = report;
     return (
-      <List.Item>
+      <List.Item key={id}>
         <List>
           <List.Item className="m-bottom-2">
             <List.Header>Report ID</List.Header>

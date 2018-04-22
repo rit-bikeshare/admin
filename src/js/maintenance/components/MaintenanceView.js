@@ -10,10 +10,6 @@ import AckTable from './AckTable';
 import UnAckTable from './UnAckTable';
 
 class MaintenanceView extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
   componentWillMount() {
     const { fetchDamageReports } = this.props;
     fetchDamageReports();

@@ -11,7 +11,7 @@ class DamageReportsTable extends React.Component {
     const damageTypes = data.reports.map(report => report.damageType);
     const mostRecentReport = data.reports.first();
     return (
-      <Table.Row>
+      <Table.Row key={id}>
         <Table.Cell>{id}</Table.Cell>
         <Table.Cell>{damageTypes.join(', ')}</Table.Cell>
         <Table.Cell>
