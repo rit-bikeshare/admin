@@ -31,13 +31,17 @@ class BikesView extends Component {
   constructor(props) {
     super(props);
     this.state = { deleteBikeModal: null, pollForUpdates: false, qrCode: null };
-    this.pollTimeout = setInterval(() => props.listBikes(), 5000);
     this.handleQRModalClose = this.handleQRModalClose.bind(this);
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.pollTimeout);
   }
 
   componentDidMount() {
     const { listBikes } = this.props;
     listBikes();
+    this.pollTimeout = setInterval(() => listBikes(), 5000);
   }
 
   registerMapRef(ref) {
@@ -66,7 +70,9 @@ class BikesView extends Component {
       <Modal onClose={this.handleQRModalClose} open={true} closeIcon={true}>
         <Modal.Header>QR Code</Modal.Header>
         <Modal.Content>
-          <p>Download this image and resize to 615x350</p>
+          <p>
+            Download this image and change the dpi to be 300 before printing.
+          </p>
           <img
             src={qrCode}
             style={{
