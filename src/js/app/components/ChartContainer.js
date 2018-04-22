@@ -1,10 +1,16 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Segment } from 'semantic-ui-react';
-import moment from 'moment';
+//import moment from 'moment';
 import Chart from 'chart.js';
 
+Chart.defaults.global.defaultFontSize = 14;
+Chart.defaults.global.defaultFontColor = '#33475b';
+
 let chartId = 0;
+
+const getDays = () => {
+  return ['April 22 - Monday', 'April 23 - Tuesday'];
+};
 
 class ChartContainer extends Component {
   constructor(props) {
@@ -21,38 +27,18 @@ class ChartContainer extends Component {
   }
 
   drawChart() {
-    const { type, data, options } = this.props;
+    //const { type, data, options } = this.props;
     var timeFormat = 'MM/DD/YYYY HH:mm';
-
-    function newDate(days) {
-      return moment()
-        .add(days, 'd')
-        .toDate();
-    }
-
-    function newDateString(days) {
-      return moment()
-        .add(days, 'd')
-        .format(timeFormat);
-    }
 
     new Chart(`chart_${this.chartId}`, {
       type: 'line',
       data: {
-        labels: [
-          // Date Objects
-          newDate(0),
-          newDate(1),
-          newDate(2),
-          newDate(3),
-          newDate(4),
-          newDate(5),
-          newDate(6),
-        ],
+        labels: getDays(),
         datasets: [
           {
-            label: 'My First dataset',
             fill: true,
+            label: 'Bikes rented',
+            backgroundColor: 'rgba(228, 129, 58, 0.45)',
             data: [10, 12, 8, 4, 1, 2, 3],
           },
         ],
@@ -70,8 +56,7 @@ class ChartContainer extends Component {
                 tooltipFormat: 'll HH:mm',
               },
               scaleLabel: {
-                display: true,
-                labelString: 'Date',
+                display: false,
               },
             },
           ],
@@ -79,7 +64,7 @@ class ChartContainer extends Component {
             {
               scaleLabel: {
                 display: true,
-                labelString: 'value',
+                labelString: 'Rentals',
               },
             },
           ],
