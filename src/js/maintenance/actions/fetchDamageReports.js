@@ -26,6 +26,7 @@ function fetchExtraData(response) {
 }
 
 function parseData(response) {
+  response = response.filter(report => report.get('resolvedBy') == null);
   return response.reduce((acc, report) => {
     const bikeId = report.get('bike');
     const damageReport = new DamageReport(report);
