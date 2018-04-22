@@ -139,7 +139,7 @@ class BikesView extends Component {
     };
 
     return (
-      <Table.Row className="admin-table-row">
+      <Table.Row key={id} className="admin-table-row">
         <Table.Cell>
           <span style={{ paddingRight: '20px' }}>{id}</span>
         </Table.Cell>
