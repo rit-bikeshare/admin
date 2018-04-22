@@ -9,6 +9,7 @@ import {
   saveBikeEditor as saveBikeEditorAction,
 } from '../actions/bikeEditorActions';
 import DeleteModal from 'app/components/DeleteModal';
+import BikeLockSelect from '../../bike-locks/components/BikeLockSelect';
 
 class BikeEditor extends Component {
   constructor(props) {
@@ -117,14 +118,10 @@ class BikeEditor extends Component {
           ) : null}
           <Form.Field>
             <label>Lock id:</label>
-            <input
-              placeholder="Unique lock identifier"
-              initialValue={lock}
-              onChange={({ target: { value: lock } }) =>
-                this.setState({ lock })
-              }
+            <BikeLockSelect
+              lock={lock}
+              onChange={lock => this.setState({ lock })}
             />
-            {lock}
           </Form.Field>
           <Form.Checkbox
             checked={visible}
