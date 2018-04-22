@@ -12,14 +12,13 @@ import {
   Input,
 } from 'semantic-ui-react';
 import BoolIcon from 'lib/components/BoolIcon';
-//import { record as BikeshareUser } from '../UsersRedux';
+import UserEditor from './UserEditor';
 import { listAdmins as listAdminsAction } from '../actions/adminActions';
 import {
   searchUsers as searchUsersAction,
   clearUsersAction,
-} from '../actions/userActions';
-
-//import openUserEditorAction from '../actions/openUserEditor';
+} from '../actions/usersActions';
+import { openUserEditor as openUserEditorAction } from '../actions/userEditorActions';
 
 const UserSearchOptions = [
   { key: 'username', text: 'Username', value: 'username' },
@@ -31,7 +30,7 @@ class UsersView extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      deleteuserModal: null,
+      deleteUserModal: null,
       userSearchMode: 'username',
       userSearchString: '',
     };
@@ -42,6 +41,13 @@ class UsersView extends Component {
     listAdmins();
   }
 
+  componentWillUpdate(nextProps) {
+    const { listAdmins, editorActive } = this.props;
+    if (editorActive && !nextProps.editorActive) {
+      listAdmins();
+    }
+  }
+
   search() {
     const { searchUsers } = this.props;
     const { userSearchMode, userSearchString } = this.state;
@@ -49,14 +55,14 @@ class UsersView extends Component {
   }
 
   renderUser(user) {
-    //const { openUserEditor } = this.props;
+    const { openUserEditor } = this.props;
     const { username, firstName, lastName, isStaff } = user;
 
     const editButton = (
       <Button
         size="tiny"
         compact
-        //onClick={() => openUserEditor({ object: user })}
+        onClick={() => openUserEditor({ object: user })}
       >
         Edit
       </Button>
@@ -164,9 +170,9 @@ class UsersView extends Component {
   }
 
   render() {
-    const { editorActive, /*openUserEditor,*/ usersError } = this.props;
-    if (/*openUserEditor && */ editorActive) {
-      //return <Editor />;
+    const { editorActive, openUserEditor, usersError } = this.props;
+    if (openUserEditor && editorActive) {
+      return <UserEditor />;
     }
 
     return (
@@ -189,7 +195,7 @@ UsersView.propTypes = {
   listAdmins: PropTypes.func.isRequired,
   searchUsers: PropTypes.func.isRequired,
   clearUsers: PropTypes.func.isRequired,
-  //openUserEditor: PropTypes.func,
+  openUserEditor: PropTypes.func,
 };
 
 const mapStateToProps = state => {
@@ -198,7 +204,7 @@ const mapStateToProps = state => {
     adminsError: state.admins.get('error'),
     users: state.users.get('data'),
     usersError: state.users.get('error'),
-    //editorActive: state.userEditor.get('active', false),
+    editorActive: state.userEditor.get('active', false),
   };
 };
 
@@ -206,7 +212,7 @@ const mapDispatchToProps = {
   listAdmins: listAdminsAction,
   searchUsers: searchUsersAction,
   clearUsers: clearUsersAction,
-  //openuserEditor: openUserEditorAction,
+  openUserEditor: openUserEditorAction,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(UsersView);

@@ -1,6 +1,6 @@
 import { Record } from 'immutable';
 
-export const BikeLock = Record(
+export default Record(
   {
     id: null,
   },

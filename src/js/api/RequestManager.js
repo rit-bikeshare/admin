@@ -32,7 +32,11 @@ export default class RequestManager {
     }).then(async response => {
       if (response.ok) return response.json().then(fromJS);
       const error = await response.json();
-      return Promise.reject({ code: response.status, message: error.detail });
+      return Promise.reject({
+        code: response.status,
+        message: error.detail,
+        error,
+      });
     });
   }
 
@@ -53,6 +57,7 @@ export default class RequestManager {
       return Promise.reject({
         code: response.status,
         message: error.detail,
+        error,
       });
     });
   }
@@ -74,6 +79,7 @@ export default class RequestManager {
       return Promise.reject({
         code: response.status,
         message: error.detail,
+        error,
       });
     });
   }

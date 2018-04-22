@@ -6,7 +6,7 @@ export const list = ({ name, path, record, indexFn }) => {
   const listSuccessAction = createAction(`${prefix}_LIST_SUCCESS`);
   const listFailureAction = createAction(`${prefix}_LIST_FAILURE`);
 
-  function action() {
+  function action({ merge = false, filter } = {}) {
     return (dispatch, getState, api) => {
       dispatch(listAction());
       api
@@ -17,7 +17,9 @@ export const list = ({ name, path, record, indexFn }) => {
             .map(obj => new record(obj))
             .mapKeys((_, obj) => indexFn(obj))
             .sort((a, b) => a.get('id') - b.get('id'));
-          dispatch(listSuccessAction({ data }));
+
+          const filteredData = filter ? data.filter(filter) : data;
+          dispatch(listSuccessAction({ data: filteredData, merge }));
           return data;
         })
         .catch(error => {
@@ -28,10 +30,10 @@ export const list = ({ name, path, record, indexFn }) => {
 
   const reducers = {
     [listAction]: state => state.set('status', 'PENDING'),
-    [listSuccessAction]: (state, { payload: { data } }) =>
+    [listSuccessAction]: (state, { payload: { data, merge } }) =>
       state
         .set('status', 'SUCCESS')
-        .update('data', prevData => prevData.merge(data)),
+        .update('data', prevData => (merge ? prevData.merge(data) : data)),
     [listFailureAction]: (state, { payload: { error } }) =>
       state.set('status', 'FAILURE').set('error', error),
   };

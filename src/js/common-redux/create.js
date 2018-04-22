@@ -9,7 +9,7 @@ export const create = ({ name, path, record, indexFn }) => {
   function action({ object }) {
     return (dispatch, getState, api) => {
       dispatch(createObjAction());
-      api
+      return api
         .post(path, object)
         .then(rawObject => {
           const object = new record(rawObject);
@@ -18,6 +18,7 @@ export const create = ({ name, path, record, indexFn }) => {
         })
         .catch(error => {
           dispatch(createFailureAction({ error }));
+          throw error;
         });
     };
   }

@@ -7,7 +7,13 @@ export const retrieve = actions.retrieve;
 export const update = actions.update;
 
 /**
- * TODO, implement query filter
+ * TODO, implement query filtering
  */
 export const listAdmins = () => dispatch =>
-  dispatch(list({ query: 'isStaff=true' }));
+  dispatch(
+    list({
+      query: 'isStaff=true',
+      merge: false,
+      filter: user => user.get('isStaff'),
+    })
+  );

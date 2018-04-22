@@ -2,6 +2,7 @@ import { createAction } from 'redux-actions';
 import {
   retrieve as retrieveBikeAction,
   update as updateBikeAction,
+  create as createBikeAction,
 } from './bikesActions';
 import { indexFn } from '../BikesRedux';
 
@@ -35,5 +36,8 @@ export const openBikeEditor = ({ id: maybeId, object }) => {
 };
 
 export const saveBikeEditor = ({ object }) => {
-  return dispatch => dispatch(updateBikeAction({ object }));
+  const id = indexFn(object);
+  return id
+    ? dispatch => dispatch(updateBikeAction({ object }))
+    : dispatch => dispatch(createBikeAction({ object }));
 };

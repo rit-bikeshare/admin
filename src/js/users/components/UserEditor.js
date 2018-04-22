@@ -2,34 +2,33 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Button, Form, Loader, Header, Message } from 'semantic-ui-react';
-import { name as objectName, record as Bike } from '../BikesRedux';
-import { destroy as destroyBikeAction } from '../actions/bikesActions';
+import { name as objectName, record as BikeshareUser } from '../UsersRedux';
+import { destroy as destroyUserAction } from '../actions/usersActions';
 import {
-  closeBikeEditor as closeBikeEditorAction,
-  saveBikeEditor as saveBikeEditorAction,
-} from '../actions/bikeEditorActions';
+  closeUserEditor as closeUserEditorAction,
+  saveUserEditor as saveUserEditorAction,
+} from '../actions/userEditorActions';
 import DeleteModal from 'app/components/DeleteModal';
-import BikeLockSelect from '../../bike-locks/components/BikeLockSelect';
 
-class BikeEditor extends Component {
+class UserEditor extends Component {
   constructor(props) {
     super(props);
     this.state = {
       _deleteModal: false,
       _status: '',
       _error: null,
-      ...props.bike.toJS(),
+      ...props.user.toJS(),
     };
   }
 
   componentWillUnmount() {
-    const { closeBikeEditor } = this.props;
-    closeBikeEditor();
+    const { closeUserEditor } = this.props;
+    closeUserEditor();
   }
 
   save() {
-    const { saveBikeEditor } = this.props;
-    saveBikeEditor(new Bike(this.state))
+    const { saveUserEditor } = this.props;
+    saveUserEditor(new BikeshareUser(this.state))
       .then(() => this.setState({ _status: 'SUCCEEDED', _error: null }))
       .catch(e => this.setState({ _status: 'FAILED', _error: e }))
       .finally(next => {
@@ -42,14 +41,14 @@ class BikeEditor extends Component {
 
   renderDeleteModal() {
     const { _deleteModal, id } = this.state;
-    const { deleteBike, closeBikeEditor } = this.props;
+    const { deleteUser, closeUserEditor } = this.props;
 
     return _deleteModal ? (
       <DeleteModal
         id={id}
         objectName={objectName}
-        deleteFn={deleteBike}
-        onDelete={closeBikeEditor}
+        deleteFn={deleteUser}
+        onDelete={closeUserEditor}
         onCancel={() => this.setState({ deleteModal: false })}
       />
     ) : null;
@@ -70,89 +69,89 @@ class BikeEditor extends Component {
     return null;
   }
 
-  renderButtons(showDelete = false) {
-    const { closeBikeEditor } = this.props;
+  renderButtons() {
+    const { closeUserEditor } = this.props;
     const { _status } = this.state;
     if (_status === 'PENDING') {
       return <Loader active inline="centered" />;
     }
 
-    const deleteButton = showDelete ? (
+    const deleteButton = (
       <Button
         floated="right"
         negative
         onClick={() => this.setState({ deleteModal: true })}
       >
-        Delete bike
+        Delete user
       </Button>
-    ) : null;
+    );
 
     return (
       <div>
-        {this.renderMessage()}
-        <Button basic primary onClick={() => closeBikeEditor()}>
+        <Button basic primary onClick={() => closeUserEditor()}>
           Back
         </Button>
         <Button primary type="submit" onClick={() => this.save()}>
           Submit
         </Button>
         {deleteButton}
+        {this.renderMessage()}
       </div>
     );
   }
 
   render() {
-    const { id, lock, visible } = this.state;
-    const showDelete = Boolean(id);
+    const { username, firstName, lastName, isStaff } = this.state;
 
     return (
       <div>
         {this.renderDeleteModal()}
-        <Header as="h3">{id ? 'Edit Bike' : 'Create Bike'}</Header>
+        <Header as="h3">Edit User</Header>
         <Form>
-          {id ? (
+          <Form.Group widths="equal">
             <Form.Field>
-              <label>Bike id:</label>
-              <input value={id} disabled />
+              <label>Username:</label>
+              <input value={username} disabled />
             </Form.Field>
-          ) : null}
-          <Form.Field>
-            <label>Lock id:</label>
-            <BikeLockSelect
-              lock={lock}
-              onChange={lock => this.setState({ lock })}
-            />
-          </Form.Field>
+            <Form.Field>
+              <label>First Name:</label>
+              <input value={firstName} disabled />
+            </Form.Field>
+            <Form.Field>
+              <label>Last Name:</label>
+              <input value={lastName} disabled />
+            </Form.Field>
+          </Form.Group>
           <Form.Checkbox
-            checked={visible}
-            label="This bike is visible for checkout."
-            onChange={(_, { checked: visible }) => {
-              this.setState({ visible });
+            checked={isStaff}
+            label="Staff user"
+            onChange={(_, { checked: isStaff }) => {
+              this.setState({ isStaff });
             }}
           />
-          {this.renderButtons(showDelete)}
+          {this.renderButtons()}
         </Form>
       </div>
     );
   }
 }
 
-BikeEditor.propTypes = {
-  bike: PropTypes.string,
+UserEditor.propTypes = {
+  user: PropTypes.object.isRequired,
   /* dispatch */
-  deleteBike: PropTypes.func.isRequired,
-  saveBikeEditor: PropTypes.func.isRequired,
-  closeBikeEditor: PropTypes.func.isRequired,
+  deleteUser: PropTypes.func.isRequired,
+  saveUserEditor: PropTypes.func.isRequired,
+  closeUserEditor: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state => ({
-  bike: state.bikeEditor.get('bike'),
+  user: state.userEditor.get('user'),
 });
 
 const mapDispatchToProps = dispatch => ({
-  deleteBike: ({ id, obj }) => dispatch(destroyBikeAction({ id, obj })),
-  saveBikeEditor: bike => dispatch(saveBikeEditorAction({ object: bike })),
-  closeBikeEditor: () => dispatch(closeBikeEditorAction()),
+  deleteUser: ({ id, obj }) => dispatch(destroyUserAction({ id, obj })),
+  saveUserEditor: user => dispatch(saveUserEditorAction({ object: user })),
+  closeUserEditor: () => dispatch(closeUserEditorAction()),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(BikeEditor);
+export default connect(mapStateToProps, mapDispatchToProps)(UserEditor);

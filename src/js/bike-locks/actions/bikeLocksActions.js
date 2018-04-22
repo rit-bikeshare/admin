@@ -1,4 +1,4 @@
-import { actions } from '../BikeRacksRedux';
+import { actions } from '../BikeLocksRedux';
 
 export const create = actions.create;
 export const destroy = actions.destroy;
