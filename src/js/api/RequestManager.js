@@ -1,15 +1,27 @@
 import { fromJS } from 'immutable';
 import getBaseRequestUrl from './utils/getBaseRequestUrl';
 
+function getQueryString(params) {
+  var esc = encodeURIComponent;
+  return Object.keys(params)
+    .map(k => esc(k) + '=' + esc(params[k]))
+    .join('&');
+}
+
 export default class RequestManager {
   constructor(getToken) {
     this.baseApiUrl = getBaseRequestUrl();
     this.getToken = getToken;
   }
 
-  get(url) {
+  get(url, query) {
     // always add a trailing slash
     url = url.replace(/\/?$/, '/');
+
+    if (query) {
+      url += `?${getQueryString(query)}`;
+    }
+
     return fetch(`${this.baseApiUrl}/${url}`, {
       method: 'GET',
       headers: {

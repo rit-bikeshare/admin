@@ -14,6 +14,7 @@ import LoadingPage from './LoadingPage';
 import UserView from 'users/components/UsersView';
 import UserData, { isEmpty, isFetched } from 'auth/records/UserData';
 import { fetchUserData as fetchUserDataAction } from 'auth/actions/authActions';
+import MaintenanceView from 'maintenance/components/MaintenanceView';
 
 class AppContainer extends React.Component {
   constructor(props) {
@@ -93,7 +94,7 @@ class AppContainer extends React.Component {
             <Route path="/admin/bikes" component={Bikes} />
             <Route path="/admin/bike-racks" component={BikeRacks} />
             <Route path="/admin/users" component={UserView} />
-            <Route path="/admin/maintenance" component={() => 'Maintenance'} />
+            <Route path="/admin/maintenance" component={MaintenanceView} />
             <Route path="/admin/settings" component={() => 'Settings'} />
           </Switch>
         </Container>
