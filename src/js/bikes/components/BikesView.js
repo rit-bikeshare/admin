@@ -142,10 +142,10 @@ class BikesView extends Component {
 
   renderMap() {
     const { bikes } = this.props;
-    const markers = bikes.map(bike => this.renderBikeMarker(bike));
+    const markers = bikes.map(bike => this.renderBikeMarker(bike)).toList();
 
     return (
-      <MarkerMap mapRef={ref => this.registerMapRef(ref)} markers={markers} />
+      <MarkerMap mapRef={ref => this.registerMapRef(ref)}>{markers}</MarkerMap>
     );
   }
 

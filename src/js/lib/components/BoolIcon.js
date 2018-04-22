@@ -7,7 +7,7 @@ export default function BoolIcon({ value }) {
     return <Icon name="check circle outline" color="green" />;
   }
 
-  return <Icon name="cancel" circular color="red" />;
+  return <Icon name="cancel" color="red" />;
 }
 
 BoolIcon.propTypes = {
