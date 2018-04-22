@@ -85,8 +85,10 @@ class Editor extends Component {
     return (
       <div>
         {this.renderMessage()}
-        <Button onClick={() => closeBikeEditor()}>Back</Button>
-        <Button type="submit" onClick={() => this.save()}>
+        <Button basic primary onClick={() => closeBikeEditor()}>
+          Back
+        </Button>
+        <Button primary type="submit" onClick={() => this.save()}>
           Submit
         </Button>
         {deleteButton}
