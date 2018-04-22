@@ -27,17 +27,18 @@ function fetchExtraData(response) {
 
 function parseData(response) {
   return response.reduce((acc, report) => {
+    const bikeId = report.get('bike');
     const damageReport = new DamageReport(report);
-    if (acc.has(report.bike)) {
-      return acc.updateIn([report.bike, 'reports'], reports =>
+    if (acc.has(bikeId)) {
+      return acc.updateIn([bikeId, 'reports'], reports =>
         reports.push(damageReport)
       );
     }
     return acc.set(
-      report.get('bike'),
+      bikeId,
       new DamagedBike({
         reports: List([damageReport]),
-        acknowledged: report.acknowledged,
+        acknowledged: report.get('acknowledged'),
       })
     );
   }, Map());
