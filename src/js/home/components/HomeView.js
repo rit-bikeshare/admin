@@ -1,23 +1,42 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { Segment } from 'semantic-ui-react';
+import {
+  XYPlot,
+  XAxis,
+  YAxis,
+  HorizontalGridLines,
+  LineSeries,
+  makeWidthFlexible,
+} from 'react-vis';
+
 import DataWell from '../../lib/components/DataWell';
 
 class HomeView extends Component {
   renderStat(stat) {
-    return (
-      <DataWell
-        style={{ width: '25%' }}
-        title={stat.title}
-        value={stat.value}
-      />
-    );
+    return <DataWell title={stat.title} value={stat.value} />;
   }
 
   render() {
     const { statData } = this.props;
     const children = statData.map(stat => this.renderStat(stat));
-    return <div className="stat-container">{children}</div>;
+    const FlexibleXYPlot = makeWidthFlexible(XYPlot);
+
+    return (
+      <div>
+        <h2>Usage Statistics</h2>
+        <FlexibleXYPlot height={300}>
+          <HorizontalGridLines />
+          <LineSeries
+            data={[{ x: 1, y: 10 }, { x: 2, y: 5 }, { x: 3, y: 15 }]}
+          />
+          <XAxis />
+          <YAxis />
+        </FlexibleXYPlot>
+        <Segment className="stat-container">{children}</Segment>
+      </div>
+    );
   }
 }
 
