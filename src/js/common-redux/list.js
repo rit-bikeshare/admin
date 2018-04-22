@@ -6,7 +6,7 @@ export const list = ({ name, path, record, indexFn }) => {
   const listSuccessAction = createAction(`${prefix}_LIST_SUCCESS`);
   const listFailureAction = createAction(`${prefix}_LIST_FAILURE`);
 
-  function action({ merge = true, filter } = {}) {
+  function action({ merge = false, filter } = {}) {
     return (dispatch, getState, api) => {
       dispatch(listAction());
       api
