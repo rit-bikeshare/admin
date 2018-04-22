@@ -3,7 +3,7 @@ import logo from '../../img/logo.png';
 import QRCode from 'qrcode';
 
 async function generateQRCode(data) {
-  const qrData = await QRCode.toDataURL(`check-in/${data.id}`, {
+  const qrData = await QRCode.toString(`check-in/${data.id}`, {
     rendererOpts: {
       quality: 1,
     },
@@ -25,7 +25,7 @@ async function generateQRCode(data) {
     resolve => (imageCallback = () => resolve())
   );
   image.onload = imageCallback;
-  image.src = qrData;
+  image.src = `data:image/svg+xml,${qrData}`;
   await imagePromise;
   ctx.drawImage(image, 0, 0, 900, 900);
 
