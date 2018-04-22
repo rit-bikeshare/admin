@@ -5,6 +5,7 @@ import {
   damageReportFetchSuccess,
   fetchBikeDataSuccess,
 } from '../actions/fetchDamageReports';
+import { deleteReportSuccess } from '../actions/deleteDamageReport';
 
 export default handleActions(
   {
@@ -14,6 +15,10 @@ export default handleActions(
     [fetchBikeDataSuccess](state, action) {
       const { id, data } = action.payload;
       return state.setIn([id, 'bike'], new Bike(data));
+    },
+    [deleteReportSuccess](state, action) {
+      const id = action.payload;
+      return state.remove(id);
     },
   },
   Map()

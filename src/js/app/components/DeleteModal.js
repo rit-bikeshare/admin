@@ -12,6 +12,10 @@ const meta = {
     description:
       'Deleting this bike rack will prevent any further check-ins at the rack.',
   },
+  damageReports: {
+    header: id => `Delete all reports for bike ${id}`,
+    description: 'Deleting this item will remove all reports for this bike.',
+  },
 };
 
 const DeleteModalView = ({ objectName, id, status, onCancel, onDelete }) => {

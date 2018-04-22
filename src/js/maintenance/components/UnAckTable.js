@@ -86,12 +86,13 @@ class UnAckTable extends React.Component {
   }
 
   renderReportActions(id, data) {
+    const { deleteDamageReport } = this.props;
     return (
       <div className="actions">
         <Button size="tiny" compact onClick={() => this.openDetailsModal(data)}>
           Details
         </Button>
-        <Button size="tiny" compact>
+        <Button size="tiny" compact onClick={() => deleteDamageReport(id)}>
           Delete
         </Button>
       </div>
@@ -114,6 +115,7 @@ class UnAckTable extends React.Component {
 
 UnAckTable.propTypes = {
   damageReports: PropTypes.instanceOf(Map),
+  deleteDamageReport: PropTypes.func,
 };
 
 export default UnAckTable;
