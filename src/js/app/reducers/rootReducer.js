@@ -7,14 +7,14 @@ import bikeEditorReducer from 'bikes/reducers/bikeEditorReducer';
 import bikeRacksReducer from 'bike-racks/reducers/bikeRacksReducer';
 import adminsReducer from 'users/reducers/adminsReducer';
 import usersReducer from 'users/reducers/usersReducer';
-// import userEditorReducer from 'users/reducers/userEditorReducer';
+import userEditorReducer from 'users/reducers/userEditorReducer';
 import damageReportReducer from 'maintenance/reducer/damageReportReducer';
 
 export default combineReducers({
   userData: authReducer,
   admins: adminsReducer,
   users: usersReducer,
-  //userEditor: userEditorReducer,
+  userEditor: userEditorReducer,
   bikes: bikeReducer,
   bikeEditor: bikeEditorReducer,
   bikeRacks: bikeRacksReducer,

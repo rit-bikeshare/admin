@@ -10,7 +10,7 @@ import {
 } from '../actions/bikeEditorActions';
 import DeleteModal from 'app/components/DeleteModal';
 
-class Editor extends Component {
+class BikeEditor extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -30,7 +30,11 @@ class Editor extends Component {
     const { saveBikeEditor } = this.props;
     saveBikeEditor(new Bike(this.state))
       .then(() => this.setState({ _status: 'SUCCEEDED', _error: null }))
-      .catch(e => this.setState({ _status: 'FAILED', _error: e }));
+      .catch(e => this.setState({ _status: 'FAILED', _error: e }))
+      .finally(next => {
+        setTimeout(() => this.setState({ _status: '', _error: null }), 2000);
+        return next;
+      });
 
     this.setState({ _status: 'PENDING' });
   }
@@ -136,7 +140,7 @@ class Editor extends Component {
   }
 }
 
-Editor.propTypes = {
+BikeEditor.propTypes = {
   bike: PropTypes.string,
   /* dispatch */
   deleteBike: PropTypes.func.isRequired,
@@ -154,4 +158,4 @@ const mapDispatchToProps = dispatch => ({
   closeBikeEditor: () => dispatch(closeBikeEditorAction()),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Editor);
+export default connect(mapStateToProps, mapDispatchToProps)(BikeEditor);
