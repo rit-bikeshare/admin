@@ -11,21 +11,18 @@ import {
   Header,
   Modal,
 } from 'semantic-ui-react';
-
-import { name as objectName } from '../BikesRedux';
-import {
-  retrieve as retrieveBikeAction,
-  list as listBikeAction,
-  destroy as destroyBikeAction,
-} from '../actions/bikesActions';
-import { openBikeEditor } from '../actions/bikeEditorActions';
-//import { editorAction } from '../../redux/bikes/actions'
 import MarkerMap from 'app/components/Map';
-
 import DeleteModal from 'app/components/DeleteModal';
 import BikeEditor from './BikeEditor';
-import Bike from '../records/Bike';
 import generateQRCode from '../../lib/generateQRCode';
+import {
+  name as objectName,
+  record as Bike,
+  bikesListAction,
+  bikesRetrieveAction,
+  bikesDestroyAction,
+} from '../redux/bikes';
+import { openBikeEditor } from '../redux/bikeEditor';
 
 class BikesView extends Component {
   constructor(props) {
@@ -39,9 +36,9 @@ class BikesView extends Component {
   }
 
   componentDidMount() {
-    const { listBikes } = this.props;
-    listBikes();
-    this.pollTimeout = setInterval(() => listBikes(), 5000);
+    const { bikesList } = this.props;
+    bikesList();
+    this.pollTimeout = setInterval(() => bikesList(), 5000);
   }
 
   registerMapRef(ref) {
@@ -49,21 +46,16 @@ class BikesView extends Component {
   }
 
   handleQRModalClose() {
-    this.setState({
-      qrCode: null,
-    });
+    this.setState({ qrCode: null });
   }
 
   async showQRCodeModal(bike) {
     const qrCode = await generateQRCode(bike);
-    this.setState({
-      qrCode,
-    });
+    this.setState({ qrCode });
   }
 
   renderQRCodeModal() {
     const { qrCode } = this.state;
-
     if (!qrCode) return null;
 
     return (
@@ -93,7 +85,7 @@ class BikesView extends Component {
       <DeleteModal
         id={id}
         objectName={objectName}
-        deleteFn={this.props.deleteBike}
+        deleteFn={this.props.bikesDestroy}
         onDelete={() => this.setState({ deleteBikeModal: null })}
         onCancel={() => this.setState({ deleteBikeModal: null })}
       />
@@ -236,9 +228,9 @@ BikesView.propTypes = {
   rentalsError: PropTypes.object,
   editorActive: PropTypes.bool,
   /* dispatch */
-  listBikes: PropTypes.func.isRequired,
-  retrieveBike: PropTypes.func.isRequired,
-  deleteBike: PropTypes.func.isRequired,
+  bikesList: PropTypes.func.isRequired,
+  bikesRetrieve: PropTypes.func.isRequired,
+  bikesDestroy: PropTypes.func.isRequired,
   openEditor: PropTypes.func,
 };
 
@@ -252,14 +244,11 @@ const mapStateToProps = state => {
   };
 };
 
-const mapDispatchToProps = dispatch => {
-  return {
-    listBikes: () => dispatch(listBikeAction()),
-    retrieveBike: ({ id }) => dispatch(retrieveBikeAction({ id })),
-    deleteBike: ({ id, obj }) => dispatch(destroyBikeAction({ id, obj })),
-    openEditor: ({ id = null, object = null }) =>
-      dispatch(openBikeEditor({ id, object })),
-  };
+const mapDispatchToProps = {
+  bikesList: bikesListAction,
+  bikesRetrieve: bikesRetrieveAction,
+  bikesDestroy: bikesDestroyAction,
+  openEditor: openBikeEditor,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(BikesView);

@@ -1,15 +1,19 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { fromJS } from 'immutable';
 import { Button, Form, Loader, Header, Message } from 'semantic-ui-react';
-import { name as objectName, record as Bike } from '../BikesRedux';
-import { destroy as destroyBikeAction } from '../actions/bikesActions';
+import DeleteModal from 'app/components/DeleteModal';
+import BikeLockSelect from './BikeLockSelect';
+import {
+  name as objectName,
+  record as Bike,
+  bikesDestroyAction,
+} from '../redux/bikes';
 import {
   closeBikeEditor as closeBikeEditorAction,
   saveBikeEditor as saveBikeEditorAction,
-} from '../actions/bikeEditorActions';
-import DeleteModal from 'app/components/DeleteModal';
-import BikeLockSelect from '../../bike-locks/components/BikeLockSelect';
+} from '../redux/bikeEditor';
 
 class BikeEditor extends Component {
   constructor(props) {
@@ -29,11 +33,11 @@ class BikeEditor extends Component {
 
   save() {
     const { saveBikeEditor } = this.props;
-    saveBikeEditor(new Bike(this.state))
+    saveBikeEditor({ object: new Bike(this.state) })
       .then(() => this.setState({ _status: 'SUCCEEDED', _error: null }))
       .catch(e => this.setState({ _status: 'FAILED', _error: e }))
       .finally(next => {
-        setTimeout(() => this.setState({ _status: '', _error: null }), 2000);
+        setTimeout(() => this.setState({ _status: '', _error: null }), 10000);
         return next;
       });
 
@@ -42,13 +46,13 @@ class BikeEditor extends Component {
 
   renderDeleteModal() {
     const { _deleteModal, id } = this.state;
-    const { deleteBike, closeBikeEditor } = this.props;
+    const { bikesDestroy, closeBikeEditor } = this.props;
 
     return _deleteModal ? (
       <DeleteModal
         id={id}
         objectName={objectName}
-        deleteFn={deleteBike}
+        deleteFn={bikesDestroy}
         onDelete={closeBikeEditor}
         onCancel={() => this.setState({ deleteModal: false })}
       />
@@ -58,8 +62,14 @@ class BikeEditor extends Component {
   renderMessage() {
     const { _status, _error = '' } = this.state;
     if (_status === 'FAILED') {
+      const error = fromJS(_error.error);
+      const str = error
+        .flatten()
+        .toList()
+        .toJS()
+        .join(' ');
       return (
-        <Message visible error header="Something went wrong" content={_error} />
+        <Message visible error header="Something went wrong" content={str} />
       );
     }
 
@@ -116,13 +126,10 @@ class BikeEditor extends Component {
               <input value={id} disabled />
             </Form.Field>
           ) : null}
-          <Form.Field>
-            <label>Lock id:</label>
-            <BikeLockSelect
-              lock={lock}
-              onChange={lock => this.setState({ lock })}
-            />
-          </Form.Field>
+          <BikeLockSelect
+            lock={lock}
+            onChange={lock => this.setState({ lock })}
+          />
           <Form.Checkbox
             checked={visible}
             label="This bike is visible for checkout."
@@ -140,7 +147,7 @@ class BikeEditor extends Component {
 BikeEditor.propTypes = {
   bike: PropTypes.string,
   /* dispatch */
-  deleteBike: PropTypes.func.isRequired,
+  bikesDestroy: PropTypes.func.isRequired,
   saveBikeEditor: PropTypes.func.isRequired,
   closeBikeEditor: PropTypes.func.isRequired,
 };
@@ -149,10 +156,10 @@ const mapStateToProps = state => ({
   bike: state.bikeEditor.get('bike'),
 });
 
-const mapDispatchToProps = dispatch => ({
-  deleteBike: ({ id, obj }) => dispatch(destroyBikeAction({ id, obj })),
-  saveBikeEditor: bike => dispatch(saveBikeEditorAction({ object: bike })),
-  closeBikeEditor: () => dispatch(closeBikeEditorAction()),
-});
+const mapDispatchToProps = {
+  bikesDestroy: bikesDestroyAction,
+  saveBikeEditor: saveBikeEditorAction,
+  closeBikeEditor: closeBikeEditorAction,
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(BikeEditor);

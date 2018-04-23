@@ -9,6 +9,7 @@ import NavConfig from 'nav/constants/NavConfig';
 
 import Home from 'home/components/HomeView';
 import Bikes from 'bikes/components/BikesView';
+import Locks from 'locks/components/LocksView';
 import BikeRacks from 'bike-racks/components/BikeRacksView';
 import LoadingPage from './LoadingPage';
 import UserView from 'users/components/UsersView';
@@ -92,6 +93,7 @@ class AppContainer extends React.Component {
           <Switch>
             <Route exact={true} path="/admin" component={Home} />
             <Route path="/admin/bikes" component={Bikes} />
+            <Route path="/admin/locks" component={Locks} />
             <Route path="/admin/bike-racks" component={BikeRacks} />
             <Route path="/admin/users" component={UserView} />
             <Route path="/admin/maintenance" component={MaintenanceView} />

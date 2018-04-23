@@ -4,15 +4,15 @@ import PropTypes from 'prop-types';
 import { List, Map } from 'immutable';
 import { OverlayView, Polygon } from 'react-google-maps';
 import { Container, Table, Button, Loader, Header } from 'semantic-ui-react';
-import {
-  list as listBikeRackAction,
-  destroy as destroyBikeRackAction,
-} from '../actions/bikeRacksActions';
-import { name as objectName } from '../BikeRacksRedux';
-//import Editor from './Editor';
 import MarkerMap from 'app/components/Map';
 import DeleteModal from 'app/components/DeleteModal';
 import BikeRackMarker from 'svg/BikeRackMarker';
+//import Editor from './Editor';
+import {
+  name as objectName,
+  bikeRacksListAction,
+  bikeRacksDestroyAction,
+} from '../redux/bikeRacks';
 
 class BikeRacksView extends Component {
   constructor(props) {
@@ -22,8 +22,8 @@ class BikeRacksView extends Component {
   }
 
   componentDidMount() {
-    const { listBikeRacks } = this.props;
-    listBikeRacks();
+    const { bikeRacksList } = this.props;
+    bikeRacksList();
   }
 
   registerMapRef(ref) {
@@ -36,7 +36,7 @@ class BikeRacksView extends Component {
       <DeleteModal
         id={id}
         objectName={objectName}
-        deleteFn={this.props.deleteBikeRack}
+        deleteFn={this.props.bikeRacksDestroy}
         onDelete={() => this.setState({ deleteBikeRackModal: null })}
         onCancel={() => this.setState({ deleteBikeRackModal: null })}
       />
@@ -115,12 +115,7 @@ class BikeRacksView extends Component {
       </Button>
     );
 
-    const handleLocationClick = () => {
-      this.map.panTo({
-        lat,
-        lng: lon,
-      });
-    };
+    const handleLocationClick = () => this.map.panTo({ lat, lng: lon });
 
     return (
       <Table.Row key={id} className="admin-table-row">
@@ -195,8 +190,8 @@ BikeRacksView.propTypes = {
   bikeRacksError: PropTypes.object,
   editorActive: PropTypes.bool,
   /* dispatch */
-  listBikeRacks: PropTypes.func.isRequired,
-  deleteBikeRack: PropTypes.func.isRequired,
+  bikeRacksList: PropTypes.func.isRequired,
+  bikeRacksDestroy: PropTypes.func.isRequired,
   openEditor: PropTypes.func,
 };
 
@@ -208,13 +203,10 @@ const mapStateToProps = state => {
   };
 };
 
-const mapDispatchToProps = dispatch => {
-  return {
-    listBikeRacks: () => dispatch(listBikeRackAction()),
-    deleteBikeRack: ({ id, object }) =>
-      dispatch(destroyBikeRackAction({ id, object })),
-    //openEditor: bike => dispatch(editorAction({ active: true, bike }))
-  };
+const mapDispatchToProps = {
+  bikeRacksList: bikeRacksListAction,
+  bikeRacksDestroy: bikeRacksDestroyAction,
+  //openEditor: bike => dispatch(editorAction({ active: true, bike }))
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(BikeRacksView);

@@ -2,13 +2,16 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Button, Form, Loader, Header, Message } from 'semantic-ui-react';
-import { name as objectName, record as BikeshareUser } from '../UsersRedux';
-import { destroy as destroyUserAction } from '../actions/usersActions';
+import DeleteModal from 'app/components/DeleteModal';
+import {
+  name as objectName,
+  record as BikeshareUser,
+  usersDestroyAction,
+} from '../redux/users';
 import {
   closeUserEditor as closeUserEditorAction,
   saveUserEditor as saveUserEditorAction,
-} from '../actions/userEditorActions';
-import DeleteModal from 'app/components/DeleteModal';
+} from '../redux/userEditor';
 
 class UserEditor extends Component {
   constructor(props) {
@@ -28,7 +31,7 @@ class UserEditor extends Component {
 
   save() {
     const { saveUserEditor } = this.props;
-    saveUserEditor(new BikeshareUser(this.state))
+    saveUserEditor({ object: new BikeshareUser(this.state) })
       .then(() => this.setState({ _status: 'SUCCEEDED', _error: null }))
       .catch(e => this.setState({ _status: 'FAILED', _error: e }))
       .finally(next => {
@@ -41,13 +44,13 @@ class UserEditor extends Component {
 
   renderDeleteModal() {
     const { _deleteModal, id } = this.state;
-    const { deleteUser, closeUserEditor } = this.props;
+    const { destroyUser, closeUserEditor } = this.props;
 
     return _deleteModal ? (
       <DeleteModal
         id={id}
         objectName={objectName}
-        deleteFn={deleteUser}
+        deleteFn={destroyUser}
         onDelete={closeUserEditor}
         onCancel={() => this.setState({ deleteModal: false })}
       />
@@ -139,7 +142,7 @@ class UserEditor extends Component {
 UserEditor.propTypes = {
   user: PropTypes.object.isRequired,
   /* dispatch */
-  deleteUser: PropTypes.func.isRequired,
+  destroyUser: PropTypes.func.isRequired,
   saveUserEditor: PropTypes.func.isRequired,
   closeUserEditor: PropTypes.func.isRequired,
 };
@@ -148,10 +151,10 @@ const mapStateToProps = state => ({
   user: state.userEditor.get('user'),
 });
 
-const mapDispatchToProps = dispatch => ({
-  deleteUser: ({ id, obj }) => dispatch(destroyUserAction({ id, obj })),
-  saveUserEditor: user => dispatch(saveUserEditorAction({ object: user })),
-  closeUserEditor: () => dispatch(closeUserEditorAction()),
-});
+const mapDispatchToProps = {
+  usersDestroy: usersDestroyAction,
+  saveUserEditor: saveUserEditorAction,
+  closeUserEditor: closeUserEditorAction,
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(UserEditor);
