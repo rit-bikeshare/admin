@@ -13,12 +13,9 @@ import {
 } from 'semantic-ui-react';
 import BoolIcon from 'lib/components/BoolIcon';
 import UserEditor from './UserEditor';
-import { listAdmins as listAdminsAction } from '../actions/adminActions';
-import {
-  searchUsers as searchUsersAction,
-  clearUsersAction,
-} from '../actions/usersActions';
-import { openUserEditor as openUserEditorAction } from '../actions/userEditorActions';
+import { usersClearAction, usersSearchAction } from '../redux/users';
+import { adminsListAction } from '../redux/admins';
+import { openUserEditor as openUserEditorAction } from '../redux/userEditor';
 
 const UserSearchOptions = [
   { key: 'username', text: 'Username', value: 'username' },
@@ -37,21 +34,21 @@ class UsersView extends Component {
   }
 
   componentDidMount() {
-    const { listAdmins } = this.props;
-    listAdmins();
+    const { adminsList } = this.props;
+    adminsList();
   }
 
   componentWillUpdate(nextProps) {
-    const { listAdmins, editorActive } = this.props;
+    const { adminsList, editorActive } = this.props;
     if (editorActive && !nextProps.editorActive) {
-      listAdmins();
+      adminsList();
     }
   }
 
   search() {
-    const { searchUsers } = this.props;
+    const { usersSearch } = this.props;
     const { userSearchMode, userSearchString } = this.state;
-    searchUsers(userSearchMode, userSearchString);
+    usersSearch(userSearchMode, userSearchString);
   }
 
   renderUser(user) {
@@ -130,13 +127,13 @@ class UsersView extends Component {
   }
 
   renderSearchedUsers() {
-    const { users, clearUsers } = this.props;
+    const { users, usersClear } = this.props;
 
     const usersTable =
       users.count() > 0 ? (
         <div>
           {this.renderUsers(users)}
-          <Button onClick={() => clearUsers()}> Clear </Button>
+          <Button onClick={() => usersClear()}> Clear </Button>
         </div>
       ) : (
         <span>No search results.</span>
@@ -192,9 +189,9 @@ UsersView.propTypes = {
   usersError: PropTypes.object,
   editorActive: PropTypes.bool,
   /* dispatch */
-  listAdmins: PropTypes.func.isRequired,
-  searchUsers: PropTypes.func.isRequired,
-  clearUsers: PropTypes.func.isRequired,
+  adminsList: PropTypes.func.isRequired,
+  usersSearch: PropTypes.func.isRequired,
+  usersClear: PropTypes.func.isRequired,
   openUserEditor: PropTypes.func,
 };
 
@@ -209,9 +206,9 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = {
-  listAdmins: listAdminsAction,
-  searchUsers: searchUsersAction,
-  clearUsers: clearUsersAction,
+  adminsList: adminsListAction,
+  usersSearch: usersSearchAction,
+  usersClear: usersClearAction,
   openUserEditor: openUserEditorAction,
 };
 

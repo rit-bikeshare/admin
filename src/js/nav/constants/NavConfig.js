@@ -11,6 +11,11 @@ export default OrderedMap({
     label: 'Bikes',
     route: '/admin/bikes',
   }),
+  LOCKS: Map({
+    key: 'LOCKS',
+    label: 'Locks',
+    route: '/admin/locks',
+  }),
   BIKE_RACKS: Map({
     key: 'BIKE_RACKS',
     label: 'Bike Racks',
