@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Map, Set } from 'immutable';
 import { Select, Form } from 'semantic-ui-react';
-import { locksListAction } from 'locks/redux/locks';
+import { record as BikeLock, locksListAction } from 'locks/redux/locks';
 
 class BikeLockSelect extends Component {
   constructor(props) {
@@ -17,17 +17,29 @@ class BikeLockSelect extends Component {
   }
 
   render() {
-    const { locksStatus, locks, availableLocks, lock, onChange } = this.props;
+    const {
+      locksStatus,
+      locks,
+      availableLocks,
+      lock: maybeNullLock,
+      onChange,
+    } = this.props;
     const { message } = this.state;
     if (locksStatus === 'PENDING') {
       return <Select placeholder="Select bike lock" search loading />;
     }
 
+    const lock = maybeNullLock || -1;
+
     const options = Set(
       availableLocks
-        .map(({ id }) => Map({ key: id, text: id, value: id }))
+        .set('-1', new BikeLock({ id: -1 }))
+        .set(lock, new BikeLock({ id: lock }))
+        .map(({ id }) =>
+          Map({ key: id, text: id === -1 ? 'No lock' : id, value: id })
+        )
         .toList()
-    ).add(Map({ key: lock, text: lock, value: lock }));
+    );
 
     return (
       <Form.Field>
@@ -41,9 +53,9 @@ class BikeLockSelect extends Component {
           value={lock}
           onChange={(e, { value }) => {
             const num = Number(value);
-            if (availableLocks.has(num) || !locks.has(num)) {
+            if (num === -1 || availableLocks.has(num) || !locks.has(num)) {
               this.setState({ message: null });
-              onChange(num);
+              onChange(num === -1 ? null : num);
             } else {
               this.setState({
                 message: `Lock with id ${num} exists and is assigned to another bike.`,
@@ -75,7 +87,12 @@ const mapStateToProps = state => {
 
   const availableLocks = (() => {
     if (locks.count() > 0) {
-      const usedIds = Set(bikes.map(({ lock }) => lock).toList());
+      const usedIds = Set(
+        bikes
+          .filter(({ lock }) => lock != null)
+          .map(({ lock }) => lock)
+          .toList()
+      );
       const filtered = locks.filter(({ id }) => !usedIds.contains(id));
       return editorBikeLock
         ? filtered.set(editorBikeLock.id, editorBikeLock)

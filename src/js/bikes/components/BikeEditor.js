@@ -11,6 +11,7 @@ import {
   bikesDestroyAction,
 } from '../redux/bikes';
 import {
+  openBikeEditor as openBikeEditorAction,
   closeBikeEditor as closeBikeEditorAction,
   saveBikeEditor as saveBikeEditorAction,
 } from '../redux/bikeEditor';
@@ -32,9 +33,12 @@ class BikeEditor extends Component {
   }
 
   save() {
-    const { saveBikeEditor } = this.props;
+    const { saveBikeEditor, openBikeEditor } = this.props;
     saveBikeEditor({ object: new Bike(this.state) })
-      .then(() => this.setState({ _status: 'SUCCEEDED', _error: null }))
+      .then(bike => {
+        this.setState({ _status: 'SUCCEEDED', _error: null, ...bike.toJS() });
+        openBikeEditor({ object: bike });
+      })
       .catch(e => this.setState({ _status: 'FAILED', _error: e }))
       .finally(next => {
         setTimeout(() => this.setState({ _status: '', _error: null }), 10000);
@@ -150,6 +154,7 @@ BikeEditor.propTypes = {
   bikesDestroy: PropTypes.func.isRequired,
   saveBikeEditor: PropTypes.func.isRequired,
   closeBikeEditor: PropTypes.func.isRequired,
+  openBikeEditor: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state => ({
@@ -158,6 +163,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = {
   bikesDestroy: bikesDestroyAction,
+  openBikeEditor: openBikeEditorAction,
   saveBikeEditor: saveBikeEditorAction,
   closeBikeEditor: closeBikeEditorAction,
 };

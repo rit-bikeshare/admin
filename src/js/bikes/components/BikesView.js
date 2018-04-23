@@ -11,6 +11,7 @@ import {
   Header,
   Modal,
 } from 'semantic-ui-react';
+import BoolIcon from 'lib/components/BoolIcon';
 import MarkerMap from 'app/components/Map';
 import DeleteModal from 'app/components/DeleteModal';
 import BikeEditor from './BikeEditor';
@@ -97,6 +98,7 @@ class BikesView extends Component {
     const { openEditor } = this.props;
     const {
       id,
+      visible,
       currentRenterUsername,
       lat,
       lon,
@@ -133,7 +135,10 @@ class BikesView extends Component {
     return (
       <Table.Row key={id} className="admin-table-row">
         <Table.Cell>
-          <span style={{ paddingRight: '20px' }}>{id}</span>
+          <span style={{ paddingRight: '10px' }}>{id}</span>
+        </Table.Cell>
+        <Table.Cell>
+          <BoolIcon value={visible} />
         </Table.Cell>
         <Table.Cell>
           <a className="link-button" onClick={() => handleLocationClick()}>
@@ -164,6 +169,7 @@ class BikesView extends Component {
         <Table.Header>
           <Table.Row>
             <Table.HeaderCell>ID</Table.HeaderCell>
+            <Table.HeaderCell>VISIBLE</Table.HeaderCell>
             <Table.HeaderCell>LOCATION</Table.HeaderCell>
             <Table.HeaderCell>CURRENT RIDER</Table.HeaderCell>
             <Table.HeaderCell>LAST RIDER</Table.HeaderCell>

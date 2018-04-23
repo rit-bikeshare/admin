@@ -44,7 +44,7 @@ export const saveBikeEditor = ({ object }) => {
   const lockId = object.lock;
   return (dispatch, getState) => {
     const state = getState();
-    if (!state.locks.has(lockId)) {
+    if (!state.locks.hasIn(['data', lockId]) && lockId != null) {
       return dispatch(locksCreateAction({ object: new Lock({ id: lockId }) }))
         .then(() => dispatch(fn({ object })))
         .catch(e => {
