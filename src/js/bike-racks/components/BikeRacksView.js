@@ -81,6 +81,7 @@ class BikeRacksView extends Component {
     }, List());
 
     return <GMap mapRef={ref => this.registerMapRef(ref)}>{markers}</GMap>;
+
   }
 
   renderBikeRack(bikeRack) {
