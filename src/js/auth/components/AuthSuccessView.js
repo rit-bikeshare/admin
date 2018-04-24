@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Loader } from 'semantic-ui-react';
-import queryString from 'query-string';
+import queryString from 'querystring';
 import {
   fetchUserData as fetchUserDataAction,
   setUserToken as setUserTokenAction,
@@ -21,7 +21,11 @@ class AuthSuccessView extends React.Component {
 
   componentWillMount() {
     const { location, fetchUserData, setUserToken } = this.props;
-    const params = queryString.parse(location.search);
+    let query = location.search;
+    if (query.charAt(0) === '?') {
+      query = query.substr(1);
+    }
+    const params = queryString.parse(query);
     const { token } = params;
 
     if (!token) {
