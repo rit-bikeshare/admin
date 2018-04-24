@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import Immutable from 'immutable';
-import { Marker } from 'react-google-maps';
+import { List, Map } from 'immutable';
+import { Marker, Polygon } from 'react-google-maps';
 import {
   Container,
   Table,
@@ -23,6 +23,7 @@ import {
   bikesRetrieveAction,
   bikesDestroyAction,
 } from '../redux/bikes';
+import { bikeRacksListAction } from 'bike-racks/redux/bikeRacks';
 import { openBikeEditor } from '../redux/bikeEditor';
 
 class BikesView extends Component {
@@ -36,9 +37,10 @@ class BikesView extends Component {
     clearInterval(this.pollTimeout);
   }
 
-  componentDidMount() {
-    const { bikesList } = this.props;
+  componentWillMount() {
+    const { bikesList, bikeRacksList } = this.props;
     bikesList();
+    bikeRacksList();
     this.pollTimeout = setInterval(() => bikesList(), 5000);
   }
 
@@ -191,10 +193,42 @@ class BikesView extends Component {
     );
   }
 
+  renderCheckInArea(bikeRack) {
+    const coords = bikeRack.checkInArea
+      .get('coordinates')
+      .first()
+      .toJS();
+    const formattedCoords = coords.map(coord => {
+      return {
+        lat: coord[1],
+        lng: coord[0],
+      };
+    });
+
+    return (
+      <Polygon
+        paths={formattedCoords}
+        options={{
+          fillColor: 'rgba(243,110,31,0.25)',
+          strokeColor: 'rgba(243,110,31,0.5)',
+        }}
+      />
+    );
+  }
+
   renderMap() {
-    const { bikes } = this.props;
+    const { bikes, bikeRacks } = this.props;
     const markers = bikes.map(bike => this.renderBikeMarker(bike)).toList();
-    return <GMap mapRef={ref => this.registerMapRef(ref)}>{markers}</GMap>;
+    const checkInAreas = bikeRacks
+      .map(rack => this.renderCheckInArea(rack))
+      .toList();
+
+    return (
+      <GMap mapRef={ref => this.registerMapRef(ref)}>
+        {markers}
+        {checkInAreas}
+      </GMap>
+    );
   }
 
   render() {
@@ -226,12 +260,14 @@ class BikesView extends Component {
 }
 
 BikesView.propTypes = {
-  bikes: PropTypes.instanceOf(Immutable.Map),
+  bikeRacks: PropTypes.instanceOf(Map),
+  bikes: PropTypes.instanceOf(Map),
   bikesError: PropTypes.object,
-  rentals: PropTypes.instanceOf(Immutable.List),
+  rentals: PropTypes.instanceOf(List),
   rentalsError: PropTypes.object,
   editorActive: PropTypes.bool,
   /* dispatch */
+  bikeRacksList: PropTypes.func,
   bikesList: PropTypes.func.isRequired,
   bikesRetrieve: PropTypes.func.isRequired,
   bikesDestroy: PropTypes.func.isRequired,
@@ -240,6 +276,7 @@ BikesView.propTypes = {
 
 const mapStateToProps = state => {
   return {
+    bikeRacks: state.bikeRacks.get('data'),
     bikes: state.bikes.get('data'),
     bikesError: state.bikes.get('error'),
     rentals: state.bikes.get(['rentals', 'rentals']),
@@ -249,6 +286,7 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = {
+  bikeRacksList: bikeRacksListAction,
   bikesList: bikesListAction,
   bikesRetrieve: bikesRetrieveAction,
   bikesDestroy: bikesDestroyAction,
