@@ -23,9 +23,14 @@ class BikeRacksView extends Component {
     this.registerMapRef = this.registerMapRef.bind(this);
   }
 
-  componentDidMount() {
+  componentWillUnmount() {
+    clearInterval(this.pollTimeout);
+  }
+
+  componentWillMount() {
     const { bikeRacksList } = this.props;
     bikeRacksList();
+    this.pollTimeout = setInterval(() => bikeRacksList(), 5000);
   }
 
   registerMapRef(ref) {
