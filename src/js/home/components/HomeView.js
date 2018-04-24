@@ -7,7 +7,7 @@ import DataWell from '../../lib/components/DataWell';
 
 class HomeView extends Component {
   renderStat(stat) {
-    return <DataWell title={stat.title} value={stat.value} />;
+    return <DataWell key={stat.title} title={stat.title} value={stat.value} />;
   }
 
   render() {

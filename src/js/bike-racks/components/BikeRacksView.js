@@ -86,7 +86,7 @@ class BikeRacksView extends Component {
         .push(this.renderBikeRackCheckOutArea(rack));
     }, List());
 
-    return <MarkerMap mapRef={this.registerMapRef} markers={markers} />;
+    return <MarkerMap mapRef={this.registerMapRef}>{markers}</MarkerMap>;
   }
 
   renderBikeRack(bikeRack) {
