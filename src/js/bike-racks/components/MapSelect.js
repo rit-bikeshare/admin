@@ -53,7 +53,7 @@ class MapSelect extends Component {
   }
 
   renderMap() {
-    const { bikeRack, onChange } = this.props;
+    const { bikeRack, onChange, children } = this.props;
     const markers = List([
       this.renderBikeRackMarker(bikeRack),
       this.renderBikeRackCheckOutArea(bikeRack),
@@ -101,6 +101,7 @@ class MapSelect extends Component {
           }}
         />
         {markers}
+        {children}
       </GMap>
     );
   }
@@ -113,6 +114,7 @@ class MapSelect extends Component {
 MapSelect.propTypes = {
   bikeRack: PropTypes.instanceOf(BikeRack),
   onChange: PropTypes.func.isRequired,
+  children: PropTypes.node,
 };
 
 export default MapSelect;

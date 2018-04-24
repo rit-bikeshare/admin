@@ -46,7 +46,7 @@ class BikeRacksView extends Component {
   }
 
   renderBikeRackMarker(rack) {
-    return <BikeRackMarker bikeRack={rack} />;
+    return <BikeRackMarker key={`${rack.id}-marker`} bikeRack={rack} />;
   }
 
   renderBikeRackCheckOutArea(bikeRack) {
@@ -63,6 +63,7 @@ class BikeRacksView extends Component {
 
     return (
       <Polygon
+        key={bikeRack.id}
         paths={formattedCoords}
         options={{
           fillColor: 'rgba(243,110,31,0.25)',
@@ -81,7 +82,6 @@ class BikeRacksView extends Component {
     }, List());
 
     return <GMap mapRef={ref => this.registerMapRef(ref)}>{markers}</GMap>;
-
   }
 
   renderBikeRack(bikeRack) {

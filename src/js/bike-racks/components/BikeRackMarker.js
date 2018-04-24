@@ -38,7 +38,7 @@ export default class BikeRackMarker extends React.Component {
 
   render() {
     const { bikeRack } = this.props;
-    const availableBikes = bikeRack.availableBikes || null;
+    const availableBikes = bikeRack.bikeCount || 0;
     return (
       <OverlayView
         key={bikeRack.id || `${bikeRack.lat}${bikeRack.lon}`}

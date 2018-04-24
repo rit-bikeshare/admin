@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { fromJS } from 'immutable';
+import { fromJS, Map } from 'immutable';
+import { Polygon } from 'react-google-maps';
 import {
   Button,
   Form,
@@ -10,6 +11,7 @@ import {
   Message,
   Input,
 } from 'semantic-ui-react';
+
 import DeleteModal from 'app/components/DeleteModal';
 import MapSelect from './MapSelect';
 import {
@@ -33,11 +35,24 @@ class BikeRackEditor extends Component {
       _error: null,
       bikeRack: props.bikeRack || new BikeRack(),
     };
+
+    this.clearBikeRackMapEdits = this.clearBikeRackMapEdits.bind(this);
   }
 
   componentWillUnmount() {
     const { closeBikeRackEditor } = this.props;
     closeBikeRackEditor();
+  }
+
+  clearBikeRackMapEdits() {
+    const { bikeRack: editedBikeRack } = this.state;
+    const { bikeRack = new BikeRack() } = this.props;
+    this.setState({
+      bikeRack: editedBikeRack
+        .set('checkInArea', bikeRack.checkInArea)
+        .set('lat', bikeRack.lat)
+        .set('lon', bikeRack.lon),
+    });
   }
 
   save() {
@@ -131,9 +146,38 @@ class BikeRackEditor extends Component {
     );
   }
 
+  renderCheckInArea(bikeRack) {
+    const coords = bikeRack.checkInArea
+      .get('coordinates')
+      .first()
+      .toJS();
+    const formattedCoords = coords.map(coord => {
+      return {
+        lat: coord[1],
+        lng: coord[0],
+      };
+    });
+
+    return (
+      <Polygon
+        key={bikeRack.id}
+        paths={formattedCoords}
+        options={{
+          fillColor: 'rgba(243,110,31,0.25)',
+          strokeColor: 'rgba(243,110,31,0.5)',
+        }}
+      />
+    );
+  }
+
   render() {
+    const { bikeRacks } = this.props;
     const { bikeRack } = this.state;
     const id = indexFn(bikeRack) || null;
+    const checkInAreas = bikeRacks
+      .filter(rack => rack.id !== bikeRack.id)
+      .map(rack => this.renderCheckInArea(rack))
+      .toList();
 
     return (
       <div>
@@ -176,10 +220,19 @@ class BikeRackEditor extends Component {
               }}
             />
           </Form.Field>
+          <Button
+            size="tiny"
+            className="m-bottom-2"
+            onClick={this.clearBikeRackMapEdits}
+          >
+            Reset Map Edits
+          </Button>
           <MapSelect
             bikeRack={bikeRack}
             onChange={bikeRack => this.setState({ bikeRack })}
-          />
+          >
+            {checkInAreas}
+          </MapSelect>
           <Form.Field />
           {this.renderButtons()}
         </Form>
@@ -189,6 +242,7 @@ class BikeRackEditor extends Component {
 }
 
 BikeRackEditor.propTypes = {
+  bikeRacks: PropTypes.instanceOf(Map),
   bikeRack: PropTypes.instanceOf(BikeRack),
   creating: PropTypes.bool,
   /* dispatch */
@@ -199,6 +253,7 @@ BikeRackEditor.propTypes = {
 };
 
 const mapStateToProps = state => ({
+  bikeRacks: state.bikeRacks.get('data'),
   bikeRack: state.bikeRackEditor.get('bikeRack'),
   creating: state.bikeRackEditor.get('creating'),
 });

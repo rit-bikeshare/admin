@@ -207,6 +207,7 @@ class BikesView extends Component {
 
     return (
       <Polygon
+        key={bikeRack.id}
         paths={formattedCoords}
         options={{
           fillColor: 'rgba(243,110,31,0.25)',
