@@ -1,9 +1,8 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { compose, withProps } from 'recompose';
 import { withScriptjs, withGoogleMap, GoogleMap } from 'react-google-maps';
 
-const MapComponent = compose(
+export default compose(
   withProps({
     googleMapURL:
       'https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places',
@@ -28,19 +27,3 @@ const MapComponent = compose(
     </GoogleMap>
   );
 });
-
-const MarkerMap = ({ mapRef, children, ...props }) => {
-  return (
-    <MapComponent {...props} mapRef={mapRef}>
-      {children}
-    </MapComponent>
-  );
-};
-
-MarkerMap.propTypes = {
-  markers: PropTypes.object,
-  mapRef: PropTypes.func,
-  children: PropTypes.node,
-};
-
-export default MarkerMap;

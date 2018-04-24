@@ -1,9 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { OverlayView } from 'react-google-maps';
+import BikeRack from '../records/BikeRack';
+
+const getPixelPositionOffset = (width, height) => ({
+  x: -(width / 2),
+  y: -(height / 2),
+});
 
 export default class BikeRackMarker extends React.Component {
   renderText(availableBikes) {
-    if (availableBikes === null) return null;
+    if (availableBikes == null) return null;
 
     return (
       <text textAnchor="middle" fill="#FFFFFF" fontSize="18" x="28" y="45">
@@ -30,11 +37,21 @@ export default class BikeRackMarker extends React.Component {
   }
 
   render() {
-    const { availableBikes } = this.props;
-    return this.renderSvg(availableBikes);
+    const { bikeRack } = this.props;
+    const availableBikes = bikeRack.availableBikes || null;
+    return (
+      <OverlayView
+        key={bikeRack.id || `${bikeRack.lat}${bikeRack.lon}`}
+        position={{ lat: bikeRack.lat, lng: bikeRack.lon }}
+        mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}
+        getPixelPositionOffset={getPixelPositionOffset}
+      >
+        {this.renderSvg(availableBikes)}
+      </OverlayView>
+    );
   }
 }
 
 BikeRackMarker.propTypes = {
-  availableBikes: PropTypes.node,
+  bikeRack: PropTypes.instanceOf(BikeRack),
 };

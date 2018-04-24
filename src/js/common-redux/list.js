@@ -24,6 +24,7 @@ export const list = ({ name, path, record, indexFn }) => {
         })
         .catch(error => {
           dispatch(listFailureAction({ error }));
+          throw error;
         });
     };
   }

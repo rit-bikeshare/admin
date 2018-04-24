@@ -2,17 +2,19 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { List, Map } from 'immutable';
-import { OverlayView, Polygon } from 'react-google-maps';
+import { Polygon } from 'react-google-maps';
 import { Container, Table, Button, Loader, Header } from 'semantic-ui-react';
-import MarkerMap from 'app/components/Map';
+import GMap from 'app/components/GMap';
 import DeleteModal from 'app/components/DeleteModal';
-import BikeRackMarker from 'svg/BikeRackMarker';
-//import Editor from './Editor';
+import BikeRackMarker from './BikeRackMarker';
+import BikeRackEditor from './BikeRackEditor';
 import {
   name as objectName,
   bikeRacksListAction,
   bikeRacksDestroyAction,
 } from '../redux/bikeRacks';
+import { openBikeRackEditor } from '../redux/bikeRackEditor';
+import BikeRack from '../records/BikeRack';
 
 class BikeRacksView extends Component {
   constructor(props) {
@@ -44,15 +46,7 @@ class BikeRacksView extends Component {
   }
 
   renderBikeRackMarker(rack) {
-    return (
-      <OverlayView
-        key={rack.id}
-        position={{ lat: rack.lat, lng: rack.lon }}
-        mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}
-      >
-        <BikeRackMarker availableBikes={rack.bikeCount} />
-      </OverlayView>
-    );
+    return <BikeRackMarker bikeRack={rack} />;
   }
 
   renderBikeRackCheckOutArea(bikeRack) {
@@ -86,7 +80,8 @@ class BikeRacksView extends Component {
         .push(this.renderBikeRackCheckOutArea(rack));
     }, List());
 
-    return <MarkerMap mapRef={this.registerMapRef}>{markers}</MarkerMap>;
+    return <GMap mapRef={ref => this.registerMapRef(ref)}>{markers}</GMap>;
+
   }
 
   renderBikeRack(bikeRack) {
@@ -94,7 +89,11 @@ class BikeRacksView extends Component {
     const { id, name, bikeCount, lat, lon } = bikeRack.toJS();
 
     const editButton = (
-      <Button size="tiny" compact onClick={() => openEditor(bikeRack.toJS())}>
+      <Button
+        size="tiny"
+        compact
+        onClick={() => openEditor({ object: bikeRack })}
+      >
         Edit
       </Button>
     );
@@ -165,7 +164,7 @@ class BikeRacksView extends Component {
   render() {
     const { editorActive, openEditor, bikeRacksError } = this.props;
     if (openEditor && editorActive) {
-      //return <Editor />;
+      return <BikeRackEditor />;
     }
 
     return (
@@ -173,7 +172,13 @@ class BikeRacksView extends Component {
         {this.renderDeleteBikeRackModal()}
         {this.renderMap()}
         <Container style={{ paddingBottom: '10px' }}>
-          <Button primary floated="right" onClick={() => openEditor()}>
+          <Button
+            primary
+            floated="right"
+            onClick={() =>
+              openEditor({ object: new BikeRack(), creating: true })
+            }
+          >
             Add Bike Rack
           </Button>
           <Header as="h2">Bike Racks</Header>
@@ -199,14 +204,14 @@ const mapStateToProps = state => {
   return {
     bikeRacks: state.bikeRacks.get('data'),
     bikeRacksError: state.bikeRacks.get('error'),
-    editorActive: state.bikes.getIn(['editor', 'active'], false),
+    editorActive: state.bikeRackEditor.get('active', false),
   };
 };
 
 const mapDispatchToProps = {
   bikeRacksList: bikeRacksListAction,
   bikeRacksDestroy: bikeRacksDestroyAction,
-  //openEditor: bike => dispatch(editorAction({ active: true, bike }))
+  openEditor: openBikeRackEditor,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(BikeRacksView);

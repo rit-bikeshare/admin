@@ -12,7 +12,7 @@ import {
   Modal,
 } from 'semantic-ui-react';
 import BoolIcon from 'lib/components/BoolIcon';
-import MarkerMap from 'app/components/Map';
+import GMap from 'app/components/GMap';
 import DeleteModal from 'app/components/DeleteModal';
 import BikeEditor from './BikeEditor';
 import generateQRCode from '../../lib/generateQRCode';
@@ -194,10 +194,7 @@ class BikesView extends Component {
   renderMap() {
     const { bikes } = this.props;
     const markers = bikes.map(bike => this.renderBikeMarker(bike)).toList();
-
-    return (
-      <MarkerMap mapRef={ref => this.registerMapRef(ref)}>{markers}</MarkerMap>
-    );
+    return <GMap mapRef={ref => this.registerMapRef(ref)}>{markers}</GMap>;
   }
 
   render() {

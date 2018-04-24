@@ -12,6 +12,7 @@ import { reducer as locksReducer } from 'locks/redux/locks';
 
 /* Bike Racks */
 import { reducer as bikeRacksReducer } from 'bike-racks/redux/bikeRacks';
+import { reducer as bikeRackEditorReducer } from 'bike-racks/redux/bikeRackEditor';
 
 /* Users */
 import { reducer as usersReducer } from 'users/redux/users';
@@ -30,6 +31,7 @@ export default combineReducers({
   bikeEditor: bikeEditorReducer,
   locks: locksReducer,
   bikeRacks: bikeRacksReducer,
+  bikeRackEditor: bikeRackEditorReducer,
   routing: routerReducer,
   damageReports: damageReportReducer,
 });

@@ -2,8 +2,8 @@ import { Record } from 'immutable';
 
 export default Record(
   {
-    id: null,
-    bikeCount: null,
+    id: undefined,
+    bikeCount: undefined,
     name: null,
     description: null,
     checkInArea: null,

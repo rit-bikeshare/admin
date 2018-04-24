@@ -2,19 +2,19 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Map } from 'immutable';
-import { Table, Button, Loader } from 'semantic-ui-react';
-import BoolIcon from 'lib/components/BoolIcon';
+import { Header, Container, Table, Button, Loader } from 'semantic-ui-react';
+import DeleteModal from 'app/components/DeleteModal';
 //import UserEditor from './UserEditor';
-import { locksListAction } from '../redux/locks';
+import {
+  name as objectName,
+  locksListAction,
+  locksDestroyAction,
+} from '../redux/locks';
 
 class UsersView extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      deleteUserModal: null,
-      userSearchMode: 'username',
-      userSearchString: '',
-    };
+    this.state = { deleteLockModal: null };
   }
 
   componentDidMount() {
@@ -29,9 +29,22 @@ class UsersView extends Component {
     }
   }
 
+  renderDeleteLockModal() {
+    const { deleteLockModal: id } = this.state;
+    return id ? (
+      <DeleteModal
+        id={id}
+        objectName={objectName}
+        deleteFn={this.props.locksDestroy}
+        onDelete={() => this.setState({ deleteLockModal: null })}
+        onCancel={() => this.setState({ deleteLockModal: null })}
+      />
+    ) : null;
+  }
+
   renderLock(lock) {
     //const { openUserEditor } = this.props;
-    //const { username, firstName, lastName, isStaff } = user;
+    const { id, channelName } = lock;
 
     const editButton = (
       <Button
@@ -43,16 +56,25 @@ class UsersView extends Component {
       </Button>
     );
 
+    const deleteButton = (
+      <Button
+        size="tiny"
+        compact
+        onClick={() => this.setState({ deleteLockModal: id })}
+      >
+        Delete
+      </Button>
+    );
+
     return (
-      <Table.Row key={lock.id} className="admin-table-row">
-        <Table.Cell>asdf</Table.Cell>
-        <Table.Cell>asdf</Table.Cell>
-        <Table.Cell>asdf</Table.Cell>
+      <Table.Row key={id} className="admin-table-row">
+        <Table.Cell>{id}</Table.Cell>
+        <Table.Cell>{channelName}</Table.Cell>
         <Table.Cell>
-          <BoolIcon value={false} />
-        </Table.Cell>
-        <Table.Cell>
-          <div className="actions">{editButton}</div>
+          <div className="actions">
+            {editButton}
+            {deleteButton}
+          </div>
         </Table.Cell>
       </Table.Row>
     );
@@ -68,14 +90,12 @@ class UsersView extends Component {
       <Table className="admin-table hoverable" selectable>
         <Table.Header>
           <Table.Row>
-            <Table.HeaderCell>USERNAME</Table.HeaderCell>
-            <Table.HeaderCell>FIRST NAME</Table.HeaderCell>
-            <Table.HeaderCell>LAST NAME</Table.HeaderCell>
-            <Table.HeaderCell>ADMIN ACCESS</Table.HeaderCell>
+            <Table.HeaderCell>ID</Table.HeaderCell>
+            <Table.HeaderCell>CHANNEL NAME</Table.HeaderCell>
             <Table.HeaderCell>ACTIONS</Table.HeaderCell>
           </Table.Row>
         </Table.Header>
-        <Table.Body>{locks.map(b => this.renderLock(b)).toList()}</Table.Body>
+        <Table.Body>{locks.map(l => this.renderLock(l)).toList()}</Table.Body>
       </Table>
     );
   }
@@ -88,7 +108,11 @@ class UsersView extends Component {
 
     return (
       <div>
+        {this.renderDeleteLockModal()}
         {locksError ? String(locksError) : null}
+        <Container style={{ paddingBottom: '10px' }}>
+          <Header as="h2">Locks</Header>
+        </Container>
         {this.renderLocks()}
       </div>
     );
@@ -101,6 +125,7 @@ UsersView.propTypes = {
   editorActive: PropTypes.bool,
   /* dispatch */
   locksList: PropTypes.func.isRequired,
+  locksDestroy: PropTypes.func.isRequired,
   //openUserEditor: PropTypes.func,
 };
 
@@ -114,6 +139,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = {
   locksList: locksListAction,
+  locksDestroy: locksDestroyAction,
   //openUserEditor: openUserEditorAction,
 };
 
