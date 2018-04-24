@@ -3,7 +3,7 @@ import logo from '../../img/logo.png';
 import QRCode from 'qrcode';
 
 async function generateQRCode(data) {
-  const qrData = await QRCode.toString(`check-in/${data.id}`, {
+  const qrData = await QRCode.toString(`check-out/${data.id}`, {
     rendererOpts: {
       quality: 1,
     },
