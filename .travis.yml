@@ -1,29 +1,27 @@
 notifications:
   email: false
-
 jobs:
   include:
-    - stage: test
-      if: branch = master OR type IN (pull_request)
-      language: node_js
-      node_js: node
-      cache: yarn
-      install: yarn install
-      script: yarn test
-
-    - stage: build
-      if: tag IS present
-      language: node_js
-      node_js: node
-      cache: yarn
-      install: yarn install
-      script: yarn build
-      before_deploy: tar -zcvf dist.tar.gz build
-      deploy:
-        provider: releases
-        skip_cleanup: true
-        api_key:
-          secure: at9L2fczFCMscONfSwVc0i9qOE/+aoq4xPFsA5pnap1tnx5ilHEIX264J+kBzGKrAqn+XMmHyyJ4YaTUX113cSQFFKyYS1NYgUAoUb4vqKlyvKj3GvfBsXyLu12cIr5OSS1/Kf1G/pOkJ2UI2to7hFoEJ/wBqGqbO1rMTDVyRBKjPU2NPVwkYSvppY8c/iVEQJUawK5ddRzoc1WT54JavJiZpfgRhwjd8cCBgu/iLxyV/WAkRQZ8R9yvifICsdV8ZagioYTGi50aQZoskrdFuL488ptKYasg+Mag2YNQFMYMzrxd+Jpj41iMzkEP3EztzdpMbtnPs2ABQIX46d1vNU8p20nugy2BcSi6u3D9/Rhum0ZeX2zDNRszMJ7ylfjYNGqCA4ChUXLeoCK8mnV4GDOzkpgxVFFRWUWvE9EV0Fo7Aro4TCL1IrSYhGDQPw1xIqM5hyEhnqCtZFQhQQZnpEUzj5zK1fRBEP29piaQOzcJo3Lg6eTDu6wNOus0hWyxT3QkqEBzdcTdatFYgx4eEOB1HzVz3cIzrSE2WDFHUIkDh82ZGc7VSkXUgjxqzHkkRYvzU3mKWNRLfL2dDTgmCXLUHfxvuyqTOK6O5oak0jSDQAY75KcWh+5RIphwsS9+ELD5UQ/9txy+4gNxQO4lZCgkQ7J77GnFho6vPxylMfw=
-        file: dist.tar.gz
-        on:
-          tags: true
+  - stage: test
+    if: branch = master OR type IN (pull_request)
+    language: node_js
+    node_js: 9
+    cache: yarn
+    install: yarn install
+    script: yarn test
+  - stage: build
+    if: tag IS present
+    language: node_js
+    node_js: 9
+    cache: yarn
+    install: yarn install
+    script: yarn build
+    before_deploy: tar -zcvf dist.tar.gz build
+    deploy:
+      provider: releases
+      skip_cleanup: true
+      api_key:
+        secure: M5l0WcmA99PgdR1HJzyJh9b8VXW391qn2m9xfZLTzIr2U3Y19E9mU9uNVPSE1Qumt4KRPLoZz7RUYcTybhLNDEXtCdRQ5gNtKrXWQSoJJgwlG+IPJYJr5fImz4mwdvi8LgrO6xf3I2dDJkmAaM9DAxp3zs04VHjmqFCNliSDNgw1HokHZ9Qt6j0+FZ4FX8LO7TQuOR9JK9su810Pw10j5mCCitxCykkEDrrk/1mFbwwrwpoMECN3yo1TjPWMpRYdOou66qkWxcqyL5+udg9GsBCCxp5hAmc10i+NPHPrI6JNp2QD5sK8wxNM3d71e2+vJP9d4k7djB1Vglta9k+Wtf3ZcBHPIJzI8TudANVtLMYf9qTODJpw4IbARiSLRMCz4uGy0a5oCn7qFFYMn5Rp9gayhhxQmPDLC91rWJidPt2G/2iSPIGIAB8iYeynI1YfYFgnyrLtSixasydHNKw6pzuIvfH6/pqWy7JXH7brcAFwEOaS/dbR1bsXkROTP5J+eEC9GlIOjcmnmcTj/oB6LsfHkYn1p35ibNh/1GV4N5LQYHv4rwfoo70JsrJRvxK3KnOUrWmMU4yWj0dxJToeegxBmkYRW1Q/byLZR7HyOJqyjbiOPifzVWQQ62EgT9CXw/xt4Aqt5P0/knsudsf9hN6JyD5Fb8zeNyQyy3V4zhA=
+      file: dist.tar.gz
+      on:
+        tags: true
