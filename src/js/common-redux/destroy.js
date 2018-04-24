@@ -17,6 +17,7 @@ export const destroy = ({ name, path, indexFn }) => {
         })
         .catch(error => {
           dispatch(destroyFailureAction({ error }));
+          throw error;
         });
     };
   }

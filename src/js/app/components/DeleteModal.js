@@ -7,6 +7,10 @@ const meta = {
     header: id => `Delete bike ${id}`,
     description: 'Are you sure you want to delete this bike?',
   },
+  locks: {
+    header: id => `Delete lock ${id}`,
+    description: 'Are you sure you want to delete this lock?',
+  },
   bikeracks: {
     header: id => `Delete bike rack ${id}`,
     description:
@@ -74,10 +78,8 @@ class DeleteModal extends React.Component {
       this.setState({ status: 'PENDING' });
       deleteFn({ id })
         .then(() => {
-          setTimeout(() => {
-            this.setState({ status: 'SUCCESS' });
-            setTimeout(onDelete, 1500);
-          }, 1000);
+          this.setState({ status: 'SUCCESS' });
+          setTimeout(onDelete, 300);
         })
         .catch(() => {
           this.setState({ status: 'ERROR' });

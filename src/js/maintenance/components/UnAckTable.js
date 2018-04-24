@@ -5,7 +5,7 @@ import { Marker } from 'react-google-maps';
 import { Button, Modal, List } from 'semantic-ui-react';
 
 import BoolIcon from 'lib/components/BoolIcon';
-import MapComponent from 'app/components/Map';
+import GMap from 'app/components/GMap';
 import DamageReportsTable from './DamageReportsTable';
 
 class UnAckTable extends React.Component {
@@ -72,9 +72,9 @@ class UnAckTable extends React.Component {
         <Modal.Header>Damage Details</Modal.Header>
         <Modal.Content>
           <Modal.Description>
-            <MapComponent defaultCenter={location}>
+            <GMap defaultCenter={location}>
               <Marker position={location} label={`${bike.id}`} />
-            </MapComponent>
+            </GMap>
             <h4>Reports for bike #{bike.id}</h4>
             <List divided relaxed>
               {reports.map(report => this.renderReport(report))}
