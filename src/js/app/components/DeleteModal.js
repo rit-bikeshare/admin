@@ -11,7 +11,7 @@ const meta = {
     header: id => `Delete lock ${id}`,
     description: 'Are you sure you want to delete this lock?',
   },
-  bikeracks: {
+  bikeRacks: {
     header: id => `Delete bike rack ${id}`,
     description:
       'Deleting this bike rack will prevent any further check-ins at the rack.',

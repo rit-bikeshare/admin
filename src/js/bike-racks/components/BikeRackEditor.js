@@ -92,14 +92,14 @@ class BikeRackEditor extends Component {
     return null;
   }
 
-  renderButtons(showDelete = false) {
-    const { closeBikeRackEditor } = this.props;
+  renderButtons() {
+    const { closeBikeRackEditor, creating } = this.props;
     const { _status } = this.state;
     if (_status === 'PENDING') {
       return <Loader active inline="centered" />;
     }
 
-    const deleteButton = showDelete ? (
+    const deleteButton = !creating ? (
       <Button
         floated="right"
         negative
@@ -124,9 +124,8 @@ class BikeRackEditor extends Component {
   }
 
   render() {
-    const { bikeRack, _mode } = this.state;
+    const { bikeRack } = this.state;
     const id = indexFn(bikeRack) || null;
-    const showDelete = _mode === 'EDIT';
 
     return (
       <div>
@@ -174,7 +173,7 @@ class BikeRackEditor extends Component {
             onChange={bikeRack => this.setState({ bikeRack })}
           />
           <Form.Field />
-          {this.renderButtons(showDelete)}
+          {this.renderButtons()}
         </Form>
       </div>
     );

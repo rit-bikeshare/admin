@@ -1,7 +1,7 @@
 /* global google */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { fromJS, List, Map } from 'immutable';
+import { List, Map } from 'immutable';
 import { Polygon } from 'react-google-maps';
 import DrawingManager from 'react-google-maps/lib/components/drawing/DrawingManager';
 import GMap from 'app/components/GMap';
@@ -83,9 +83,11 @@ class MapSelect extends Component {
             },
           }}
           onPolygonComplete={p => {
-            const coordinates = List([
-              fromJS(p.latLngs.b[0].b).map(k => List([k.lng(), k.lat()])),
-            ]);
+            const bounds = List(
+              p.latLngs.b[0].b.map(k => List([k.lng(), k.lat()]))
+            );
+
+            const coordinates = List([bounds.push(bounds.get(0))]);
             p.setMap(null);
             onChange(
               bikeRack.set('checkInArea', Map({ coordinates, type: 'Polygon' }))

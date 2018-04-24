@@ -44,7 +44,12 @@ export const saveBikeRackEditor = ({ object }) => {
     const state = getState();
     const creating = state.bikeRackEditor.get('creating', false);
     const fn = creating ? bikeRacksCreateAction : bikeRacksUpdateAction;
-    return dispatch(fn({ object: object.set('bikeCount', undefined) }));
+    const bikeRack = object.set('bikeCount', undefined);
+    return dispatch(
+      fn({
+        object: bikeRack,
+      })
+    );
   };
 };
 
