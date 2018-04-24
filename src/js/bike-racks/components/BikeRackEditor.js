@@ -66,7 +66,7 @@ class BikeRackEditor extends Component {
         objectName={objectName}
         deleteFn={bikeRacksDestroy}
         onDelete={closeBikeRackEditor}
-        onCancel={() => this.setState({ deleteModal: false })}
+        onCancel={() => this.setState({ _deleteModal: false })}
       />
     ) : null;
   }
@@ -80,8 +80,16 @@ class BikeRackEditor extends Component {
         .toList()
         .toJS()
         .join(' ');
+
+      console.log(str); // eslint-disable-line
+
       return (
-        <Message visible error header="Something went wrong" content={str} />
+        <Message
+          visible
+          error
+          header="Something went wrong"
+          content="Failed: Please ensure all fields are complete. Including an area polygon AND a marker location."
+        />
       );
     }
 
@@ -103,7 +111,7 @@ class BikeRackEditor extends Component {
       <Button
         floated="right"
         negative
-        onClick={() => this.setState({ deleteModal: true })}
+        onClick={() => this.setState({ _deleteModal: true })}
       >
         Delete bikeRack
       </Button>

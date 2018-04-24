@@ -58,7 +58,7 @@ class BikeEditor extends Component {
         objectName={objectName}
         deleteFn={bikesDestroy}
         onDelete={closeBikeEditor}
-        onCancel={() => this.setState({ deleteModal: false })}
+        onCancel={() => this.setState({ _deleteModal: false })}
       />
     ) : null;
   }
@@ -95,7 +95,7 @@ class BikeEditor extends Component {
       <Button
         floated="right"
         negative
-        onClick={() => this.setState({ deleteModal: true })}
+        onClick={() => this.setState({ _deleteModal: true })}
       >
         Delete bike
       </Button>
