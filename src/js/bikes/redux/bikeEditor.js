@@ -7,7 +7,6 @@ import {
   bikesUpdateAction,
   bikesCreateAction,
 } from './bikes';
-import { record as Lock, locksCreateAction } from 'locks/redux/locks';
 
 const openBikeEditorAction = createAction('BIKE_EDITOR_OPEN');
 export const closeBikeEditor = createAction('BIKE_EDITOR_CLOSE');
@@ -41,17 +40,7 @@ export const openBikeEditor = ({ id: maybeId, object }) => {
 export const saveBikeEditor = ({ object }) => {
   const id = indexFn(object);
   const fn = id ? bikesUpdateAction : bikesCreateAction;
-  const lockId = object.lock;
-  return (dispatch, getState) => {
-    const state = getState();
-    if (!state.locks.hasIn(['data', lockId]) && lockId != null) {
-      return dispatch(locksCreateAction({ object: new Lock({ id: lockId }) }))
-        .then(() => dispatch(fn({ object })))
-        .catch(e => {
-          throw e;
-        });
-    }
-
+  return dispatch => {
     return dispatch(fn({ object }));
   };
 };

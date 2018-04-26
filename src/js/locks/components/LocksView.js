@@ -44,7 +44,7 @@ class UsersView extends Component {
 
   renderLock(lock) {
     //const { openUserEditor } = this.props;
-    const { id, channelName } = lock;
+    const { id } = lock;
 
     const editButton = (
       <Button
@@ -69,7 +69,6 @@ class UsersView extends Component {
     return (
       <Table.Row key={id} className="admin-table-row">
         <Table.Cell>{id}</Table.Cell>
-        <Table.Cell>{channelName}</Table.Cell>
         <Table.Cell>
           <div className="actions">
             {editButton}
@@ -91,7 +90,6 @@ class UsersView extends Component {
         <Table.Header>
           <Table.Row>
             <Table.HeaderCell>ID</Table.HeaderCell>
-            <Table.HeaderCell>CHANNEL NAME</Table.HeaderCell>
             <Table.HeaderCell>ACTIONS</Table.HeaderCell>
           </Table.Row>
         </Table.Header>
