@@ -131,8 +131,8 @@ class BikesView extends Component {
     );
 
     const handleLocationClick = () => {
-      this.map.panTo({ lat, lng: lon });
       window.scrollTo(0, 0);
+      this.map.panTo({ lat, lng: lon });
     };
 
     return (

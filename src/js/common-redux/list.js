@@ -6,11 +6,11 @@ export const list = ({ name, path, record, indexFn }) => {
   const listSuccessAction = createAction(`${prefix}_LIST_SUCCESS`);
   const listFailureAction = createAction(`${prefix}_LIST_FAILURE`);
 
-  function action({ merge = false, filter } = {}) {
+  function action({ merge = false, query = {} } = {}) {
     return (dispatch, getState, api) => {
       dispatch(listAction());
       api
-        .get(path)
+        .get(path, query)
         .then(objects => {
           const data = objects
             .toMap()
@@ -18,8 +18,7 @@ export const list = ({ name, path, record, indexFn }) => {
             .mapKeys((_, obj) => indexFn(obj))
             .sort((a, b) => a.get('id') - b.get('id'));
 
-          const filteredData = filter ? data.filter(filter) : data;
-          dispatch(listSuccessAction({ data: filteredData, merge }));
+          dispatch(listSuccessAction({ data: data, merge }));
           return data;
         })
         .catch(error => {
