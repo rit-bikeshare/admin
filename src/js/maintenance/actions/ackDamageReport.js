@@ -16,10 +16,11 @@ export default function ackDamageReport(bikeId) {
     );
 
     Q.all(promises).then(responses => {
-      responses.map(response => {
+      return responses.map(response => {
         if (!response.code) {
-          dispatch(updateDamageReport(response));
+          return dispatch(updateDamageReport(response));
         }
+        return response;
       });
     });
   };

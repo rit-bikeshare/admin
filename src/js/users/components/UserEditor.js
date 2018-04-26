@@ -152,7 +152,7 @@ class UserEditor extends Component {
                     groups =>
                       checked
                         ? groups.push(GROUPS.ADMIN.id)
-                        : groups.filter(id => id != GROUPS.ADMIN.id)
+                        : groups.filter(id => id !== GROUPS.ADMIN.id)
                   )
                   .update(user => user.set('isStaff', isStaff(user))),
               }));
@@ -169,7 +169,7 @@ class UserEditor extends Component {
                     groups =>
                       checked
                         ? groups.push(GROUPS.MAINTENANCE.id)
-                        : groups.filter(id => id != GROUPS.MAINTENANCE.id)
+                        : groups.filter(id => id !== GROUPS.MAINTENANCE.id)
                   )
                   .update(user => user.set('isStaff', isStaff(user))),
               }));

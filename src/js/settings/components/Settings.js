@@ -16,7 +16,7 @@ import {
 } from '../redux/settings';
 
 // features
-const DROP_ANYWHERE = 'ENABLE_DROP_ANYWHERE';
+// const DROP_ANYWHERE = 'ENABLE_DROP_ANYWHERE';
 const RENTAL_LENGTH = 'RENTAL_LENGTH';
 
 //maintenance
@@ -29,6 +29,7 @@ class Settings extends Component {
   constructor(props) {
     super(props);
     this.state = { status: '', error: null, settings: props.settings };
+    this.updateRentalLength = this.updateRentalLength.bind(this);
   }
 
   componentDidMount() {
@@ -48,6 +49,18 @@ class Settings extends Component {
       });
 
     this.setState({ status: 'PENDING' });
+  }
+
+  updateRentalLength(e, { value }) {
+    const { settings: propSettings } = this.props;
+    const hours = parseInt(value, 10);
+    const seconds = hours * 3600;
+    this.setState(({ settings }) => ({
+      settings: settings.set(
+        RENTAL_LENGTH,
+        propSettings.get(RENTAL_LENGTH).set('value', seconds)
+      ),
+    }));
   }
 
   renderMessage() {
@@ -97,7 +110,7 @@ class Settings extends Component {
         <Header as="h3">Settings</Header>
         <Form>
           <Header as="h4">Features</Header>
-          <Form.Checkbox
+          {/* <Form.Checkbox
             checked={settings.getIn([DROP_ANYWHERE, 'value'], false)}
             label="Enable Drop Anywhere"
             onChange={(_, { checked }) => {
@@ -108,20 +121,13 @@ class Settings extends Component {
                 ),
               }));
             }}
-          />
+          /> */}
           <Form.Field>
-            <label>Rental Length (seconds)</label>
+            <label>Rental Length (hours)</label>
             <Input
-              placeholder="86400.0"
-              value={settings.getIn([RENTAL_LENGTH, 'value'])}
-              onChange={(e, { value }) => {
-                this.setState(({ settings }) => ({
-                  settings: settings.set(
-                    RENTAL_LENGTH,
-                    propSettings.get(RENTAL_LENGTH).set('value', value)
-                  ),
-                }));
-              }}
+              placeholder="24"
+              value={settings.getIn([RENTAL_LENGTH, 'value']) / 3600}
+              onChange={this.updateRentalLength}
             />
           </Form.Field>
           <Header as="h4">Maintenance</Header>
