@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
 import Nav from 'nav/components/NavView';
 import NavConfig from 'nav/constants/NavConfig';
 
-import Home from 'home/components/HomeView';
+import Home from 'stats/components/HomeView';
 import Bikes from 'bikes/components/BikesView';
 import Locks from 'locks/components/LocksView';
 import BikeRacks from 'bike-racks/components/BikeRacksView';

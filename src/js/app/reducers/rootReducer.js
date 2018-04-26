@@ -18,7 +18,7 @@ import { reducer as bikeRackEditorReducer } from 'bike-racks/redux/bikeRackEdito
 import { reducer as usersReducer } from 'users/redux/users';
 import { reducer as adminsReducer } from 'users/redux/admins';
 import { reducer as userEditorReducer } from 'users/redux/userEditor';
-
+import statReducer from 'stats/reducers/statReducer';
 /* Maintenance */
 import damageReportReducer from 'maintenance/reducer/damageReportReducer';
 
@@ -34,4 +34,5 @@ export default combineReducers({
   bikeRackEditor: bikeRackEditorReducer,
   routing: routerReducer,
   damageReports: damageReportReducer,
+  stats: statReducer,
 });
