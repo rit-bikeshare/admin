@@ -16,7 +16,9 @@ jobs:
     cache: yarn
     install: yarn install
     script: yarn build
-    before_deploy: tar -zcvf dist.tar.gz build
+    before_deploy: 
+      - tar -zcvf dist.tar.gz build
+      - sudo apt-get install sshpass
     deploy:
       provider: releases
       skip_cleanup: true

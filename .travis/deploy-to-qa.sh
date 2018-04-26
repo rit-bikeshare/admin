@@ -1,7 +1,8 @@
 #!/bin/bash
 set -ev
 
-ssh -oStrictHostKeyChecking=no $SSH_USERNAME@bikesharedev.rit.edu <<-'ENDSSH'
+sshpass -p $SSH_PASSWORD ssh -oStrictHostKeyChecking=no $SSH_USERNAME@bikesharedev.rit.edu <<-'ENDSSH'
+  rm -f dist.tar.gz
   curl -s https://api.github.com/repos/rit-bikeshare/admin/releases/latest \
   | grep "browser_download_url.*gz" \
   | cut -d '"' -f 4 \
@@ -9,6 +10,3 @@ ssh -oStrictHostKeyChecking=no $SSH_USERNAME@bikesharedev.rit.edu <<-'ENDSSH'
 
   tar -xvzf dist.tar.gz -C deploy
 ENDSSH
-expect "assword:"
-send "$SSH_PASSWORD\r"
-interact
