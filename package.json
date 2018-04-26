@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "private": true,
   "dependencies": {
-    "chart.js": "^2.7.2",
     "classnames": "^2.2.5",
     "giphy-js-sdk-core": "^1.0.3",
     "immutable": "^3.8.2",
