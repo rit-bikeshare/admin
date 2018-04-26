@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { List } from 'immutable';
+import { Map, List } from 'immutable';
 import {
   Input,
   Button,
@@ -28,7 +28,7 @@ const MAINTENANCE_MESSAGE = 'MAINTENANCE_MESSAGE';
 class Settings extends Component {
   constructor(props) {
     super(props);
-    this.state = { status: '', error: null, settings: props.settings };
+    this.state = { status: '', error: null, settings: Map() };
     this.updateRentalLength = this.updateRentalLength.bind(this);
   }
 
