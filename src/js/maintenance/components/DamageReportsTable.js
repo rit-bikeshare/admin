@@ -7,9 +7,11 @@ import { Table } from 'semantic-ui-react';
 class DamageReportsTable extends React.Component {
   renderReportRow(id, data) {
     const { renderReportActions } = this.props;
+    const reports = data.get('reports').toList();
 
-    const damageTypes = data.reports.map(report => report.damageType);
-    const mostRecentReport = data.reports.first();
+    const damageTypes = reports.map(report => report.damageType);
+    const mostRecentReport = reports.first();
+
     return (
       <Table.Row key={id}>
         <Table.Cell>{id}</Table.Cell>

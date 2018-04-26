@@ -58,14 +58,15 @@ class AckTable extends React.Component {
     const { reportDetail } = this.state;
 
     if (!reportDetail) return null;
-    const { bike, reports } = reportDetail;
+    const reports = reportDetail.get('reports');
+    const bikeId = reports.first().bike;
 
     return (
       <Modal onClose={this.handleDetailClose} open={true} closeIcon={true}>
         <Modal.Header>Damage Details</Modal.Header>
         <Modal.Content>
           <Modal.Description>
-            <h4>Reports for bike #{bike.id}</h4>
+            <h4>Reports for bike #{bikeId}</h4>
             <List divided relaxed>
               {reports.map(report => this.renderReport(report))}
             </List>

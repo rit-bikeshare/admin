@@ -5,8 +5,11 @@ import { connect } from 'react-redux';
 
 import fetchDamageReportsAction from '../actions/fetchDamageReports';
 import deleteDamageReportAction from '../actions/deleteDamageReport';
+import ackDamageReportAction from '../actions/ackDamageReport';
+
 import getUnAckedDamageReports from '../selectors/getUnAckedDamageReports';
 import getAckedDamageReports from '../selectors/getAckedDamageReports';
+
 import AckTable from './AckTable';
 import UnAckTable from './UnAckTable';
 
@@ -14,6 +17,11 @@ class MaintenanceView extends React.Component {
   componentWillMount() {
     const { fetchDamageReports } = this.props;
     fetchDamageReports();
+    this.pollInterval = setInterval(() => fetchDamageReports(), 5000);
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.pollInterval);
   }
 
   render() {
@@ -21,6 +29,7 @@ class MaintenanceView extends React.Component {
       unAckedDamageReports,
       ackedDamageReports,
       deleteDamageReport,
+      ackDamageReport,
     } = this.props;
     return (
       <div>
@@ -30,6 +39,7 @@ class MaintenanceView extends React.Component {
         <UnAckTable
           damageReports={unAckedDamageReports}
           deleteDamageReport={deleteDamageReport}
+          ackDamageReport={ackDamageReport}
         />
       </div>
     );
@@ -41,6 +51,7 @@ MaintenanceView.propTypes = {
   ackedDamageReports: PropTypes.instanceOf(Map),
   fetchDamageReports: PropTypes.func,
   deleteDamageReport: PropTypes.func,
+  ackDamageReport: PropTypes.func,
 };
 
 const mapStateToProps = state => ({
@@ -51,4 +62,5 @@ const mapStateToProps = state => ({
 export default connect(mapStateToProps, {
   fetchDamageReports: fetchDamageReportsAction,
   deleteDamageReport: deleteDamageReportAction,
+  ackDamageReport: ackDamageReportAction,
 })(MaintenanceView);

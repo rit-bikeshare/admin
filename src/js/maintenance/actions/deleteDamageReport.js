@@ -1,11 +1,16 @@
 import Q from 'q';
 import { createAction } from 'redux-actions';
+import getUnAckedDamageReports from '../selectors/getUnAckedDamageReports';
 
 export const deleteReportSuccess = createAction('DELETE_REPORT_SUCCESS');
 
 export default function deleteDamageReport(bikeId) {
   return (dispatch, getState, api) => {
-    const { reports } = getState().damageReports.get(bikeId);
+    const reports = getUnAckedDamageReports(getState()).getIn([
+      bikeId,
+      'reports',
+    ]);
+
     Q.all(
       reports
         .map(report => {

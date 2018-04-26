@@ -60,7 +60,8 @@ class UnAckTable extends React.Component {
     const { reportDetail } = this.state;
 
     if (!reportDetail) return null;
-    const { bike, reports } = reportDetail;
+    const bike = reportDetail.get('bike');
+    const reports = reportDetail.get('reports');
 
     const location = {
       lat: bike.lat,
@@ -86,7 +87,7 @@ class UnAckTable extends React.Component {
   }
 
   renderReportActions(id, data) {
-    const { deleteDamageReport } = this.props;
+    const { deleteDamageReport, ackDamageReport } = this.props;
     return (
       <div className="actions">
         <Button size="tiny" compact onClick={() => this.openDetailsModal(data)}>
@@ -94,6 +95,9 @@ class UnAckTable extends React.Component {
         </Button>
         <Button size="tiny" compact onClick={() => deleteDamageReport(id)}>
           Delete
+        </Button>
+        <Button size="tiny" compact onClick={() => ackDamageReport(id)}>
+          Acknowledge
         </Button>
       </div>
     );
@@ -116,6 +120,7 @@ class UnAckTable extends React.Component {
 UnAckTable.propTypes = {
   damageReports: PropTypes.instanceOf(Map),
   deleteDamageReport: PropTypes.func,
+  ackDamageReport: PropTypes.func,
 };
 
 export default UnAckTable;
