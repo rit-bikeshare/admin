@@ -8,5 +8,5 @@ sshpass -p $SSH_PASSWORD ssh -oStrictHostKeyChecking=no $SSH_USERNAME@bikeshared
   | cut -d '"' -f 4 \
   | wget -qi -
 
-  tar -xvzf dist.tar.gz -C deploy
+  tar -xvzf dist.tar.gz -C deploy --strip-components 1
 ENDSSH
