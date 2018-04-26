@@ -105,6 +105,7 @@ class BikesView extends Component {
       lat,
       lon,
       previousRenterUsername,
+      lock,
     } = bike;
 
     const editButton = (
@@ -139,6 +140,7 @@ class BikesView extends Component {
         <Table.Cell>
           <span style={{ paddingRight: '10px' }}>{id}</span>
         </Table.Cell>
+        <Table.Cell>{lock}</Table.Cell>
         <Table.Cell>
           <BoolIcon value={visible} />
         </Table.Cell>
@@ -171,6 +173,7 @@ class BikesView extends Component {
         <Table.Header>
           <Table.Row>
             <Table.HeaderCell>ID</Table.HeaderCell>
+            <Table.HeaderCell>LOCK ID</Table.HeaderCell>
             <Table.HeaderCell>VISIBLE</Table.HeaderCell>
             <Table.HeaderCell>LOCATION</Table.HeaderCell>
             <Table.HeaderCell>CURRENT RIDER</Table.HeaderCell>
