@@ -20,6 +20,10 @@ const meta = {
     header: id => `Delete all reports for bike ${id}`,
     description: 'Deleting this item will remove all reports for this bike.',
   },
+  users: {
+    header: id => `Delete user ${id}`,
+    description: 'Are you sure you want to delete this user?',
+  },
 };
 
 const DeleteModalView = ({ objectName, id, status, onCancel, onDelete }) => {

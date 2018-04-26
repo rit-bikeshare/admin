@@ -7,7 +7,6 @@ export const list = ({ name, path, record, indexFn }) => {
   const listFailureAction = createAction(`${prefix}_LIST_FAILURE`);
 
   function action({ merge = false, query = {} } = {}) {
-    debugger;
     return (dispatch, getState, api) => {
       dispatch(listAction());
       api

@@ -12,7 +12,7 @@ export const { actions, reducer } = all(
     adminsListAction: () => dispatch =>
       dispatch(
         actions.adminsListAction({
-          query: { isStaff: true, firstName: 'tris' },
+          query: { is_staff: true },
           merge: false,
         })
       ),

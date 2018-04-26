@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { Set } from 'immutable';
 import { Button, Form, Loader, Header, Message } from 'semantic-ui-react';
 import DeleteModal from 'app/components/DeleteModal';
 import {
+  GROUPS,
   name as objectName,
   record as BikeshareUser,
   usersDestroyAction,
@@ -17,10 +19,10 @@ class UserEditor extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      _deleteModal: false,
-      _status: '',
-      _error: null,
-      ...props.user.toJS(),
+      deleteModal: false,
+      status: '',
+      error: null,
+      user: props.user,
     };
   }
 
@@ -31,26 +33,26 @@ class UserEditor extends Component {
 
   save() {
     const { saveUserEditor } = this.props;
-    saveUserEditor({ object: new BikeshareUser(this.state) })
-      .then(() => this.setState({ _status: 'SUCCEEDED', _error: null }))
-      .catch(e => this.setState({ _status: 'FAILED', _error: e }))
+    saveUserEditor({ object: new BikeshareUser(this.state.user) })
+      .then(() => this.setState({ status: 'SUCCEEDED', error: null }))
+      .catch(e => this.setState({ status: 'FAILED', error: e }))
       .finally(next => {
-        setTimeout(() => this.setState({ _status: '', _error: null }), 2000);
+        setTimeout(() => this.setState({ status: '', error: null }), 2000);
         return next;
       });
 
-    this.setState({ _status: 'PENDING' });
+    this.setState({ status: 'PENDING' });
   }
 
   renderDeleteModal() {
-    const { _deleteModal, id } = this.state;
-    const { destroyUser, closeUserEditor } = this.props;
+    const { deleteModal, user } = this.state;
+    const { usersDestroy, closeUserEditor } = this.props;
 
-    return _deleteModal ? (
+    return deleteModal ? (
       <DeleteModal
-        id={id}
+        id={user.id}
         objectName={objectName}
-        deleteFn={destroyUser}
+        deleteFn={usersDestroy}
         onDelete={closeUserEditor}
         onCancel={() => this.setState({ deleteModal: false })}
       />
@@ -58,14 +60,14 @@ class UserEditor extends Component {
   }
 
   renderMessage() {
-    const { _status, _error = '' } = this.state;
-    if (_status === 'FAILED') {
+    const { status, error = '' } = this.state;
+    if (status === 'FAILED') {
       return (
-        <Message visible error header="Something went wrong" content={_error} />
+        <Message visible error header="Something went wrong" content={error} />
       );
     }
 
-    if (_status === 'SUCCEEDED') {
+    if (status === 'SUCCEEDED') {
       return <Message visible success header="Success" />;
     }
 
@@ -74,8 +76,8 @@ class UserEditor extends Component {
 
   renderButtons() {
     const { closeUserEditor } = this.props;
-    const { _status } = this.state;
-    if (_status === 'PENDING') {
+    const { status } = this.state;
+    if (status === 'PENDING') {
       return <Loader active inline="centered" />;
     }
 
@@ -104,7 +106,12 @@ class UserEditor extends Component {
   }
 
   render() {
-    const { username, firstName, lastName, isStaff } = this.state;
+    const { user } = this.state;
+
+    const isAdmin = user => Set(user.groups).has(GROUPS.ADMIN.id);
+    const isMaintenance = user => Set(user.groups).has(GROUPS.MAINTENANCE.id);
+    const isStaff = user => isAdmin(user) || isMaintenance(user);
+    const isActive = user => user.isActive;
 
     return (
       <div>
@@ -114,22 +121,58 @@ class UserEditor extends Component {
           <Form.Group widths="equal">
             <Form.Field>
               <label>Username:</label>
-              <input value={username} disabled />
+              <input value={user.username} disabled />
             </Form.Field>
             <Form.Field>
               <label>First Name:</label>
-              <input value={firstName} disabled />
+              <input value={user.firstName} disabled />
             </Form.Field>
             <Form.Field>
               <label>Last Name:</label>
-              <input value={lastName} disabled />
+              <input value={user.lastName} disabled />
             </Form.Field>
           </Form.Group>
           <Form.Checkbox
-            checked={isStaff}
-            label="Staff user"
-            onChange={(_, { checked: isStaff }) => {
-              this.setState({ isStaff });
+            checked={isActive(user)}
+            label="BikeShare Access"
+            onChange={(_, { checked }) => {
+              this.setState(({ user }) => ({
+                user: user.set('isActive', checked),
+              }));
+            }}
+          />
+          <Form.Checkbox
+            checked={isAdmin(user)}
+            label="Admin user"
+            onChange={(_, { checked }) => {
+              this.setState(({ user }) => ({
+                user: user
+                  .update(
+                    'groups',
+                    groups =>
+                      checked
+                        ? groups.push(GROUPS.ADMIN.id)
+                        : groups.filter(id => id != GROUPS.ADMIN.id)
+                  )
+                  .update(user => user.set('isStaff', isStaff(user))),
+              }));
+            }}
+          />
+          <Form.Checkbox
+            checked={isMaintenance(user)}
+            label="Maintenance user"
+            onChange={(_, { checked }) => {
+              this.setState(({ user }) => ({
+                user: user
+                  .update(
+                    'groups',
+                    groups =>
+                      checked
+                        ? groups.push(GROUPS.MAINTENANCE.id)
+                        : groups.filter(id => id != GROUPS.MAINTENANCE.id)
+                  )
+                  .update(user => user.set('isStaff', isStaff(user))),
+              }));
             }}
           />
           {this.renderButtons()}
@@ -142,7 +185,7 @@ class UserEditor extends Component {
 UserEditor.propTypes = {
   user: PropTypes.object.isRequired,
   /* dispatch */
-  destroyUser: PropTypes.func.isRequired,
+  usersDestroy: PropTypes.func.isRequired,
   saveUserEditor: PropTypes.func.isRequired,
   closeUserEditor: PropTypes.func.isRequired,
 };
