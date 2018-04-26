@@ -25,3 +25,4 @@ jobs:
       file: dist.tar.gz
       on:
         tags: true
+    after_deploy: bash .travis/deploy-to-qa.sh
