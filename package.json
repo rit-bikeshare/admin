@@ -1,6 +1,6 @@
 {
   "name": "rit-bikeshare-admin",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "private": true,
   "dependencies": {
     "classnames": "^2.2.5",
