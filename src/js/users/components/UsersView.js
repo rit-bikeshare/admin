@@ -9,6 +9,7 @@ import {
   Loader,
   Header,
   Input,
+  Form,
 } from 'semantic-ui-react';
 import BoolIcon from 'lib/components/BoolIcon';
 import UserEditor from './UserEditor';
@@ -19,7 +20,7 @@ import { openUserEditor as openUserEditorAction } from '../redux/userEditor';
 class UsersView extends Component {
   constructor(props) {
     super(props);
-    this.state = { userSearchString: '' };
+    this.state = { userSearchString: '', searchedString: '' };
   }
 
   componentDidMount() {
@@ -38,6 +39,7 @@ class UsersView extends Component {
     const { usersSearch } = this.props;
     const { userSearchString } = this.state;
     usersSearch({ search: userSearchString });
+    this.setState({ searchedString: userSearchString });
   }
 
   renderUser(user) {
@@ -105,22 +107,27 @@ class UsersView extends Component {
   renderUserSearch() {
     const { userSearchString } = this.state;
     return (
-      <Input type="text" placeholder="Search..." action>
-        <input
-          value={userSearchString}
-          onChange={({ target: { value: userSearchString } }) =>
-            this.setState({ userSearchString })
-          }
-        />
-        <Button type="submit" onClick={() => this.search()}>
-          Search
-        </Button>
-      </Input>
+      <Form onSubmit={() => this.search()}>
+        <Form.Field>
+          <Input type="text" placeholder="Search..." action>
+            <input
+              value={userSearchString}
+              onChange={({ target: { value: userSearchString } }) =>
+                this.setState({ userSearchString })
+              }
+            />
+            <Button type="submit" onClick={() => this.search()}>
+              Search
+            </Button>
+          </Input>
+        </Form.Field>
+      </Form>
     );
   }
 
   renderSearchedUsers() {
     const { users, usersClear } = this.props;
+    const { searchedString } = this.state;
 
     const usersTable =
       users.count() > 0 ? (
@@ -136,7 +143,11 @@ class UsersView extends Component {
           </Button>
         </div>
       ) : (
-        <span>No search results.</span>
+        <span>
+          {searchedString == ''
+            ? 'No search results.'
+            : `No search results for ${searchedString}.`}
+        </span>
       );
 
     return (
