@@ -1,36 +1,25 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { Map } from 'immutable';
+import { Set, Map } from 'immutable';
 import {
   Container,
   Table,
   Button,
   Loader,
   Header,
-  Select,
   Input,
 } from 'semantic-ui-react';
 import BoolIcon from 'lib/components/BoolIcon';
 import UserEditor from './UserEditor';
-import { usersClearAction, usersSearchAction } from '../redux/users';
+import { GROUPS, usersClearAction, usersSearchAction } from '../redux/users';
 import { adminsListAction } from '../redux/admins';
 import { openUserEditor as openUserEditorAction } from '../redux/userEditor';
-
-const UserSearchOptions = [
-  { key: 'username', text: 'Username', value: 'username' },
-  { key: 'firstName', text: 'First Name', value: 'firstName' },
-  { key: 'lastName', text: 'Last Name', value: 'lastName' },
-];
 
 class UsersView extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      deleteUserModal: null,
-      userSearchMode: 'username',
-      userSearchString: '',
-    };
+    this.state = { userSearchString: '' };
   }
 
   componentDidMount() {
@@ -47,13 +36,17 @@ class UsersView extends Component {
 
   search() {
     const { usersSearch } = this.props;
-    const { userSearchMode, userSearchString } = this.state;
-    usersSearch(userSearchMode, userSearchString);
+    const { userSearchString } = this.state;
+    usersSearch({ search: userSearchString });
   }
 
   renderUser(user) {
     const { openUserEditor } = this.props;
-    const { username, firstName, lastName, isStaff } = user;
+    const { username, firstName, lastName } = user;
+
+    const isAdmin = user => Set(user.groups).has(GROUPS.ADMIN.id);
+    const isMaintenance = user => Set(user.groups).has(GROUPS.MAINTENANCE.id);
+    const isActive = user => user.isActive;
 
     const editButton = (
       <Button
@@ -68,10 +61,17 @@ class UsersView extends Component {
     return (
       <Table.Row key={user.id} className="admin-table-row">
         <Table.Cell>{username}</Table.Cell>
-        <Table.Cell>{firstName}</Table.Cell>
-        <Table.Cell>{lastName}</Table.Cell>
         <Table.Cell>
-          <BoolIcon value={isStaff} />
+          {lastName}, {firstName}
+        </Table.Cell>
+        <Table.Cell>
+          <BoolIcon value={isActive(user)} />
+        </Table.Cell>
+        <Table.Cell>
+          <BoolIcon value={isAdmin(user)} />
+        </Table.Cell>
+        <Table.Cell>
+          <BoolIcon value={isMaintenance(user)} />
         </Table.Cell>
         <Table.Cell>
           <div className="actions">{editButton}</div>
@@ -90,9 +90,10 @@ class UsersView extends Component {
         <Table.Header>
           <Table.Row>
             <Table.HeaderCell>USERNAME</Table.HeaderCell>
-            <Table.HeaderCell>FIRST NAME</Table.HeaderCell>
-            <Table.HeaderCell>LAST NAME</Table.HeaderCell>
+            <Table.HeaderCell>NAME</Table.HeaderCell>
+            <Table.HeaderCell>BIKESHARE ACCESS</Table.HeaderCell>
             <Table.HeaderCell>ADMIN ACCESS</Table.HeaderCell>
+            <Table.HeaderCell>MAINTENENCE ACCESS</Table.HeaderCell>
             <Table.HeaderCell>ACTIONS</Table.HeaderCell>
           </Table.Row>
         </Table.Header>
@@ -111,14 +112,6 @@ class UsersView extends Component {
             this.setState({ userSearchString })
           }
         />
-        <Select
-          compact
-          options={UserSearchOptions}
-          defaultValue="username"
-          onChange={(e, { value: userSearchMode }) =>
-            this.setState({ userSearchMode })
-          }
-        />
         <Button type="submit" onClick={() => this.search()}>
           Search
         </Button>
@@ -133,7 +126,14 @@ class UsersView extends Component {
       users.count() > 0 ? (
         <div>
           {this.renderUsers(users)}
-          <Button onClick={() => usersClear()}> Clear </Button>
+          <Button
+            onClick={() => {
+              usersClear();
+              this.setState({ userSearchString: '' });
+            }}
+          >
+            Clear
+          </Button>
         </div>
       ) : (
         <span>No search results.</span>
@@ -159,7 +159,7 @@ class UsersView extends Component {
     return (
       <div>
         <Container style={{ paddingBottom: '10px' }}>
-          <Header as="h2">Admins</Header>
+          <Header as="h2">Staff</Header>
         </Container>
         {this.renderUsers(admins)}
       </div>

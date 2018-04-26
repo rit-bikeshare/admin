@@ -9,12 +9,11 @@ export const indexFn = user => user.get('id');
 export const { actions, reducer } = all(
   { name, path, record, indexFn },
   actions => ({
-    adminsList: () => dispatch =>
+    adminsListAction: () => dispatch =>
       dispatch(
         actions.adminsListAction({
-          query: 'isStaff=true',
+          query: { is_staff: true },
           merge: false,
-          filter: user => user.get('isStaff'),
         })
       ),
   })

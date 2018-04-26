@@ -119,7 +119,10 @@ class BikeRacksView extends Component {
       </Button>
     );
 
-    const handleLocationClick = () => this.map.panTo({ lat, lng: lon });
+    const handleLocationClick = () => {
+      window.scrollTo(0, 0);
+      this.map.panTo({ lat, lng: lon });
+    };
 
     return (
       <Table.Row key={id} className="admin-table-row">

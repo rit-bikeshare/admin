@@ -22,6 +22,9 @@ import statReducer from 'stats/reducers/statReducer';
 /* Maintenance */
 import damageReportReducer from 'maintenance/reducer/damageReportReducer';
 
+/* Settings */
+import { reducer as settingsReducer } from 'settings/redux/settings';
+
 export default combineReducers({
   userData: authReducer,
   admins: adminsReducer,
@@ -35,4 +38,5 @@ export default combineReducers({
   routing: routerReducer,
   damageReports: damageReportReducer,
   stats: statReducer,
+  settings: settingsReducer,
 });

@@ -9,8 +9,8 @@ export const indexFn = user => user.get('id');
 export const { actions, reducer } = all(
   { name, path, record, indexFn },
   actions => ({
-    usersSearchAction: () => dispatch =>
-      dispatch(actions.usersListAction({ query: 'isStaff=true' })),
+    usersSearchAction: query => dispatch =>
+      dispatch(actions.usersListAction({ query })),
   })
 );
 
@@ -23,3 +23,15 @@ export const usersUpdateAction = actions.usersUpdateAction;
 
 // Additional actions
 export const usersSearchAction = actions.usersSearchAction;
+
+// constants
+export const GROUPS = {
+  ADMIN: {
+    id: 14,
+    name: 'Admin',
+  },
+  MAINTENANCE: {
+    id: 15,
+    name: 'Maintenance',
+  },
+};
