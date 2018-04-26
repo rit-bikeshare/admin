@@ -22,6 +22,9 @@ import { reducer as userEditorReducer } from 'users/redux/userEditor';
 /* Maintenance */
 import damageReportReducer from 'maintenance/reducer/damageReportReducer';
 
+/* Settings */
+import { reducer as settingsReducer } from 'settings/redux/settings';
+
 export default combineReducers({
   userData: authReducer,
   admins: adminsReducer,
@@ -34,4 +37,5 @@ export default combineReducers({
   bikeRackEditor: bikeRackEditorReducer,
   routing: routerReducer,
   damageReports: damageReportReducer,
+  settings: settingsReducer,
 });
