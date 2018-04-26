@@ -113,12 +113,6 @@ class BikeRacksView extends Component {
       </Button>
     );
 
-    const printButton = (
-      <Button size="tiny" compact>
-        Print check in QR Code
-      </Button>
-    );
-
     const handleLocationClick = () => {
       window.scrollTo(0, 0);
       this.map.panTo({ lat, lng: lon });
@@ -139,7 +133,6 @@ class BikeRacksView extends Component {
           <div className="actions">
             {editButton}
             {deleteButton}
-            {printButton}
           </div>
         </Table.Cell>
       </Table.Row>
