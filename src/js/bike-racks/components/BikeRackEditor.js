@@ -163,8 +163,8 @@ class BikeRackEditor extends Component {
         key={bikeRack.id}
         paths={formattedCoords}
         options={{
-          fillColor: 'rgba(243,110,31,0.25)',
-          strokeColor: 'rgba(243,110,31,0.5)',
+          fillColor: 'rgba(0,0,0,0.3)',
+          strokeColor: 'rgba(0,0,0,0.35)',
         }}
       />
     );

@@ -8,7 +8,7 @@ import { record as BikeLock, locksListAction } from 'locks/redux/locks';
 class BikeLockSelect extends Component {
   constructor(props) {
     super(props);
-    this.state = { selectedId: null };
+    this.state = { message: '' };
   }
 
   componentDidMount() {
@@ -29,14 +29,14 @@ class BikeLockSelect extends Component {
       return <Select placeholder="Select bike lock" search loading />;
     }
 
-    const lock = maybeNullLock || -1;
+    const lock = maybeNullLock || 'NONE';
 
     const options = Set(
       availableLocks
-        .set('-1', new BikeLock({ id: -1 }))
+        .set('-1', new BikeLock({ id: 'NONE' }))
         .set(lock, new BikeLock({ id: lock }))
         .map(({ id }) =>
-          Map({ key: id, text: id === -1 ? 'No lock' : id, value: id })
+          Map({ key: id, text: id === 'NONE' ? 'No lock' : id, value: id })
         )
         .toList()
     );
@@ -48,17 +48,19 @@ class BikeLockSelect extends Component {
         <Select
           placeholder="Select bike lock"
           search
-          allowAdditions
           options={options.toJS()}
           value={lock}
           onChange={(e, { value }) => {
-            const num = Number(value);
-            if (num === -1 || availableLocks.has(num) || !locks.has(num)) {
+            if (
+              value === 'NONE' ||
+              availableLocks.has(value) ||
+              !locks.has(value)
+            ) {
               this.setState({ message: null });
-              onChange(num === -1 ? null : num);
+              onChange(value === 'NONE' ? null : value);
             } else {
               this.setState({
-                message: `Lock with id ${num} exists and is assigned to another bike.`,
+                message: `Lock with id ${value} exists and is assigned to another bike.`,
               });
             }
           }}

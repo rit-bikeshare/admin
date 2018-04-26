@@ -5,6 +5,7 @@ import { Map } from 'immutable';
 import { Header, Container, Table, Button, Loader } from 'semantic-ui-react';
 import DeleteModal from 'app/components/DeleteModal';
 //import UserEditor from './UserEditor';
+import { bikesListAction } from 'bikes/redux/bikes';
 import {
   name as objectName,
   locksListAction,
@@ -18,15 +19,9 @@ class UsersView extends Component {
   }
 
   componentDidMount() {
-    const { locksList } = this.props;
+    const { locksList, bikesList } = this.props;
     locksList();
-  }
-
-  componentWillUpdate(nextProps) {
-    const { locksList, editorActive } = this.props;
-    if (editorActive && !nextProps.editorActive) {
-      locksList();
-    }
+    bikesList();
   }
 
   renderDeleteLockModal() {
@@ -43,18 +38,8 @@ class UsersView extends Component {
   }
 
   renderLock(lock) {
-    //const { openUserEditor } = this.props;
+    const { bikesByLock } = this.props;
     const { id } = lock;
-
-    const editButton = (
-      <Button
-        size="tiny"
-        compact
-        //onClick={() => openUserEditor({ object: user })}
-      >
-        Edit
-      </Button>
-    );
 
     const deleteButton = (
       <Button
@@ -70,10 +55,10 @@ class UsersView extends Component {
       <Table.Row key={id} className="admin-table-row">
         <Table.Cell>{id}</Table.Cell>
         <Table.Cell>
-          <div className="actions">
-            {editButton}
-            {deleteButton}
-          </div>
+          {bikesByLock.has(id) ? bikesByLock.get(id).id : '-'}
+        </Table.Cell>
+        <Table.Cell>
+          <div className="actions">{deleteButton}</div>
         </Table.Cell>
       </Table.Row>
     );
@@ -90,6 +75,7 @@ class UsersView extends Component {
         <Table.Header>
           <Table.Row>
             <Table.HeaderCell>ID</Table.HeaderCell>
+            <Table.HeaderCell>ASSIGNED TO BIKE</Table.HeaderCell>
             <Table.HeaderCell>ACTIONS</Table.HeaderCell>
           </Table.Row>
         </Table.Header>
@@ -99,10 +85,7 @@ class UsersView extends Component {
   }
 
   render() {
-    const { editorActive, /* openUserEditor, */ locksError } = this.props;
-    if (editorActive) {
-      //return <UserEditor />;
-    }
+    const { locksError } = this.props;
 
     return (
       <div>
@@ -120,25 +103,30 @@ class UsersView extends Component {
 UsersView.propTypes = {
   locks: PropTypes.instanceOf(Map),
   locksError: PropTypes.object,
-  editorActive: PropTypes.bool,
+  bikesByLock: PropTypes.instanceOf(Map),
   /* dispatch */
   locksList: PropTypes.func.isRequired,
   locksDestroy: PropTypes.func.isRequired,
-  //openUserEditor: PropTypes.func,
+  bikesList: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state => {
+  const bikesByLock = state.bikes
+    .get('data')
+    .filter(b => b.lock)
+    .mapKeys((_, b) => b.lock);
+
   return {
     locks: state.locks.get('data'),
     locksError: state.locks.get('error'),
-    //editorActive: state.userEditor.get('active', false),
+    bikesByLock,
   };
 };
 
 const mapDispatchToProps = {
   locksList: locksListAction,
   locksDestroy: locksDestroyAction,
-  //openUserEditor: openUserEditorAction,
+  bikesList: bikesListAction,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(UsersView);
