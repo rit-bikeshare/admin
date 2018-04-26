@@ -77,12 +77,13 @@ class AckTable extends React.Component {
   }
 
   renderReportActions(id, data) {
+    const { createMaintenanceReport } = this.props;
     return (
       <div className="actions">
         <Button size="tiny" compact onClick={() => this.openDetailsModal(data)}>
           Details
         </Button>
-        <Button size="tiny" compact>
+        <Button size="tiny" compact onClick={() => createMaintenanceReport(id)}>
           Finish Maintenance
         </Button>
       </div>
@@ -105,6 +106,7 @@ class AckTable extends React.Component {
 
 AckTable.propTypes = {
   damageReports: PropTypes.instanceOf(Map),
+  createMaintenanceReport: PropTypes.func,
 };
 
 export default AckTable;
