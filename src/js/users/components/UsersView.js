@@ -144,7 +144,7 @@ class UsersView extends Component {
         </div>
       ) : (
         <span>
-          {searchedString == ''
+          {searchedString === ''
             ? 'No search results.'
             : `No search results for ${searchedString}.`}
         </span>
