@@ -24,8 +24,26 @@ class DamageReportsTable extends React.Component {
     );
   }
 
-  render() {
+  renderZeroState() {
+    return (
+      <Table.Cell colSpan="100%" textAlign="center">
+        <h2>All is Good</h2>
+        <p>There are no reports</p>
+      </Table.Cell>
+    );
+  }
+
+  renderContent() {
     const { damageReports } = this.props;
+
+    if (damageReports.size === 0) return this.renderZeroState();
+
+    return damageReports
+      .map((data, id) => this.renderReportRow(id, data))
+      .toList();
+  }
+
+  render() {
     return (
       <Table className="damage-report-table hoverable" selectable>
         <Table.Header>
@@ -36,11 +54,7 @@ class DamageReportsTable extends React.Component {
             <Table.HeaderCell>ACTIONS</Table.HeaderCell>
           </Table.Row>
         </Table.Header>
-        <Table.Body>
-          {damageReports
-            .map((data, id) => this.renderReportRow(id, data))
-            .toList()}
-        </Table.Body>
+        <Table.Body>{this.renderContent()}</Table.Body>
       </Table>
     );
   }
