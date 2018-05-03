@@ -11,10 +11,14 @@ We use travis to automatically build and publish new javascript versions.
 #### Dependencies
 Yarn is used to install and manage dependencies, but npm should also be compatible without much work.
 If using OSX, installing yarn is easiest with homebrew:
+
 ```brew install yarn```
+
 Otherwise, follow installation instructions from https://yarnpkg.com
 And finally,
+
 ```yarn install```
+
 Will install any dependencies.
 
 #### Prettier / eslint
